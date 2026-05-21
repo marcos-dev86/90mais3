@@ -1,511 +1,737 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>90+3 Qualidade até o fim</title>
+    <title>90+3 — Qualidade até o Fim</title>
     <link rel="icon" type="image/png" href="IMG_20260223_231216_496.webp">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,400;0,600;0,700;1,400&family=Barlow+Condensed:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-    
-    <div class="barra-promocao">
-        <div class="promo-animada">
-            <span>📍 ATENDIMENTO EM ITAPETININGA E REGIÃO</span>
-            <span>💰 05% OFF NO PAGAMENTO À VISTA</span>
-            <span>💳 ATÉ 3X SEM JUROS NO CARTÃO</span>
-            <span>⚽ CAMISAS DE TIME, PRIMEIRA E SEGUNDA LINHA</span>
+
+    <!-- TICKER DE PROMOÇÕES -->
+    <div class="ticker-wrap">
+        <div class="ticker-track">
+            <span>📍 ITAPETININGA E REGIÃO</span>
+            <span class="sep">✦</span>
+            <span>💰 5% OFF À VISTA</span>
+            <span class="sep">✦</span>
+            <span>💳 ATÉ 3X SEM JUROS</span>
+            <span class="sep">✦</span>
+            <span>⚽ CAMISAS TAILANDESAS PREMIUM</span>
+            <span class="sep">✦</span>
             <span>🚚 ENTREGA EM ATÉ 5 DIAS ÚTEIS</span>
+            <span class="sep">✦</span>
+            <span>📍 ITAPETININGA E REGIÃO</span>
+            <span class="sep">✦</span>
+            <span>💰 5% OFF À VISTA</span>
+            <span class="sep">✦</span>
+            <span>💳 ATÉ 3X SEM JUROS</span>
+            <span class="sep">✦</span>
+            <span>⚽ CAMISAS TAILANDESAS PREMIUM</span>
+            <span class="sep">✦</span>
+            <span>🚚 ENTREGA EM ATÉ 5 DIAS ÚTEIS</span>
+            <span class="sep">✦</span>
         </div>
     </div>
 
+    <!-- HEADER -->
     <header>
-        <h1>90+3: Catálogo</h1>
-        <nav>
-            <a href="https://instagram.com/90_3.camisastailandesas" target="_blank" class="insta">Instagram</a>
-            <a href="https://wa.me/5515991617508" target="_blank" class="whats">WhatsApp</a>
-        </nav>
+        <div class="header-inner">
+            <div class="logo-block">
+                <div class="logo-text"><span class="logo-accent">90</span><span class="logo-plus">+3</span></div>
+                <p class="logo-tagline">Qualidade até o Fim</p>
+            </div>
+            <nav>
+                <a href="https://instagram.com/90_3.camisastailandesas" target="_blank" class="nav-btn insta">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                    Instagram
+                </a>
+                <a href="https://wa.me/5515991617508" target="_blank" class="nav-btn whats">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+                    WhatsApp
+                </a>
+            </nav>
+        </div>
     </header>
 
-    <section class="pesquisa">
-        <input type="text" id="campoPesquisa" placeholder="🔎 Pesquisar time, Seleção ou Ano">
-        <button onclick="pesquisarCamisa()" style="font-size:22px; padding:10px 14px;">🔍</button>
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-bg-pattern"></div>
+        <div class="hero-content">
+            <p class="hero-eyebrow reveal-up">⚽ Camisas Tailandesas Premium</p>
+            <h1 class="hero-title reveal-up delay-1">
+                VESTE<br><span class="hero-gold">COMO</span><br>UM CRAQUE
+            </h1>
+            <p class="hero-sub reveal-up delay-2">Brasileirão · Europeus · Seleções · Retrô</p>
+            <div class="hero-actions reveal-up delay-3">
+                <a href="#catalogo" class="btn-primary">Ver Catálogo</a>
+                <a href="https://wa.me/5515991617508" target="_blank" class="btn-ghost">Falar no WhatsApp</a>
+            </div>
+            <div class="hero-badges reveal-up delay-4">
+                <div class="badge"><span>R$29</span><small>a partir de</small></div>
+                <div class="badge-divider"></div>
+                <div class="badge"><span>5%</span><small>off à vista</small></div>
+                <div class="badge-divider"></div>
+                <div class="badge"><span>3x</span><small>sem juros</small></div>
+            </div>
+        </div>
+        <!-- <div class="hero-scroll-hint"> -->
+            <!-- <span>scroll</span> -->
+            <!-- <div class="scroll-line"></div> -->
+        </div>
     </section>
 
-    <div style="text-align: center; margin-top: 20px;">
-        <button onclick="toggleFiltros()" class="btn-filtro-principal">FILTRAR POR LIGA ▽</button>
-    </div>
+    <!-- BUSCA E FILTROS -->
+    <section class="busca-section" id="catalogo">
+        <div class="busca-inner">
+            <div class="search-box">
+                <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                <input type="text" id="campoPesquisa" placeholder="Pesquisar time, seleção ou ano...">
+                <button onclick="pesquisarCamisa()" class="search-btn">Buscar</button>
+            </div>
+            <button onclick="toggleFiltros()" class="filtro-toggle" id="btnFiltro">
+                Filtrar por Liga
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+        </div>
 
-    <section id="abaFiltros" class="filtros-container">
-        <div class="card-categoria" onclick="filtrarCategoria('todos')">
-            <span class="emoji-cat">🔄</span><p>Todas</p>
-        </div>
-        <div class="card-categoria" onclick="filtrarCategoria('brasileirao')">
-            <span class="emoji-cat">🇧🇷</span><p>Brasileirão</p>
-        </div>
-        <div class="card-categoria" onclick="filtrarCategoria('europeus')">
-            <span class="emoji-cat">🇪🇺</span><p>Europeus</p>
-        </div>
-        <div class="card-categoria" onclick="filtrarCategoria('selecoes')">
-            <span class="emoji-cat">🌎</span><p>Seleções</p>
-        </div>
-        <div class="card-categoria" onclick="filtrarCategoria('retro')">
-            <span class="emoji-cat">⏪</span><p>Retrô</p>
+        <div id="abaFiltros" class="filtros-container">
+            <button class="filtro-pill active" onclick="filtrarCategoria('todos', this)">🔄 Todas</button>
+            <button class="filtro-pill" onclick="filtrarCategoria('brasileirao', this)">🇧🇷 Brasileirão</button>
+            <button class="filtro-pill" onclick="filtrarCategoria('europeus', this)">🇪🇺 Europeus</button>
+            <button class="filtro-pill" onclick="filtrarCategoria('selecoes', this)">🌎 Seleções</button>
+            <button class="filtro-pill" onclick="filtrarCategoria('retro', this)">⏪ Retrô</button>
         </div>
     </section>
 
-    <h2>EXPLORAR MODELOS:</h2>
-    <p>Clique na imagem para visualizar as costas</p>
+    <!-- CATÁLOGO -->
+    <section class="section-title-block">
+        <h2 class="section-title">EXPLORAR MODELOS</h2>
+        <p class="section-sub">Clique na imagem para ver as costas da camisa</p>
+    </section>
 
     <section class="catalogo">
-        
+
         <!-- FLAMENGO -->
         <div class="card FLAMENGO brasileirao">
-            <button class="btn-fav" data-nome="FLAMENGO 2024/25" onclick="alternarFavorito(this)">❤️</button>
+            <button class="btn-fav" data-nome="FLAMENGO 2024/25" onclick="alternarFavorito(this)" title="Favoritar">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </button>
             <div class="imagem-container">
-                <img src="FLAMENGO FRENTE.jpg" alt="Frente Camisa FLAMENGO 90+3" class="foto-frente">
-                <img src="FLAMENGO COSTAS.jpg" alt="Costas Camisa FLAMENGO 90+3" class="foto-costas">
+                <img src="FLAMENGO FRENTE.jpg" alt="Camisa Flamengo Frente" class="foto-frente">
+                <img src="FLAMENGO COSTAS.jpg" alt="Camisa Flamengo Costas" class="foto-costas">
             </div>
-            <h3>FLAMENGO</h3>
-            <p>Temporada 2024/25</p>
-            <div class="tamanhos">
-                <span class="tamanho-badge esgotado">P</span>
-                <span class="tamanho-badge esgotado">M</span>
-                <span class="tamanho-badge disponivel">G</span>
-                <span class="tamanho-badge esgotado">GG</span>
+            <div class="card-info">
+                <div class="card-header-row">
+                    <h3>FLAMENGO</h3>
+                    <span class="preco">R$49<small>,90</small></span>
+                </div>
+                <p class="temporada">Temporada 2024/25</p>
+                <div class="tamanhos">
+                    <span class="tamanho-badge esgotado">P</span>
+                    <span class="tamanho-badge esgotado">M</span>
+                    <span class="tamanho-badge disponivel">G</span>
+                    <span class="tamanho-badge esgotado">GG</span>
+                </div>
+                <a class="comprar" href="https://wa.me/5515991617508?text=Olá, tenho interesse na camisa do FLAMENGO" target="_blank">
+                    Comprar no WhatsApp
+                </a>
             </div>
-            <span class="preco">R$49,90</span>
-            <a class="comprar" href="https://wa.me/5515991617508?text=Olá, tenho interesse na camisa do FLAMENGO" target="_blank">Comprar no WhatsApp</a>
         </div>
 
         <!-- BRASIL MODELO 2 -->
-        <div class="card camisa BRASIL selecoes">
-            <button class="btn-fav" data-nome="BRASIL 2026/27 (Modelo 2)" onclick="alternarFavorito(this)">❤️</button>
+        <div class="card BRASIL selecoes">
+            <button class="btn-fav" data-nome="BRASIL 2026/27 (Modelo 2)" onclick="alternarFavorito(this)" title="Favoritar">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </button>
             <div class="imagem-container">
-                <img src="BRASIL 2 26 FRENTE.jpg" alt="Frente Camisa BRASIL 90+3" class="foto-frente">
-                <img src="BRASIL 2026/BRASIL 2 26 COSTAS.jpg" alt="Costas Camisa BRASIL 90+3" class="foto-costas">
+                <img src="BRASIL 2 26 FRENTE.jpg" alt="Camisa Brasil Modelo 2 Frente" class="foto-frente">
+                <img src="BRASIL 2026/BRASIL 2 26 COSTAS.jpg" alt="Camisa Brasil Modelo 2 Costas" class="foto-costas">
             </div>
-            <h3>BRASIL</h3>
-            <p>Temporada 2026/27</p>
-            <div class="tamanhos">
-                <span class="tamanho-badge disponivel">P</span>
-                <span class="tamanho-badge disponivel">M</span>
-                <span class="tamanho-badge disponivel">G</span>
-                <span class="tamanho-badge disponivel">GG</span>
-            </div>
-            <span class="preco">R$59,90</span>
-            <a class="comprar" href="https://wa.me/5515991617508?text=Olá, tenho interesse na camisa do BRASIL" target="_blank">Comprar no WhatsApp</a>
-        </div>
-
-        <!-- BRASIL MODELO 1 -->
-        <div class="card camisa BRASIL selecoes">
-            <button class="btn-fav" data-nome="BRASIL 2026/27 (Modelo 1)" onclick="alternarFavorito(this)">❤️</button>
-            <div class="imagem-container">
-                <img src="BRASIL 2026/BRASIL 1 26 FRENTE.jpg" alt="Frente Camisa BRASIL 90+3" class="foto-frente">
-                <img src="BRASIL 2026/BRASIL 1 26 COSTAS.jpg" alt="Costas Camisa BRASIL 90+3" class="foto-costas">
-            </div>
-            <h3>BRASIL</h3>
-            <p>Temporada 2026/27</p>
-            <div class="tamanhos">
-                <span class="tamanho-badge disponivel">P</span>
-                <span class="tamanho-badge disponivel">M</span>
-                <span class="tamanho-badge disponivel">G</span>
-                <span class="tamanho-badge esgotado">GG</span>
-            </div>
-            <span class="preco">R$59,90</span>
-            <a class="comprar" href="https://wa.me/5515991617508?text=Olá, tenho interesse na camisa do BRASIL" target="_blank">Comprar no WhatsApp</a>
-        </div>
-
-        <!-- BARCELONA -->
-        <div class="card camisa BARCELONA europeus">
-            <button class="btn-fav" data-nome="BARCELONA 2025/26" onclick="alternarFavorito(this)">❤️</button>
-            <div class="imagem-container">
-                <img src="BARCELONA FRENTE.jpg" alt="Frente Camisa BARCELONA 90+3" class="foto-frente">
-                <img src="BARCELONA COSTAS.jpg" alt="Costas Camisa BARCELONA 90+3" class="foto-costas">
-            </div>
-            <h3>BARCELONA</h3>
-            <p>Temporada 2025/26</p>
-            <div class="tamanhos">
-                <span class="tamanho-badge esgotado">P</span>
-                <span class="tamanho-badge esgotado">M</span>
-                <span class="tamanho-badge disponivel">G</span>
-                <span class="tamanho-badge esgotado">GG</span>
-            </div>
-            <span class="preco">R$59,90</span>
-            <a class="comprar" href="https://wa.me/5515991617508?text=Olá, tenho interesse na camisa do BARCELONA" target="_blank">Comprar no WhatsApp</a>
-        </div>
-
-        <!-- PALMEIRAS (CORRIGIDO: era PALMERAS) -->
-        <div class="card camisa PALMEIRAS brasileirao">
-            <button class="btn-fav" data-nome="PALMEIRAS 2026/27" onclick="alternarFavorito(this)">❤️</button>
-            <div class="imagem-container">
-                <img src="PORCO FRENTE.jpg" alt="Frente Camisa PALMEIRAS 90+3" class="foto-frente">
-                <img src="PORCO COSTAS.jpg" alt="Costas Camisa PALMEIRAS 90+3" class="foto-costas">
-            </div>
-            <h3>PALMEIRAS</h3>
-            <p>Temporada 2026/27</p>
-            <div class="tamanhos">
-                <span class="tamanho-badge esgotado">P</span>
-                <span class="tamanho-badge disponivel">M</span>
-                <span class="tamanho-badge esgotado">G</span>
-                <span class="tamanho-badge esgotado">GG</span>
-            </div>
-            <span class="preco">R$49,90</span>
-            <a class="comprar" href="https://wa.me/5515991617508?text=Olá, tenho interesse na camisa do PALMEIRAS" target="_blank">Comprar no WhatsApp</a>
-        </div>
-
-        <!-- CORINTHIANS 2024/25 -->
-        <div class="card camisa CORINTHIANS brasileirao">
-            <button class="btn-fav" data-nome="CORINTHIANS 2024/25" onclick="alternarFavorito(this)">❤️</button>
-            <div class="imagem-container">
-                <img src="TIMÃO A FRENTE.jpg" alt="Frente Camisa CORINTHIANS 90+3" class="foto-frente">
-                <img src="TIMÃO A COSTAS.jpg" alt="Costas Camisa CORINTHIANS 90+3" class="foto-costas">
-            </div>
-            <h3>CORINTHIANS</h3>
-            <p>Temporada 2024/25</p>
-            <div class="tamanhos">
-                <span class="tamanho-badge esgotado">P</span>
-                <span class="tamanho-badge esgotado">M</span>
-                <span class="tamanho-badge disponivel">G</span>
-                <span class="tamanho-badge esgotado">GG</span>
-            </div>
-            <span class="preco">R$59,90</span>
-            <a class="comprar" href="https://wa.me/5515991617508?text=Olá, tenho interesse na camisa do CORINTHIANS" target="_blank">Comprar no WhatsApp</a>
-        </div>
-
-        <!-- BARCELONA RETRÔ -->
-        <div class="card camisa BARCELONA europeus retro">
-            <button class="btn-fav" data-nome="BARCELONA Retrô 2015/16" onclick="alternarFavorito(this)">❤️</button>
-            <div class="imagem-container">
-                <img src="BARÇA N FRENTE.jpg" alt="Frente Camisa BARCELONA Retrô 90+3" class="foto-frente">
-                <img src="BARÇA N COSTAS.jpg" alt="Costas Camisa BARCELONA Retrô 90+3" class="foto-costas">
-            </div>
-            <h3>BARCELONA</h3>
-            <p>Retrô 2015/16</p>
-            <div class="tamanhos">
-                <span class="tamanho-badge disponivel">P</span>
-                <span class="tamanho-badge esgotado">M</span>
-                <span class="tamanho-badge esgotado">G</span>
-                <span class="tamanho-badge esgotado">GG</span>
-            </div>
-            <span class="preco">R$29,90</span>
-            <a class="comprar" href="https://wa.me/5515991617508?text=Olá, tenho interesse na camisa do BARCELONA" target="_blank">Comprar no WhatsApp</a>
-        </div>
-
-        <!-- ATLÉTICO-MG -->
-        <div class="card camisa ATLETICO-MG brasileirao">
-            <button class="btn-fav" data-nome="ATLETICO-MG 2024/25" onclick="alternarFavorito(this)">❤️</button>
-            <div class="imagem-container">
-                <img src="20260325_162012.jpg" alt="Frente Camisa ATLETICO-MG 90+3" class="foto-frente">
-                <img src="20260325_162039.jpg" alt="Costas Camisa ATLETICO-MG 90+3" class="foto-costas">
-            </div>
-            <h3>ATLETICO-MG</h3>
-            <p>Temporada 2024/25</p>
-            <div class="tamanhos">
-                <span class="tamanho-badge esgotado">P</span>
-                <span class="tamanho-badge disponivel">M</span>
-                <span class="tamanho-badge esgotado">G</span>
-                <span class="tamanho-badge esgotado">GG</span>
-            </div>
-            <span class="preco">R$29,90</span>
-            <a class="comprar" href="https://wa.me/5515991617508?text=Olá, tenho interesse na camisa do ATLETICO-MG" target="_blank">Comprar no WhatsApp</a>
-        </div>
-        
-        <!-- PSG -->
-        <div class="card camisa PSG europeus">
-            <button class="btn-fav" data-nome="PSG 2023/24" onclick="alternarFavorito(this)">❤️</button>
-            <div class="imagem-container">
-                <img src="PSG FRENTE.jpg" alt="Frente Camisa PSG 90+3" class="foto-frente">
-                <img src="PSG COSTAS.jpg" alt="Costas Camisa PSG 90+3" class="foto-costas">
-            </div>
-            <h3>PSG</h3>
-            <p>Temporada 2023/24</p>
-            <div class="tamanhos">
-                <span class="tamanho-badge esgotado">P</span>
-                <span class="tamanho-badge esgotado">M</span>
-                <span class="tamanho-badge disponivel">G</span>
-                <span class="tamanho-badge esgotado">GG</span>
-            </div>
-            <span class="preco">R$59,90</span>
-            <a class="comprar" href="https://wa.me/5515991617508?text=Olá, tenho interesse na camisa do PSG" target="_blank">Comprar no WhatsApp</a>
-        </div>
-
-        <!-- GRÊMIO -->
-        <div class="card GREMIO brasileirao">
-            <button class="btn-fav" data-nome="GRÊMIO 2024/25" onclick="alternarFavorito(this)">❤️</button>
-            <div class="imagem-container">
-                <img src="GREMIO FRENTE.jpg" alt="Frente Camisa GREMIO 90+3" class="foto-frente">
-                <img src="GREMIO COSTAS.jpg" alt="Costas Camisa GREMIO 90+3" class="foto-costas">
-            </div>
-            <h3>GRÊMIO</h3>
-            <p>Temporada 2024/25</p>
-            <div class="tamanhos">
-                <span class="tamanho-badge esgotado">P</span>
-                <span class="tamanho-badge esgotado">M</span>
-                <span class="tamanho-badge disponivel">G</span>
-                <span class="tamanho-badge esgotado">GG</span>
-            </div>
-            <span class="preco">R$59,90</span>
-            <a class="comprar" href="https://wa.me/5515991617508?text=Olá, tenho interesse na camisa do GREMIO" target="_blank">Comprar no WhatsApp</a>
-        </div>
-
-        <!-- CRUZEIRO -->
-        <div class="card CRUZEIRO brasileirao">
-            <button class="btn-fav" data-nome="CRUZEIRO 2024/25" onclick="alternarFavorito(this)">❤️</button>
-            <div class="imagem-container">
-                <img src="CRUZEIRO FRENTE.jpg" alt="Frente Camisa CRUZEIRO 90+3" class="foto-frente">
-                <img src="CRUZEIRO COSTAS.jpg" alt="Costas Camisa CRUZEIRO 90+3" class="foto-costas">
-            </div>
-            <h3>CRUZEIRO</h3>
-            <p>Temporada 2024/25</p>
-            <div class="tamanhos">
-                <span class="tamanho-badge esgotado">P</span>
-                <span class="tamanho-badge esgotado">M</span>
-                <span class="tamanho-badge disponivel">G</span>
-                <span class="tamanho-badge esgotado">GG</span>
-            </div>
-            <span class="preco">R$59,90</span>
-            <a class="comprar" href="https://wa.me/5515991617508?text=Olá, tenho interesse na camisa do CRUZEIRO" target="_blank">Comprar no WhatsApp</a>
-        </div>
-
-        <!-- BAYERN DE MUNIQUE (CORRIGIDO: era BAYER) -->
-        <div class="card camisa BAYERN-DE-MUNIQUE europeus">
-            <button class="btn-fav" data-nome="BAYERN DE MUNIQUE 2025/26" onclick="alternarFavorito(this)">❤️</button>
-            <div class="imagem-container">
-                <img src="BAYERS FRENTE.jpg" alt="Frente Camisa BAYERN DE MUNIQUE 90+3" class="foto-frente">
-                <img src="BAYERS COSTA.jpg" alt="Costas Camisa BAYERN DE MUNIQUE 90+3" class="foto-costas">
-            </div>
-            <h3>BAYERN DE MUNIQUE</h3>
-            <p>Temporada 2025/26</p>
-            <div class="tamanhos">
-                <span class="tamanho-badge esgotado">P</span>
-                <span class="tamanho-badge esgotado">M</span>
-                <span class="tamanho-badge disponivel">G</span>
-                <span class="tamanho-badge esgotado">GG</span>
-            </div>
-            <span class="preco">R$59,90</span>
-            <a class="comprar" href="https://wa.me/5515991617508?text=Olá, tenho interesse na camisa do BAYERN DE MUNIQUE" target="_blank">Comprar no WhatsApp</a>
-        </div>
-
-        <!-- REAL MADRID 2026/27 -->
-        <div class="card camisa REAL-MADRID europeus">
-            <button class="btn-fav" data-nome="REAL MADRID 2026/27" onclick="alternarFavorito(this)">❤️</button>
-            <div class="imagem-container">
-                <img src="REAL FRENTE.jpg" alt="Frente Camisa REAL MADRID 90+3" class="foto-frente">
-                <img src="REAL COSTAS.jpg" alt="Costas Camisa REAL MADRID 90+3" class="foto-costas">
-            </div>
-            <h3>REAL MADRID</h3>
-            <p>Temporada 2026/27</p>
-            <div class="tamanhos">
-                <span class="tamanho-badge esgotado">P</span>
-                <span class="tamanho-badge disponivel">M</span>
-                <span class="tamanho-badge esgotado">G</span>
-                <span class="tamanho-badge esgotado">GG</span>
-            </div>
-            <span class="preco">R$59,90</span>
-            <a class="comprar" href="https://wa.me/5515991617508?text=Olá, tenho interesse na camisa do REAL MADRID" target="_blank">Comprar no WhatsApp</a>
-        </div>
-
-        <!-- REAL MADRID 2020/21 -->
-        <div class="card camisa REAL-MADRID europeus">
-            <button class="btn-fav" data-nome="REAL MADRID 2020/21" onclick="alternarFavorito(this)">❤️</button>
-            <div class="imagem-container">
-                <img src="REAL A COSTAS.jpg" alt="Frente Camisa REAL MADRID 90+3" class="foto-frente">
-                <img src="REAAL A COSTAS.jpg" alt="Costas Camisa REAL MADRID 90+3" class="foto-costas">
-            </div>
-            <h3>REAL MADRID</h3>
-            <p>Temporada 2020/21</p>
-            <div class="tamanhos">
-                <span class="tamanho-badge esgotado">P</span>
-                <span class="tamanho-badge disponivel">M</span>
-                <span class="tamanho-badge esgotado">G</span>
-                <span class="tamanho-badge esgotado">GG</span>
-            </div>
-            <span class="preco">R$39,90</span>
-            <a class="comprar" href="https://wa.me/5515991617508?text=Olá, tenho interesse na camisa do REAL MADRID" target="_blank">Comprar no WhatsApp</a>
-        </div>
-
-        <!-- JUVENTUS RETRÔ -->
-        <div class="card camisa JUVENTUS europeus retro">
-            <button class="btn-fav" data-nome="JUVENTUS Retrô 2019/20" onclick="alternarFavorito(this)">❤️</button>
-            <div class="imagem-container">
-                <img src="JUVENTUS FRENTE.jpg" alt="Frente Camisa JUVENTUS 90+3" class="foto-frente">
-                <img src="JUVENTUS COSTA.jpg" alt="Costas Camisa JUVENTUS 90+3" class="foto-costas">
-            </div>
-            <h3>JUVENTUS</h3>
-            <p>Retrô 2019/20</p>
-            <div class="tamanhos">
-                <span class="tamanho-badge esgotado">P</span>
-                <span class="tamanho-badge esgotado">M</span>
-                <span class="tamanho-badge disponivel">G</span>
-                <span class="tamanho-badge esgotado">GG</span>
-            </div>
-            <span class="preco">R$49,90</span>
-            <a class="comprar" href="https://wa.me/5515991617508?text=Olá, tenho interesse na camisa do JUVENTUS" target="_blank">Comprar no WhatsApp</a>
-        </div>
-
-        <!-- SÃO PAULO -->
-        <div class="card camisa SAO-PAULO brasileirao">
-            <button class="btn-fav" data-nome="SÃO PAULO 2023/24" onclick="alternarFavorito(this)">❤️</button>
-            <div class="imagem-container">
-                <img src="IMG-20260207-WA0017.jpg" alt="Frente Camisa SÃO PAULO 90+3" class="foto-frente">
-                <img src="IMG-20260207-WA0014.jpg" alt="Costas Camisa SÃO PAULO 90+3" class="foto-costas">
-            </div>
-            <h3>SÃO PAULO</h3>
-            <p>Temporada 2023/24</p>
-            <div class="tamanhos">
-                <span class="tamanho-badge esgotado">P</span>
-                <span class="tamanho-badge disponivel">M</span>
-                <span class="tamanho-badge esgotado">G</span>
-                <span class="tamanho-badge esgotado">GG</span>
-            </div>
-            <span class="preco">R$39,90</span>
-            <a class="comprar" href="https://wa.me/5515991617508?text=Olá, tenho interesse na camisa do SÃO PAULO" target="_blank">Comprar no WhatsApp</a>
-        </div>
-
-        <!-- MANCHESTER CITY -->
-        <div class="card camisa MANCHESTER-CITY europeus">
-            <button class="btn-fav" data-nome="MANCHESTER CITY 2023/24" onclick="alternarFavorito(this)">❤️</button>
-            <div class="imagem-container">
-                <img src="CITY FRENTE.jpg" alt="Frente Camisa MANCHESTER CITY 90+3" class="foto-frente">
-                <img src="CITY COSTAS.jpg" alt="Costas Camisa MANCHESTER CITY 90+3" class="foto-costas">
-            </div>
-            <h3>MANCHESTER CITY</h3>
-            <p>Temporada 2023/24</p>
-            <div class="tamanhos">
-                <span class="tamanho-badge esgotado">P</span>
-                <span class="tamanho-badge esgotado">M</span>
-                <span class="tamanho-badge disponivel">G</span>
-                <span class="tamanho-badge esgotado">GG</span>
-            </div>
-            <span class="preco">R$49,90</span>
-            <a class="comprar" href="https://wa.me/5515991617508?text=Olá, tenho interesse na camisa do MANCHESTER CITY" target="_blank">Comprar no WhatsApp</a>
-        </div>
-
-    </section>
-
-    <h4>Mais nenhuma camisa encontrada...</h4>
-    
-    <section class="secao-promocoes">
-        <h2 class="titulo-promo">🔥 PROMOÇÕES IMPERDÍVEIS 🔥</h2>
-        <div class="catalogo promocoes-container">
-            <div class="card promocao">
-                <button class="btn-fav" data-nome="KIT PROMOCIONAL BRASIL 2026" onclick="alternarFavorito(this)">❤️</button>
-                <div class="imagem-unica">
-                    <img src="BRASIL 2026/Kit Brasil 2026.jpg" alt="Promoção 90+3" class="foto-frente">
+            <div class="card-info">
+                <div class="card-header-row">
+                    <h3>BRASIL</h3>
+                    <span class="preco">R$59<small>,90</small></span>
                 </div>
-                <h3>KIT CAMISAS BRASIL 2026</h3>
-                <p>Temporada 2026/27</p>
+                <p class="temporada">Temporada 2026/27 · Modelo 2</p>
                 <div class="tamanhos">
                     <span class="tamanho-badge disponivel">P</span>
                     <span class="tamanho-badge disponivel">M</span>
                     <span class="tamanho-badge disponivel">G</span>
                     <span class="tamanho-badge disponivel">GG</span>
                 </div>
-                <span style="text-decoration: line-through; color: #999; font-size: 16px;">De R$129,90</span>
-                <span class="preco" style="color: #ff2a2a; margin-top: 5px;">Por R$99,90</span>
-                <a class="comprar btn-promo" href="https://wa.me/5515991617508?text=Olá, quero aproveitar a promoção do kit camisa da seleção Brasileira!" target="_blank">Comprar no WhatsApp</a>
+                <a class="comprar" href="https://wa.me/5515991617508?text=Olá, tenho interesse na camisa do BRASIL" target="_blank">
+                    Comprar no WhatsApp
+                </a>
+            </div>
+        </div>
+
+        <!-- BRASIL MODELO 1 -->
+        <div class="card BRASIL selecoes">
+            <button class="btn-fav" data-nome="BRASIL 2026/27 (Modelo 1)" onclick="alternarFavorito(this)" title="Favoritar">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </button>
+            <div class="imagem-container">
+                <img src="BRASIL 2026/BRASIL 1 26 FRENTE.jpg" alt="Camisa Brasil Modelo 1 Frente" class="foto-frente">
+                <img src="BRASIL 2026/BRASIL 1 26 COSTAS.jpg" alt="Camisa Brasil Modelo 1 Costas" class="foto-costas">
+            </div>
+            <div class="card-info">
+                <div class="card-header-row">
+                    <h3>BRASIL</h3>
+                    <span class="preco">R$59<small>,90</small></span>
+                </div>
+                <p class="temporada">Temporada 2026/27 · Modelo 1</p>
+                <div class="tamanhos">
+                    <span class="tamanho-badge disponivel">P</span>
+                    <span class="tamanho-badge disponivel">M</span>
+                    <span class="tamanho-badge disponivel">G</span>
+                    <span class="tamanho-badge esgotado">GG</span>
+                </div>
+                <a class="comprar" href="https://wa.me/5515991617508?text=Olá, tenho interesse na camisa do BRASIL" target="_blank">
+                    Comprar no WhatsApp
+                </a>
+            </div>
+        </div>
+
+        <!-- BARCELONA -->
+        <div class="card BARCELONA europeus">
+            <button class="btn-fav" data-nome="BARCELONA 2025/26" onclick="alternarFavorito(this)" title="Favoritar">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </button>
+            <div class="imagem-container">
+                <img src="BARCELONA FRENTE.jpg" alt="Camisa Barcelona Frente" class="foto-frente">
+                <img src="BARCELONA COSTAS.jpg" alt="Camisa Barcelona Costas" class="foto-costas">
+            </div>
+            <div class="card-info">
+                <div class="card-header-row">
+                    <h3>BARCELONA</h3>
+                    <span class="preco">R$59<small>,90</small></span>
+                </div>
+                <p class="temporada">Temporada 2025/26</p>
+                <div class="tamanhos">
+                    <span class="tamanho-badge esgotado">P</span>
+                    <span class="tamanho-badge esgotado">M</span>
+                    <span class="tamanho-badge disponivel">G</span>
+                    <span class="tamanho-badge esgotado">GG</span>
+                </div>
+                <a class="comprar" href="https://wa.me/5515991617508?text=Olá, tenho interesse na camisa do BARCELONA" target="_blank">
+                    Comprar no WhatsApp
+                </a>
+            </div>
+        </div>
+
+        <!-- PALMEIRAS -->
+        <div class="card PALMEIRAS brasileirao">
+            <button class="btn-fav" data-nome="PALMEIRAS 2026/27" onclick="alternarFavorito(this)" title="Favoritar">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </button>
+            <div class="imagem-container">
+                <img src="PORCO FRENTE.jpg" alt="Camisa Palmeiras Frente" class="foto-frente">
+                <img src="PORCO COSTAS.jpg" alt="Camisa Palmeiras Costas" class="foto-costas">
+            </div>
+            <div class="card-info">
+                <div class="card-header-row">
+                    <h3>PALMEIRAS</h3>
+                    <span class="preco">R$49<small>,90</small></span>
+                </div>
+                <p class="temporada">Temporada 2026/27</p>
+                <div class="tamanhos">
+                    <span class="tamanho-badge esgotado">P</span>
+                    <span class="tamanho-badge disponivel">M</span>
+                    <span class="tamanho-badge esgotado">G</span>
+                    <span class="tamanho-badge esgotado">GG</span>
+                </div>
+                <a class="comprar" href="https://wa.me/5515991617508?text=Olá, tenho interesse na camisa do PALMEIRAS" target="_blank">
+                    Comprar no WhatsApp
+                </a>
+            </div>
+        </div>
+
+        <!-- CORINTHIANS -->
+        <div class="card CORINTHIANS brasileirao">
+            <button class="btn-fav" data-nome="CORINTHIANS 2024/25" onclick="alternarFavorito(this)" title="Favoritar">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </button>
+            <div class="imagem-container">
+                <img src="TIMÃO A FRENTE.jpg" alt="Camisa Corinthians Frente" class="foto-frente">
+                <img src="TIMÃO A COSTAS.jpg" alt="Camisa Corinthians Costas" class="foto-costas">
+            </div>
+            <div class="card-info">
+                <div class="card-header-row">
+                    <h3>CORINTHIANS</h3>
+                    <span class="preco">R$59<small>,90</small></span>
+                </div>
+                <p class="temporada">Temporada 2024/25</p>
+                <div class="tamanhos">
+                    <span class="tamanho-badge esgotado">P</span>
+                    <span class="tamanho-badge esgotado">M</span>
+                    <span class="tamanho-badge disponivel">G</span>
+                    <span class="tamanho-badge esgotado">GG</span>
+                </div>
+                <a class="comprar" href="https://wa.me/5515991617508?text=Olá, tenho interesse na camisa do CORINTHIANS" target="_blank">
+                    Comprar no WhatsApp
+                </a>
+            </div>
+        </div>
+
+        <!-- BARCELONA RETRÔ -->
+        <div class="card BARCELONA europeus retro">
+            <button class="btn-fav" data-nome="BARCELONA Retrô 2015/16" onclick="alternarFavorito(this)" title="Favoritar">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </button>
+            <div class="imagem-container">
+                <img src="BARÇA N FRENTE.jpg" alt="Camisa Barcelona Retrô Frente" class="foto-frente">
+                <img src="BARÇA N COSTAS.jpg" alt="Camisa Barcelona Retrô Costas" class="foto-costas">
+            </div>
+            <div class="card-info">
+                <div class="card-header-row">
+                    <h3>BARCELONA</h3>
+                    <span class="preco">R$29<small>,90</small></span>
+                </div>
+                <p class="temporada">Retrô 2015/16</p>
+                <div class="tamanhos">
+                    <span class="tamanho-badge disponivel">P</span>
+                    <span class="tamanho-badge esgotado">M</span>
+                    <span class="tamanho-badge esgotado">G</span>
+                    <span class="tamanho-badge esgotado">GG</span>
+                </div>
+                <a class="comprar" href="https://wa.me/5515991617508?text=Olá, tenho interesse na camisa do BARCELONA" target="_blank">
+                    Comprar no WhatsApp
+                </a>
+            </div>
+        </div>
+
+        <!-- ATLÉTICO-MG -->
+        <div class="card ATLETICO-MG brasileirao">
+            <button class="btn-fav" data-nome="ATLETICO-MG 2024/25" onclick="alternarFavorito(this)" title="Favoritar">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </button>
+            <div class="imagem-container">
+                <img src="20260325_162012.jpg" alt="Camisa Atlético-MG Frente" class="foto-frente">
+                <img src="20260325_162039.jpg" alt="Camisa Atlético-MG Costas" class="foto-costas">
+            </div>
+            <div class="card-info">
+                <div class="card-header-row">
+                    <h3>ATLÉTICO-MG</h3>
+                    <span class="preco">R$29<small>,90</small></span>
+                </div>
+                <p class="temporada">Temporada 2024/25</p>
+                <div class="tamanhos">
+                    <span class="tamanho-badge esgotado">P</span>
+                    <span class="tamanho-badge disponivel">M</span>
+                    <span class="tamanho-badge esgotado">G</span>
+                    <span class="tamanho-badge esgotado">GG</span>
+                </div>
+                <a class="comprar" href="https://wa.me/5515991617508?text=Olá, tenho interesse na camisa do ATLETICO-MG" target="_blank">
+                    Comprar no WhatsApp
+                </a>
+            </div>
+        </div>
+
+        <!-- PSG -->
+        <div class="card PSG europeus">
+            <button class="btn-fav" data-nome="PSG 2023/24" onclick="alternarFavorito(this)" title="Favoritar">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </button>
+            <div class="imagem-container">
+                <img src="PSG FRENTE.jpg" alt="Camisa PSG Frente" class="foto-frente">
+                <img src="PSG COSTAS.jpg" alt="Camisa PSG Costas" class="foto-costas">
+            </div>
+            <div class="card-info">
+                <div class="card-header-row">
+                    <h3>PSG</h3>
+                    <span class="preco">R$59<small>,90</small></span>
+                </div>
+                <p class="temporada">Temporada 2023/24</p>
+                <div class="tamanhos">
+                    <span class="tamanho-badge esgotado">P</span>
+                    <span class="tamanho-badge esgotado">M</span>
+                    <span class="tamanho-badge disponivel">G</span>
+                    <span class="tamanho-badge esgotado">GG</span>
+                </div>
+                <a class="comprar" href="https://wa.me/5515991617508?text=Olá, tenho interesse na camisa do PSG" target="_blank">
+                    Comprar no WhatsApp
+                </a>
+            </div>
+        </div>
+
+        <!-- GRÊMIO -->
+        <div class="card GREMIO brasileirao">
+            <button class="btn-fav" data-nome="GRÊMIO 2024/25" onclick="alternarFavorito(this)" title="Favoritar">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </button>
+            <div class="imagem-container">
+                <img src="GREMIO FRENTE.jpg" alt="Camisa Grêmio Frente" class="foto-frente">
+                <img src="GREMIO COSTAS.jpg" alt="Camisa Grêmio Costas" class="foto-costas">
+            </div>
+            <div class="card-info">
+                <div class="card-header-row">
+                    <h3>GRÊMIO</h3>
+                    <span class="preco">R$59<small>,90</small></span>
+                </div>
+                <p class="temporada">Temporada 2024/25</p>
+                <div class="tamanhos">
+                    <span class="tamanho-badge esgotado">P</span>
+                    <span class="tamanho-badge esgotado">M</span>
+                    <span class="tamanho-badge disponivel">G</span>
+                    <span class="tamanho-badge esgotado">GG</span>
+                </div>
+                <a class="comprar" href="https://wa.me/5515991617508?text=Olá, tenho interesse na camisa do GREMIO" target="_blank">
+                    Comprar no WhatsApp
+                </a>
+            </div>
+        </div>
+
+        <!-- CRUZEIRO -->
+        <div class="card CRUZEIRO brasileirao">
+            <button class="btn-fav" data-nome="CRUZEIRO 2024/25" onclick="alternarFavorito(this)" title="Favoritar">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </button>
+            <div class="imagem-container">
+                <img src="CRUZEIRO FRENTE.jpg" alt="Camisa Cruzeiro Frente" class="foto-frente">
+                <img src="CRUZEIRO COSTAS.jpg" alt="Camisa Cruzeiro Costas" class="foto-costas">
+            </div>
+            <div class="card-info">
+                <div class="card-header-row">
+                    <h3>CRUZEIRO</h3>
+                    <span class="preco">R$59<small>,90</small></span>
+                </div>
+                <p class="temporada">Temporada 2024/25</p>
+                <div class="tamanhos">
+                    <span class="tamanho-badge esgotado">P</span>
+                    <span class="tamanho-badge esgotado">M</span>
+                    <span class="tamanho-badge disponivel">G</span>
+                    <span class="tamanho-badge esgotado">GG</span>
+                </div>
+                <a class="comprar" href="https://wa.me/5515991617508?text=Olá, tenho interesse na camisa do CRUZEIRO" target="_blank">
+                    Comprar no WhatsApp
+                </a>
+            </div>
+        </div>
+
+        <!-- BAYERN DE MUNIQUE -->
+        <div class="card BAYERN-DE-MUNIQUE europeus">
+            <button class="btn-fav" data-nome="BAYERN DE MUNIQUE 2025/26" onclick="alternarFavorito(this)" title="Favoritar">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </button>
+            <div class="imagem-container">
+                <img src="BAYERS FRENTE.jpg" alt="Camisa Bayern Frente" class="foto-frente">
+                <img src="BAYERS COSTA.jpg" alt="Camisa Bayern Costas" class="foto-costas">
+            </div>
+            <div class="card-info">
+                <div class="card-header-row">
+                    <h3>BAYERN DE MUNIQUE</h3>
+                    <span class="preco">R$59<small>,90</small></span>
+                </div>
+                <p class="temporada">Temporada 2025/26</p>
+                <div class="tamanhos">
+                    <span class="tamanho-badge esgotado">P</span>
+                    <span class="tamanho-badge esgotado">M</span>
+                    <span class="tamanho-badge disponivel">G</span>
+                    <span class="tamanho-badge esgotado">GG</span>
+                </div>
+                <a class="comprar" href="https://wa.me/5515991617508?text=Olá, tenho interesse na camisa do BAYERN DE MUNIQUE" target="_blank">
+                    Comprar no WhatsApp
+                </a>
+            </div>
+        </div>
+
+        <!-- REAL MADRID 2026/27 -->
+        <div class="card REAL-MADRID europeus">
+            <button class="btn-fav" data-nome="REAL MADRID 2026/27" onclick="alternarFavorito(this)" title="Favoritar">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </button>
+            <div class="imagem-container">
+                <img src="REAL FRENTE.jpg" alt="Camisa Real Madrid Frente" class="foto-frente">
+                <img src="REAL COSTAS.jpg" alt="Camisa Real Madrid Costas" class="foto-costas">
+            </div>
+            <div class="card-info">
+                <div class="card-header-row">
+                    <h3>REAL MADRID</h3>
+                    <span class="preco">R$59<small>,90</small></span>
+                </div>
+                <p class="temporada">Temporada 2026/27</p>
+                <div class="tamanhos">
+                    <span class="tamanho-badge esgotado">P</span>
+                    <span class="tamanho-badge disponivel">M</span>
+                    <span class="tamanho-badge esgotado">G</span>
+                    <span class="tamanho-badge esgotado">GG</span>
+                </div>
+                <a class="comprar" href="https://wa.me/5515991617508?text=Olá, tenho interesse na camisa do REAL MADRID" target="_blank">
+                    Comprar no WhatsApp
+                </a>
+            </div>
+        </div>
+
+        <!-- REAL MADRID 2020/21 -->
+        <div class="card REAL-MADRID europeus">
+            <button class="btn-fav" data-nome="REAL MADRID 2020/21" onclick="alternarFavorito(this)" title="Favoritar">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </button>
+            <div class="imagem-container">
+                <img src="REAL A COSTAS.jpg" alt="Camisa Real Madrid 2020 Frente" class="foto-frente">
+                <img src="REAAL A COSTAS.jpg" alt="Camisa Real Madrid 2020 Costas" class="foto-costas">
+            </div>
+            <div class="card-info">
+                <div class="card-header-row">
+                    <h3>REAL MADRID</h3>
+                    <span class="preco">R$39<small>,90</small></span>
+                </div>
+                <p class="temporada">Temporada 2020/21</p>
+                <div class="tamanhos">
+                    <span class="tamanho-badge esgotado">P</span>
+                    <span class="tamanho-badge disponivel">M</span>
+                    <span class="tamanho-badge esgotado">G</span>
+                    <span class="tamanho-badge esgotado">GG</span>
+                </div>
+                <a class="comprar" href="https://wa.me/5515991617508?text=Olá, tenho interesse na camisa do REAL MADRID" target="_blank">
+                    Comprar no WhatsApp
+                </a>
+            </div>
+        </div>
+
+        <!-- JUVENTUS RETRÔ -->
+        <div class="card JUVENTUS europeus retro">
+            <button class="btn-fav" data-nome="JUVENTUS Retrô 2019/20" onclick="alternarFavorito(this)" title="Favoritar">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </button>
+            <div class="imagem-container">
+                <img src="JUVENTUS FRENTE.jpg" alt="Camisa Juventus Frente" class="foto-frente">
+                <img src="JUVENTUS COSTA.jpg" alt="Camisa Juventus Costas" class="foto-costas">
+            </div>
+            <div class="card-info">
+                <div class="card-header-row">
+                    <h3>JUVENTUS</h3>
+                    <span class="preco">R$49<small>,90</small></span>
+                </div>
+                <p class="temporada">Retrô 2019/20</p>
+                <div class="tamanhos">
+                    <span class="tamanho-badge esgotado">P</span>
+                    <span class="tamanho-badge esgotado">M</span>
+                    <span class="tamanho-badge disponivel">G</span>
+                    <span class="tamanho-badge esgotado">GG</span>
+                </div>
+                <a class="comprar" href="https://wa.me/5515991617508?text=Olá, tenho interesse na camisa do JUVENTUS" target="_blank">
+                    Comprar no WhatsApp
+                </a>
+            </div>
+        </div>
+
+        <!-- SÃO PAULO -->
+        <div class="card SAO-PAULO brasileirao">
+            <button class="btn-fav" data-nome="SÃO PAULO 2023/24" onclick="alternarFavorito(this)" title="Favoritar">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </button>
+            <div class="imagem-container">
+                <img src="IMG-20260207-WA0017.jpg" alt="Camisa São Paulo Frente" class="foto-frente">
+                <img src="IMG-20260207-WA0014.jpg" alt="Camisa São Paulo Costas" class="foto-costas">
+            </div>
+            <div class="card-info">
+                <div class="card-header-row">
+                    <h3>SÃO PAULO</h3>
+                    <span class="preco">R$39<small>,90</small></span>
+                </div>
+                <p class="temporada">Temporada 2023/24</p>
+                <div class="tamanhos">
+                    <span class="tamanho-badge esgotado">P</span>
+                    <span class="tamanho-badge disponivel">M</span>
+                    <span class="tamanho-badge esgotado">G</span>
+                    <span class="tamanho-badge esgotado">GG</span>
+                </div>
+                <a class="comprar" href="https://wa.me/5515991617508?text=Olá, tenho interesse na camisa do SÃO PAULO" target="_blank">
+                    Comprar no WhatsApp
+                </a>
+            </div>
+        </div>
+
+        <!-- MANCHESTER CITY -->
+        <div class="card MANCHESTER-CITY europeus">
+            <button class="btn-fav" data-nome="MANCHESTER CITY 2023/24" onclick="alternarFavorito(this)" title="Favoritar">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </button>
+            <div class="imagem-container">
+                <img src="CITY FRENTE.jpg" alt="Camisa Manchester City Frente" class="foto-frente">
+                <img src="CITY COSTAS.jpg" alt="Camisa Manchester City Costas" class="foto-costas">
+            </div>
+            <div class="card-info">
+                <div class="card-header-row">
+                    <h3>MANCHESTER CITY</h3>
+                    <span class="preco">R$49<small>,90</small></span>
+                </div>
+                <p class="temporada">Temporada 2023/24</p>
+                <div class="tamanhos">
+                    <span class="tamanho-badge esgotado">P</span>
+                    <span class="tamanho-badge esgotado">M</span>
+                    <span class="tamanho-badge disponivel">G</span>
+                    <span class="tamanho-badge esgotado">GG</span>
+                </div>
+                <a class="comprar" href="https://wa.me/5515991617508?text=Olá, tenho interesse na camisa do MANCHESTER CITY" target="_blank">
+                    Comprar no WhatsApp
+                </a>
+            </div>
+        </div>
+
+    </section>
+
+    <p class="nenhuma-camisa" id="msgNenhuma">Nenhuma camisa encontrada para essa busca.</p>
+
+    <!-- PROMOÇÕES -->
+    <section class="secao-promocoes">
+        <div class="promo-header">
+            <span class="promo-fire">🔥</span>
+            <h2>PROMOÇÃO IMPERDÍVEL</h2>
+            <span class="promo-fire">🔥</span>
+        </div>
+        <div class="promo-container">
+            <div class="card card-promo promocao">
+                <button class="btn-fav" data-nome="KIT PROMOCIONAL BRASIL 2026" onclick="alternarFavorito(this)" title="Favoritar">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                </button>
+                <div class="imagem-unica">
+                    <img src="BRASIL 2026/Kit Brasil 2026.jpg" alt="Kit Brasil 2026">
+                </div>
+                <div class="card-info">
+                    <div class="promo-badge-tag">OFERTA ESPECIAL</div>
+                    <div class="card-header-row">
+                        <h3>KIT BRASIL 2026</h3>
+                    </div>
+                    <p class="temporada">Temporada 2026/27 · 2 camisas</p>
+                    <div class="tamanhos">
+                        <span class="tamanho-badge disponivel">P</span>
+                        <span class="tamanho-badge disponivel">M</span>
+                        <span class="tamanho-badge disponivel">G</span>
+                        <span class="tamanho-badge disponivel">GG</span>
+                    </div>
+                    <div class="preco-promo-block">
+                        <span class="preco-de">De R$129,90</span>
+                        <span class="preco preco-por">R$99<small>,90</small></span>
+                    </div>
+                    <a class="comprar btn-promo" href="https://wa.me/5515991617508?text=Olá, quero aproveitar a promoção do kit camisa da seleção Brasileira!" target="_blank">
+                        Quero esse Kit!
+                    </a>
+                </div>
             </div>
         </div>
     </section>
 
-    
-
+    <!-- FAQ -->
     <section class="faq">
-        <h2>Perguntas Frequentes</h2>
-        <div class="pergunta">
-            <h3>As camisas são originais?</h3>
-            <p>Não são originais, mas... Trabalhamos com camisas tailandesas premium de alta qualidade, idênticas às originais.</p>
-        </div>
-        <div class="pergunta">
-            <h3>Quais tamanhos disponíveis?</h3>
-            <p>Temos tamanhos do P ao GG, dependendo o modelo temos Plus Size. Consulte disponibilidade no WhatsApp.</p>
-        </div>
-        <div class="pergunta">
-            <h3>Vocês entregam?</h3>
-            <p>Sim, entregamos em Itapetininga e região.</p>
-        </div>
-        <div class="pergunta">
-            <h3>Quais formas de pagamento?</h3>
-            <p>05% OFF no pagamento à vista ou até 3x sem juros no cartão.</p>
+        <div class="faq-inner">
+            <h2 class="section-title" style="text-align:left; margin-bottom: 40px;">Perguntas<br><span style="color: var(--gold)">Frequentes</span></h2>
+            <div class="faq-list">
+                <details class="faq-item">
+                    <summary>As camisas são originais?</summary>
+                    <p>Não são originais, mas trabalhamos exclusivamente com camisas tailandesas premium de alta qualidade — idênticas às originais em acabamento, tecido e detalhes.</p>
+                </details>
+                <details class="faq-item">
+                    <summary>Quais tamanhos estão disponíveis?</summary>
+                    <p>Trabalhamos do P ao GG. Dependendo do modelo, também temos opções Plus Size. Consulte a disponibilidade pelo WhatsApp antes de pedir.</p>
+                </details>
+                <details class="faq-item">
+                    <summary>Vocês entregam?</summary>
+                    <p>Sim! Atendemos Itapetininga e toda a região. O prazo é de até 5 dias úteis para a entrega.</p>
+                </details>
+                <details class="faq-item">
+                    <summary>Quais são as formas de pagamento?</summary>
+                    <p>Aceitamos pagamento à vista com <strong>5% de desconto</strong> ou parcelamento em até <strong>3x sem juros no cartão</strong>.</p>
+                </details>
+                <details class="faq-item">
+                    <summary>Como faço meu pedido?</summary>
+                    <p>Simples! Clique em "Comprar no WhatsApp" no produto desejado ou nos chame diretamente. Respondemos de segunda a sexta, das 09h às 17h.</p>
+                </details>
+            </div>
         </div>
     </section>
 
-    <a href="https://wa.me/5515991617508?text=Olá, tudo bem?! Vim pelo site e gostaria de mais informações sobre as camisas" class="whatsapp-float" target="_blank">
-        <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp">
-    </a>
-
+    <!-- FEEDBACKS -->
     <section class="feedbacks">
-        <h2>Feedbacks de Clientes</h2>
-
-        <div id="ticket-secreto" onclick="resgatarTicket()">
-            <span class="texto-ticket">🎟️ 15% OFF (CLIQUE)</span>
-        </div>
-
-        <div class="comentarios">
-            <div class="comentario">
-                <p>"Camisa chegou em 1 semana, mas a qualidade é incrível pelo preço!"</p>
-                <span>⭐️⭐️⭐️⭐️ - Lucas</span>
+        <div class="feedbacks-inner">
+            <h2 class="section-title">O que dizem<br><span style="color: var(--gold)">nossos clientes</span></h2>
+            <div id="ticket-secreto" onclick="resgatarTicket()">
+                <span>🎟️ TICKET DOURADO — CLIQUE</span>
             </div>
-            <div class="comentario">
-                <p>"Material muito bom, recomendo demais😁👍"</p>
-                <span>⭐️⭐️⭐️⭐️⭐️ - Rafael</span>
-            </div>
-            <div class="comentario">
-                <p>"Atendimento excelente no WhatsApp, logo comprarei mais umas para meu sobrinho😍💕"</p>
-                <span>⭐️⭐️⭐️⭐️⭐️ - Mariana</span>
+            <div class="comentarios">
+                <div class="comentario">
+                    <div class="stars">⭐⭐⭐⭐</div>
+                    <p>"Camisa chegou em 1 semana, mas a qualidade é incrível pelo preço!"</p>
+                    <span class="autor">— Lucas</span>
+                </div>
+                <div class="comentario">
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p>"Material muito bom, recomendo demais! Já pedi a terceira camisa."</p>
+                    <span class="autor">— Rafael</span>
+                </div>
+                <div class="comentario">
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p>"Atendimento excelente no WhatsApp, logo comprarei mais para meu sobrinho!"</p>
+                    <span class="autor">— Mariana</span>
+                </div>
             </div>
         </div>
     </section>
 
+    <!-- FOOTER -->
     <footer class="footer">
-        <div class="footer-container">
-            <div class="footer-col">
-                <h3>90+3 Qualidade até o fim</h3>
-                <p>Trabalhamos com camisas tailandesas premium de alta qualidade e camisas de primeira ou segunda linha. Atendimento em Itapetininga e região.</p>
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <p class="footer-logo"><span class="logo-accent">90</span><span class="logo-plus">+3</span></p>
+                <p>Camisas tailandesas premium para quem vive o futebol de verdade.</p>
+                <div class="footer-social">
+                    <a href="https://instagram.com/90_3.camisastailandesas" target="_blank" class="social-link">Instagram</a>
+                    <a href="https://wa.me/5515991617508" target="_blank" class="social-link">WhatsApp</a>
+                </div>
             </div>
-            <div class="footer-col">
-                <h3>Contato</h3>
-                <p>📱 WhatsApp: (15) 99161-7508</p>
-                <p>📍 Itapetininga - SP</p>
-                <p>⏰ Atendimento: Segunda a Sexta</p>
-                <p>09:00 AM - 17:00 PM</p>
-            </div>
-            <div class="footer-col">
-                <h3>Pagamento</h3>
-                <p>💰 05% OFF no pagamento à vista</p>
-                <p>💳 Cartão em até 3x sem juros</p>
-                <p>🚚 Atendimento em Itapetininga e região</p>
-            </div>
-            <div class="footer-col">
-                <h3>Redes Sociais</h3>
-                <a href="https://instagram.com/90_3.camisastailandesas" target="_blank">Instagram</a><br><br>
-                <a href="https://wa.me/5515991617508" target="_blank">WhatsApp</a>
+            <div class="footer-cols">
+                <div class="footer-col">
+                    <h4>Contato</h4>
+                    <p>📱 (15) 99161-7508</p>
+                    <p>📍 Itapetininga — SP</p>
+                    <p>⏰ Seg a Sex · 09h–17h</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Pagamento</h4>
+                    <p>💰 5% OFF à vista</p>
+                    <p>💳 3x sem juros no cartão</p>
+                    <p>🚚 Entrega local em até 5 dias</p>
+                </div>
             </div>
         </div>
         <div class="footer-copy">
-            <p>© 2026 90+3 Qualidade até o fim - Todos os direitos reservados</p>
+            <p>© 2026 90+3 Qualidade até o Fim — Todos os direitos reservados</p>
         </div>
     </footer>
 
+    <!-- FLOATING WHATSAPP -->
+    <a href="https://wa.me/5515991617508?text=Olá, vim pelo site e gostaria de mais informações sobre as camisas" class="whatsapp-float" target="_blank" title="Chamar no WhatsApp">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+    </a>
+
+    <!-- PROVA SOCIAL -->
     <div id="balao-prova">
-        <span style="font-size: 22px;">🛍️</span>
+        <span class="balao-icon">🛍️</span>
         <p id="texto-prova">Alguém acabou de encomendar uma camisa!</p>
     </div>
 
-    <div id="vitrine-flutuante" onclick="abrirModalFavoritos()">
-        <span style="font-size: 24px;">🛒</span>
+    <!-- SACOLA FLUTUANTE -->
+    <div id="vitrine-flutuante" onclick="abrirModalFavoritos()" title="Minha sacola">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
         <small id="contador-fav">0</small>
     </div>
 
+    <!-- MODAL FAVORITOS -->
     <div id="modal-favoritos" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="fecharModalFavoritos()">&times;</span>
-            <h3 style="color: #000; margin-top: 0;">Sua Vitrine Salva</h3>
-            <div id="lista-favoritos" style="text-align: left; margin: 15px 0; color: #333;"></div>
-            <button class="comprar" onclick="enviarFavoritosWhats()" style="width: 100%; border: none;">
+            <button class="modal-close" onclick="fecharModalFavoritos()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+            <div class="modal-logo"><span class="logo-accent">90</span><span class="logo-plus">+3</span></div>
+            <h3>Minha Sacola</h3>
+            <div id="lista-favoritos"></div>
+            <button class="comprar" onclick="enviarFavoritosWhats()">
                 Enviar lista para o WhatsApp
             </button>
         </div>
