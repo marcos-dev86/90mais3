@@ -474,7 +474,7 @@ nav { display: flex; gap: 10px; flex-wrap: wrap; }
 .btn-fav.ativo svg { fill: white; stroke: white; }
 
 /* IMAGEM */
-.imagem-container, .imagem-unica {
+.imagem-container {
     width: 100%;
     height: 270px;
     overflow: hidden;
@@ -482,7 +482,7 @@ nav { display: flex; gap: 10px; flex-wrap: wrap; }
     position: relative;
     background: #0f0f0f;
 }
-.imagem-container img, .imagem-unica img {
+.imagem-container img {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -490,8 +490,28 @@ nav { display: flex; gap: 10px; flex-wrap: wrap; }
     transition: transform 0.45s ease;
     display: block;
 }
-.card:hover .imagem-container img,
-.card:hover .imagem-unica img { transform: scale(1.04); }
+.card:hover .imagem-container img { transform: scale(1.04); }
+
+/* Imagem de promoção: altura fixa maior + contain = foto inteira, cards alinhados */
+.imagem-unica {
+    width: 100%;
+    height: 420px;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+    background: #0f0f0f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.imagem-unica img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    transition: transform 0.45s ease;
+}
+.card:hover .imagem-unica img { transform: scale(1.03); }
 
 /* CARD INFO */
 .card-info {
