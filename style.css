@@ -97,7 +97,7 @@ header {
 }
 .logo-tagline {
     font-family: 'Barlow Condensed', sans-serif;
-    font-size: 11px;
+    font-size: 9px;
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--text-muted);
@@ -107,7 +107,7 @@ nav { display: flex; gap: 10px; flex-wrap: wrap; }
 .nav-btn {
     display: inline-flex;
     align-items: center;
-    gap: 7px;
+    gap: 12px;
     padding: 9px 20px;
     border-radius: 50px;
     font-family: 'Barlow Condensed', sans-serif;
