@@ -1,3 +1,13 @@
+// ── 0. AJUSTA PADDING-TOP CONFORME ALTURA DO TOPO FIXO ──
+function ajustarPaddingTopo() {
+    const topo = document.querySelector('.topo-fixo');
+    if (topo) {
+        document.body.style.paddingTop = topo.offsetHeight + 'px';
+    }
+}
+window.addEventListener('load', ajustarPaddingTopo);
+window.addEventListener('resize', ajustarPaddingTopo);
+
 /* ============================================
    90+3 — SCRIPT.JS
    Todas as funcionalidades originais mantidas
@@ -216,8 +226,8 @@ document.addEventListener("DOMContentLoaded", function () {
     // ── Iniciar prova social após 12s ──
     setTimeout(() => {
         exibirProvaSocial();
-        setInterval(exibirProvaSocial, 50000);
-    }, 22000);
+        setInterval(exibirProvaSocial, 22000);
+    }, 12000);
 });
 
 // ── 6. PROVA SOCIAL ──
