@@ -223,11 +223,11 @@ document.addEventListener("DOMContentLoaded", function () {
         observer.observe(card);
     });
 
-    // ── Iniciar prova social após 12s ──
+    // ── Iniciar prova social após 4min30s ──
     setTimeout(() => {
         exibirProvaSocial();
-        setInterval(exibirProvaSocial, 22000);
-    }, 12000);
+        setInterval(exibirProvaSocial, 270000);
+    }, 270000);
 });
 
 // ── 6. PROVA SOCIAL ──
@@ -239,6 +239,7 @@ const produtos = [
     "uma camisa do Real Madrid",
     "uma camisa do Corinthians",
     "uma camisa do Barcelona",
+    "uma camisa do Barcelona retro",
     "uma camisa do PSG",
     "o kit Brasil + Palmeiras"
 ];
