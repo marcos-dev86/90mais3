@@ -34,6 +34,15 @@ body {
     color: var(--text);
     overflow-x: hidden;
     line-height: 1.6;
+    padding-top: var(--topo-altura, 90px);
+}
+
+/* Logo imagem no header */
+.logo-img {
+    height: 54px;
+    width: auto;
+    display: block;
+    object-fit: contain;
 }
 
 /* ── TICKER / PROMO BAR ── */
@@ -49,7 +58,7 @@ body {
     animation: ticker 28s linear infinite;
     padding-left: 100%;
     font-family: 'Barlow Condensed', sans-serif;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -63,13 +72,19 @@ body {
 }
 
 /* ── HEADER ── */
-header {
-    position: sticky;
+/* Topo fixo: ticker + header juntos */
+.topo-fixo {
+    position: fixed;
     top: 0;
+    left: 0;
+    right: 0;
     z-index: 200;
-    background: rgba(10,10,10,0.92);
+    background: rgba(10,10,10,0.97);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
+}
+
+header {
     border-bottom: 1px solid var(--border);
 }
 .header-inner {
@@ -97,7 +112,7 @@ header {
 }
 .logo-tagline {
     font-family: 'Barlow Condensed', sans-serif;
-    font-size: 13px;
+    font-size: 11px;
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--text-muted);
