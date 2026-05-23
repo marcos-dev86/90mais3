@@ -37,13 +37,6 @@ body {
     padding-top: var(--topo-altura, 90px);
 }
 
-/* Logo imagem no header */
-.logo-img {
-    height: 54px;
-    width: auto;
-    display: block;
-    object-fit: contain;
-}
 
 /* ── TICKER / PROMO BAR ── */
 .ticker-wrap {
