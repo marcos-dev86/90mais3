@@ -156,7 +156,7 @@ function gerarCardHTML(c) {
     const est = c.estoque || {};
     const nomeDisplay = c.nome;
     const ligaClass = c.liga || '';
-    const timeClass = c.time.toUpperCase().replace(/\s+/g, '-').replace(/[^A-Z0-9-]/g, '');
+    const timeClass = (c.time || c.nome || '').toUpperCase().replace(/\s+/g, '-').replace(/[^A-Z0-9-]/g, '');
     const preco = parseFloat(c.preco).toFixed(2).replace('.', ',').split(',');
     const precoInt = preco[0];
     const precoCent = preco[1];
@@ -176,11 +176,11 @@ function gerarCardHTML(c) {
         </button>
         <div class="imagem-container" role="button" tabindex="0" aria-label="Ver costas da camisa ${nomeDisplay}">
             <picture>
-                <source srcset="${c.foto_frente}" type="image/webp">
+                
                 <img src="${c.foto_frente}" alt="Camisa ${nomeDisplay} ${c.temporada} - frente" class="foto-frente" loading="lazy" width="400" height="270">
             </picture>
             <picture>
-                <source srcset="${c.foto_costas}" type="image/webp">
+                
                 <img src="${c.foto_costas}" alt="Camisa ${nomeDisplay} ${c.temporada} - costas" class="foto-costas" loading="lazy" width="400" height="270">
             </picture>
         </div>
