@@ -38,6 +38,238 @@
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,400;0,600;0,700;1,400&family=Barlow+Condensed:wght@400;700;900&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="style.css">
+
+    <script>
+        // ═══════════════════════════════════════════════════════════════
+//  90+3 — Catálogo dinâmico (substitui o <script> de catálogo
+//  que está dentro do index.html, logo antes do </body>)
+// ═══════════════════════════════════════════════════════════════
+
+const API_URL = 'https://api-90mais3.vercel.app';
+
+// ── Estado ────────────────────────────────────────────────────
+let todasCamisas    = [];
+let categoriaAtiva  = 'todos';
+let termoBusca      = '';
+let ordenacaoAtiva  = 'relevancia';   // 'relevancia' | 'preco-asc' | 'preco-desc'
+let tamanhosAtivos  = [];             // ex: ['P', 'G'] — vazio = todos
+
+// ── Inicialização ─────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', async () => {
+    await carregarCamisas();
+    iniciarBuscaDinamica();
+    iniciarFiltroOrdenacao();
+    iniciarFiltroTamanho();
+});
+
+// ── Busca as camisas na API ───────────────────────────────────
+async function carregarCamisas() {
+    try {
+        const res = await fetch(`${API_URL}/api/camisas`);
+        if (!res.ok) throw new Error('Falha na API');
+        todasCamisas = await res.json();
+        renderizarCatalogo();
+    } catch (e) {
+        console.error('Erro ao carregar catálogo:', e);
+        document.getElementById('catalogo-grid').innerHTML =
+            '<p style="text-align:center;color:#888;padding:3rem;grid-column:1/-1">Erro ao carregar catálogo. Tente recarregar a página.</p>';
+    }
+}
+
+// ── Renderiza os cards no grid ────────────────────────────────
+function renderizarCatalogo() {
+    const grid     = document.getElementById('catalogo-grid');
+    const msgVazia = document.getElementById('msgNenhuma');
+
+    let filtradas = todasCamisas;
+
+    // Filtro de liga
+    if (categoriaAtiva !== 'todos') {
+        filtradas = filtradas.filter(c => c.liga === categoriaAtiva || (c.tags || []).includes(categoriaAtiva));
+    }
+
+    // Filtro de busca textual
+    if (termoBusca) {
+        const t = termoBusca.toLowerCase();
+        filtradas = filtradas.filter(c =>
+            c.nome.toLowerCase().includes(t) ||
+            c.temporada.toLowerCase().includes(t) ||
+            c.modelo.toLowerCase().includes(t)
+        );
+    }
+
+    // Filtro de tamanho — só mostra camisas com estoque > 0 em algum dos tamanhos escolhidos
+    if (tamanhosAtivos.length > 0) {
+        filtradas = filtradas.filter(c => {
+            const est = c.estoque || {};
+            return tamanhosAtivos.some(t => Number(est[t] ?? 0) > 0);
+        });
+    }
+
+    // Ordenação
+    filtradas = ordenarCamisas(filtradas);
+
+    if (filtradas.length === 0) {
+        grid.innerHTML = '';
+        msgVazia.style.display = 'block';
+        return;
+    }
+
+    msgVazia.style.display = 'none';
+    grid.innerHTML = filtradas.map(gerarCardHTML).join('');
+
+    // Flip frente/costas ao clicar na imagem
+    grid.querySelectorAll('.imagem-container').forEach(el => {
+        el.addEventListener('click', () => el.classList.toggle('virado'));
+        el.addEventListener('keydown', e => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                el.classList.toggle('virado');
+            }
+        });
+    });
+
+    // Botões de favorito gerados dinamicamente
+    grid.querySelectorAll('.btn-fav').forEach(btn => {
+        btn.addEventListener('click', () => alternarFavorito(btn));
+    });
+}
+
+// ── Aplica a ordenação escolhida ──────────────────────────────
+// IMPORTANTE: a ordenação por relevância usa o campo "prioridade"
+// vindo do banco (maior prioridade aparece primeiro). Quando o admin
+// muda a prioridade no painel, a ordem do site muda automaticamente.
+function ordenarCamisas(lista) {
+    const copia = [...lista];
+
+    if (ordenacaoAtiva === 'preco-asc') {
+        copia.sort((a, b) => Number(a.preco) - Number(b.preco));
+    } else if (ordenacaoAtiva === 'preco-desc') {
+        copia.sort((a, b) => Number(b.preco) - Number(a.preco));
+    } else {
+        // relevância — usa prioridade (maior primeiro), depois id como desempate
+        copia.sort((a, b) => {
+            const diff = (Number(b.prioridade) || 0) - (Number(a.prioridade) || 0);
+            return diff !== 0 ? diff : a.id - b.id;
+        });
+    }
+
+    return copia;
+}
+
+// ── Gera o HTML de um card a partir dos dados da API ──────────
+function gerarCardHTML(c) {
+    const est      = c.estoque || {};
+    const tamanhos = ['P', 'M', 'G', 'GG'];
+    const preco    = Number(c.preco).toFixed(2).split('.');
+
+    const slug = c.nome.normalize('NFD')
+                   .replace(/[\u0300-\u036f]/g, '')
+                   .replace(/\s+/g, '-')
+                   .toUpperCase();
+
+    const tamanhosHTML = tamanhos.map(t => {
+        const qtd = Number(est[t] ?? 0);
+        const cls = qtd > 0 ? 'disponivel' : 'esgotado';
+        const lbl = qtd > 0 ? `Tamanho ${t} disponível` : `Tamanho ${t} esgotado`;
+        return `<span class="tamanho-badge ${cls}" aria-label="${lbl}">${t}</span>`;
+    }).join('');
+
+    // ── Identificador ÚNICO da camisa (corrige bug do carrinho) ──
+    // Antes o carrinho usava só "nome + temporada", então duas camisas
+    // do Brasil (ex: Modelo 1 e Modelo 2) colidiam e uma sumia da sacola.
+    // Agora o MODELO faz parte do identificador e do texto exibido.
+    const identificador = `${c.nome}|${c.temporada}|${c.modelo}`;
+    const nomeCompleto   = `${c.nome} ${c.temporada} - ${c.modelo}`;
+
+    const msgWpp = encodeURIComponent(
+        `Olá, tenho interesse na camisa do ${c.nome} ${c.temporada} - ${c.modelo}`
+    );
+
+    return `
+<article class="card ${slug} ${c.liga}" data-id="${c.id}">
+    <button class="btn-fav" data-id="${identificador}" data-nome="${nomeCompleto}"
+            title="Favoritar ${nomeCompleto}" aria-label="Adicionar ${nomeCompleto} à sacola" aria-pressed="false">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+    </button>
+    <div class="imagem-container" role="button" tabindex="0" aria-label="Ver costas da camisa ${c.nome}">
+        <picture>
+            <source srcset="${c.foto_frente}" type="image/webp">
+            <img src="${c.foto_frente}" alt="Camisa ${c.nome} ${c.temporada} - frente"
+                 class="foto-frente" loading="lazy" width="400" height="270">
+        </picture>
+        <picture>
+            <source srcset="${c.foto_costas}" type="image/webp">
+            <img src="${c.foto_costas}" alt="Camisa ${c.nome} ${c.temporada} - costas"
+                 class="foto-costas" loading="lazy" width="400" height="270">
+        </picture>
+    </div>
+    <div class="card-info">
+        <div class="card-header-row">
+            <h3>${c.nome}</h3>
+            <span class="preco" aria-label="Preço: R$${preco[0]},${preco[1]}">R$${preco[0]}<small>,${preco[1]}</small></span>
+        </div>
+        <p class="temporada">${c.temporada} · ${c.modelo}</p>
+        <div class="tamanhos" aria-label="Tamanhos disponíveis">${tamanhosHTML}</div>
+        <a class="comprar"
+           href="https://wa.me/5515991617508?text=${msgWpp}"
+           target="_blank" rel="noopener noreferrer"
+           aria-label="Comprar camisa ${nomeCompleto} no WhatsApp">
+            Comprar no WhatsApp
+        </a>
+    </div>
+</article>`;
+}
+
+// ── Filtros por liga ───────────────────────────────────────────
+function filtrarCategoria(liga, btn) {
+    categoriaAtiva = liga;
+    document.querySelectorAll('.filtro-pill').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    renderizarCatalogo();
+}
+
+// ── Busca por texto ────────────────────────────────────────────
+function pesquisarCamisa() {
+    termoBusca = document.getElementById('campoPesquisa').value.trim();
+    renderizarCatalogo();
+}
+
+function iniciarBuscaDinamica() {
+    const input = document.getElementById('campoPesquisa');
+    if (!input) return;
+    input.addEventListener('input', () => {
+        termoBusca = input.value.trim();
+        renderizarCatalogo();
+    });
+}
+
+// ── Filtro de ordenação (relevância / preço) ───────────────────
+function iniciarFiltroOrdenacao() {
+    const select = document.getElementById('filtroOrdenacao');
+    if (!select) return;
+    select.addEventListener('change', () => {
+        ordenacaoAtiva = select.value;
+        renderizarCatalogo();
+    });
+}
+
+// ── Filtro de tamanhos (checkboxes P, M, G, GG) ────────────────
+function iniciarFiltroTamanho() {
+    const checkboxes = document.querySelectorAll('.filtro-tamanho-check');
+    if (!checkboxes.length) return;
+    checkboxes.forEach(cb => {
+        cb.addEventListener('change', () => {
+            tamanhosAtivos = Array.from(checkboxes)
+                .filter(c => c.checked)
+                .map(c => c.value);
+            renderizarCatalogo();
+        });
+    });
+}
+    </script>
 </head>
 <body>
 
