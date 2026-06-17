@@ -16,7 +16,13 @@ function toggleFiltros() {
     btn?.setAttribute("aria-expanded", aberto ? "true" : "false");
 }
 
+// ── Estado dos filtros (liga / busca / ordenação / tamanho) ───────────────
+let categoriaAtiva = "todos";
+let ordenacaoAtiva = "relevancia";   // 'relevancia' | 'preco-asc' | 'preco-desc'
+let tamanhosAtivos = [];             // ex: ['P','G'] — vazio = todos
+
 function filtrarCategoria(categoria, el) {
+    categoriaAtiva = categoria;
     document.querySelectorAll(".filtro-pill").forEach(p => {
         p.classList.remove("active");
         p.removeAttribute("aria-current");
@@ -25,15 +31,7 @@ function filtrarCategoria(categoria, el) {
         el.classList.add("active");
         el.setAttribute("aria-current", "true");
     }
-    const cards = document.querySelectorAll(".card:not(.promocao)");
-    let visiveis = 0;
-    cards.forEach(card => {
-        const visivel = categoria === "todos" || card.classList.contains(categoria);
-        card.style.display = visivel ? "" : "none";
-        if (visivel) visiveis++;
-    });
-    const msg = document.getElementById("msgNenhuma");
-    if (msg) msg.style.display = visiveis === 0 ? "block" : "none";
+    aplicarTodosFiltros();
 }
 
 function debounce(fn, delay) {
@@ -45,49 +43,137 @@ function debounce(fn, delay) {
 }
 
 function pesquisarCamisa() {
-    const campo = document.getElementById("campoPesquisa");
-    if (!campo) return;
-    const entrada = campo.value.toLowerCase().trim();
-    const cards = document.querySelectorAll(".card:not(.promocao)");
-    let visiveis = 0;
-    cards.forEach(card => {
-        const conteudo = card.innerText.toLowerCase();
-        const visivel = conteudo.includes(entrada);
-        card.style.display = visivel ? "" : "none";
-        if (visivel) visiveis++;
-    });
-    const msg = document.getElementById("msgNenhuma");
-    if (msg) msg.style.display = visiveis === 0 ? "block" : "none";
-    document.querySelectorAll(".filtro-pill").forEach(p => {
-        p.classList.remove("active");
-        p.removeAttribute("aria-current");
-    });
-    if (entrada === "") {
-        const todas = document.querySelector(".filtro-pill");
-        if (todas) {
-            todas.classList.add("active");
-            todas.setAttribute("aria-current", "true");
-        }
-    }
+    aplicarTodosFiltros();
 }
 
 const pesquisarDebounced = debounce(pesquisarCamisa, 220);
 
+// ── Filtro de ordenação (relevância / preço) ───────────────────────────────
+function iniciarFiltroOrdenacao() {
+    const select = document.getElementById("filtroOrdenacao");
+    if (!select) return;
+    select.addEventListener("change", () => {
+        ordenacaoAtiva = select.value;
+        aplicarTodosFiltros();
+    });
+}
+
+// ── Filtro de tamanhos (checkboxes P, M, G, GG) ────────────────────────────
+function iniciarFiltroTamanho() {
+    const checkboxes = document.querySelectorAll(".filtro-tamanho-check");
+    if (!checkboxes.length) return;
+    checkboxes.forEach(cb => {
+        cb.addEventListener("change", () => {
+            tamanhosAtivos = Array.from(checkboxes).filter(c => c.checked).map(c => c.value);
+            aplicarTodosFiltros();
+        });
+    });
+}
+
+// ── Aplica busca + categoria + tamanho sobre os cards já renderizados,
+//    e reordena conforme a ordenação ativa. Promoções (.promocao) nunca
+//    são afetadas por nenhum desses filtros. ──────────────────────────────
+function aplicarTodosFiltros() {
+    const campo = document.getElementById("campoPesquisa");
+    const termo = campo ? campo.value.toLowerCase().trim() : "";
+    const grid  = document.getElementById("catalogo-grid");
+    const cards = Array.from(document.querySelectorAll(".card:not(.promocao)"));
+
+    let visiveis = 0;
+
+    cards.forEach(card => {
+        const conteudo = card.innerText.toLowerCase();
+
+        const passaCategoria = categoriaAtiva === "todos" || card.classList.contains(categoriaAtiva);
+        const passaBusca = termo === "" || conteudo.includes(termo);
+
+        let passaTamanho = true;
+        if (tamanhosAtivos.length > 0) {
+            const disponiveis = Array.from(card.querySelectorAll(".tamanho-badge.disponivel"))
+                .map(b => b.textContent.trim());
+            passaTamanho = tamanhosAtivos.some(t => disponiveis.includes(t));
+        }
+
+        const visivel = passaCategoria && passaBusca && passaTamanho;
+        card.style.display = visivel ? "" : "none";
+        if (visivel) visiveis++;
+    });
+
+    // Reordena os cards visíveis dentro do grid conforme a ordenação ativa
+    if (grid) {
+        const ordenados = ordenarCardsNoDOM(cards);
+        ordenados.forEach(card => grid.appendChild(card));
+    }
+
+    const msg = document.getElementById("msgNenhuma");
+    if (msg) msg.style.display = visiveis === 0 ? "block" : "none";
+
+    // Sincroniza o estado visual dos botões de filtro de liga
+    if (termo !== "") {
+        document.querySelectorAll(".filtro-pill").forEach(p => {
+            p.classList.remove("active");
+            p.removeAttribute("aria-current");
+        });
+    }
+}
+
+// ── Reordena os elementos <article class="card"> com base no data-preco
+//    e data-prioridade (gravados em cada card na hora da renderização). ───
+function ordenarCardsNoDOM(cards) {
+    const copia = [...cards];
+
+    if (ordenacaoAtiva === "preco-asc") {
+        copia.sort((a, b) => Number(a.dataset.preco) - Number(b.dataset.preco));
+    } else if (ordenacaoAtiva === "preco-desc") {
+        copia.sort((a, b) => Number(b.dataset.preco) - Number(a.dataset.preco));
+    } else {
+        // relevância — maior prioridade primeiro, desempate por id (ordem de cadastro)
+        copia.sort((a, b) => {
+            const diff = Number(b.dataset.prioridade) - Number(a.dataset.prioridade);
+            return diff !== 0 ? diff : Number(a.dataset.id) - Number(b.dataset.id);
+        });
+    }
+
+    return copia;
+}
+
+// ── Sacola / Favoritos ──────────────────────────────────────────────────
+// IMPORTANTE: a chave de cada item agora é "nome|temporada|modelo" em vez
+// de só "nome temporada". Isso corrige o bug em que duas camisas com nome
+// parecido (ex: 4 camisas diferentes do Brasil) se sobrescreviam na sacola.
+// O texto exibido ao cliente continua completo e legível, incluindo o modelo.
+
 let favoritos = [];
-try { favoritos = JSON.parse(localStorage.getItem("fav_903")) || []; } catch (e) { favoritos = []; }
+try {
+    const salvos = JSON.parse(localStorage.getItem("fav_903")) || [];
+    // Compatibilidade: favoritos antigos eram só strings (texto exibido).
+    // Convertemos para o novo formato { id, nome } usando o próprio texto como id.
+    favoritos = salvos.map(item =>
+        typeof item === "string" ? { id: item, nome: item } : item
+    );
+} catch (e) { favoritos = []; }
+
+function salvarFavoritos() {
+    try { localStorage.setItem("fav_903", JSON.stringify(favoritos)); } catch (e) {}
+}
 
 function alternarFavorito(botao) {
+    const id   = botao.getAttribute("data-id") || botao.getAttribute("data-nome");
     const nome = botao.getAttribute("data-nome");
-    if (favoritos.includes(nome)) {
-        favoritos = favoritos.filter(i => i !== nome);
+
+    const indice = favoritos.findIndex(item => item.id === id);
+
+    if (indice >= 0) {
+        favoritos.splice(indice, 1);
         botao.classList.remove("ativo");
         botao.setAttribute("aria-pressed", "false");
     } else {
-        favoritos.push(nome);
+        favoritos.push({ id, nome });
         botao.classList.add("ativo");
         botao.setAttribute("aria-pressed", "true");
     }
-    try { localStorage.setItem("fav_903", JSON.stringify(favoritos)); } catch(e) {}
+
+    salvarFavoritos();
     atualizarContador();
     animarBotaoFav(botao);
 }
@@ -115,11 +201,35 @@ function abrirModalFavoritos() {
     if (favoritos.length === 0) {
         lista.innerHTML = `<p style="text-align:center; color: var(--text-muted); padding: 20px 0;">Sua sacola está vazia.<br>Marque suas favoritas com ♥</p>`;
     } else {
-        lista.innerHTML = favoritos.map(item => `<p>${item}</p>`).join("");
+        lista.innerHTML = favoritos.map(item => `
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.08)">
+                <p style="margin:0">${item.nome}</p>
+                <button onclick="removerFavoritoPorId('${item.id.replace(/'/g, "\\'")}')"
+                        aria-label="Remover ${item.nome} da sacola"
+                        style="background:none;border:none;color:var(--red, #e63946);cursor:pointer;font-size:1.2rem;line-height:1;flex-shrink:0">&times;</button>
+            </div>
+        `).join("");
     }
     modal.classList.add("open");
     modal.style.display = "flex";
     setTimeout(() => { modal.querySelector('.modal-close')?.focus(); }, 50);
+}
+
+function removerFavoritoPorId(id) {
+    favoritos = favoritos.filter(item => item.id !== id);
+    salvarFavoritos();
+    atualizarContador();
+
+    // Sincroniza o botão de coração correspondente, se estiver na tela
+    document.querySelectorAll(`.btn-fav`).forEach(btn => {
+        const btnId = btn.getAttribute("data-id") || btn.getAttribute("data-nome");
+        if (btnId === id) {
+            btn.classList.remove("ativo");
+            btn.setAttribute("aria-pressed", "false");
+        }
+    });
+
+    abrirModalFavoritos();
 }
 
 function fecharModalFavoritos() {
@@ -130,7 +240,7 @@ function fecharModalFavoritos() {
 
 function enviarFavoritosWhats() {
     if (favoritos.length === 0) { alert("Adicione camisas na sua sacola primeiro!"); return; }
-    const lista = favoritos.map(f => "  • " + f).join("\n");
+    const lista = favoritos.map(f => "  • " + f.nome).join("\n");
     const msg = `Olá! Tenho interesse nessas camisas da 90+3:\n\n${lista}\n\nGostaria de consultar disponibilidade e fechar pedido!`;
     window.open(`https://wa.me/5515991617508?text=${encodeURIComponent(msg)}`, "_blank");
 }
@@ -156,11 +266,20 @@ function gerarCardHTML(c) {
     const est = c.estoque || {};
     const nomeDisplay = c.nome;
     const ligaClass = c.liga || '';
+    const tagsClass = Array.isArray(c.tags) ? c.tags.join(' ') : '';
     const timeClass = (c.time || c.nome || '').toUpperCase().replace(/\s+/g, '-').replace(/[^A-Z0-9-]/g, '');
     const preco = parseFloat(c.preco).toFixed(2).replace('.', ',').split(',');
     const precoInt = preco[0];
     const precoCent = preco[1];
-    const nomeWA = encodeURIComponent(`Olá, tenho interesse na camisa do ${c.nome} ${c.temporada}`);
+
+    // Identificador ÚNICO (corrige o bug de camisas com nome parecido).
+    // Inclui o modelo, então duas camisas do Brasil com modelos diferentes
+    // nunca colidem no carrinho.
+    const idUnico = `${c.nome}|${c.temporada}|${c.modelo}`;
+    const nomeCompleto = `${nomeDisplay} ${c.temporada} - ${c.modelo}`;
+
+    const nomeWA = encodeURIComponent(`Olá, tenho interesse na camisa do ${nomeDisplay} ${c.temporada} - ${c.modelo}`);
+
     const tamanhos = ['P','M','G','GG'].map(t => {
         const qtd = est[t] ?? 0;
         const cls = qtd > 0 ? 'disponivel' : 'esgotado';
@@ -169,9 +288,10 @@ function gerarCardHTML(c) {
     }).join('');
 
     return `
-    <article class="card ${timeClass} ${ligaClass}">
-        <button class="btn-fav" data-nome="${nomeDisplay} ${c.temporada}" onclick="alternarFavorito(this)"
-            title="Favoritar ${nomeDisplay} ${c.temporada}" aria-label="Adicionar ${nomeDisplay} ${c.temporada} à sacola" aria-pressed="false">
+    <article class="card ${timeClass} ${ligaClass} ${tagsClass}"
+             data-id="${c.id}" data-preco="${c.preco}" data-prioridade="${c.prioridade || 0}">
+        <button class="btn-fav" data-id="${idUnico}" data-nome="${nomeCompleto}" onclick="alternarFavorito(this)"
+            title="Favoritar ${nomeCompleto}" aria-label="Adicionar ${nomeCompleto} à sacola" aria-pressed="false">
             ${FAV_SVG}
         </button>
         <div class="imagem-container" role="button" tabindex="0" aria-label="Ver costas da camisa ${nomeDisplay}">
@@ -192,7 +312,7 @@ function gerarCardHTML(c) {
             <p class="temporada">${c.temporada} · ${c.modelo}</p>
             <div class="tamanhos" aria-label="Tamanhos disponíveis">${tamanhos}</div>
             <a class="comprar" href="https://wa.me/5515991617508?text=${nomeWA}"
-                target="_blank" rel="noopener noreferrer" aria-label="Comprar camisa ${nomeDisplay} no WhatsApp">
+                target="_blank" rel="noopener noreferrer" aria-label="Comprar camisa ${nomeCompleto} no WhatsApp">
                 Comprar no WhatsApp
             </a>
         </div>
@@ -215,7 +335,14 @@ async function carregarCatalogo() {
             return;
         }
 
-        grid.innerHTML = camisas.map(gerarCardHTML).join('');
+        // Ordena por prioridade (relevância) já na primeira renderização —
+        // é o comportamento padrão do site até o usuário trocar a ordenação.
+        const ordenadas = [...camisas].sort((a, b) => {
+            const diff = (Number(b.prioridade) || 0) - (Number(a.prioridade) || 0);
+            return diff !== 0 ? diff : a.id - b.id;
+        });
+
+        grid.innerHTML = ordenadas.map(gerarCardHTML).join('');
         inicializarCards();
     } catch (err) {
         console.error(err);
@@ -226,8 +353,8 @@ async function carregarCatalogo() {
 function inicializarCards() {
     atualizarContador();
     document.querySelectorAll(".btn-fav").forEach(botao => {
-        const nome = botao.getAttribute("data-nome");
-        if (favoritos.includes(nome)) {
+        const id = botao.getAttribute("data-id") || botao.getAttribute("data-nome");
+        if (favoritos.some(item => item.id === id)) {
             botao.classList.add("ativo");
             botao.setAttribute("aria-pressed", "true");
         }
@@ -289,6 +416,9 @@ function inicializarCards() {
         card.style.transition = `opacity 0.5s ease ${(i % 6) * 0.07}s, transform 0.5s ease ${(i % 6) * 0.07}s`;
         observer.observe(card);
     });
+
+    // Reaplica os filtros/ordenação ativos (útil após recarregar o catálogo)
+    aplicarTodosFiltros();
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -299,6 +429,9 @@ document.addEventListener("DOMContentLoaded", function () {
         campo.addEventListener("keypress", e => { if (e.key === "Enter") pesquisarCamisa(); });
         campo.addEventListener("input", pesquisarDebounced);
     }
+
+    iniciarFiltroOrdenacao();
+    iniciarFiltroTamanho();
 
     document.getElementById('vitrine-flutuante')?.addEventListener('keydown', e => {
         if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); abrirModalFavoritos(); }
