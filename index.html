@@ -138,6 +138,138 @@
         </div>
     </section>
 
+    <!-- ═══════════════════════════════════════════════════════════════
+     NOVO BLOCO DE FILTROS — Ordenação + Tamanho
+     Cole este bloco DENTRO da <section class="busca-section">,
+     logo depois da <div id="abaFiltros" class="filtros-container">...</div>
+     (ou seja, depois dos botões de liga: Todas / Brasileirão / Europeus / etc.)
+═══════════════════════════════════════════════════════════════ -->
+
+<div class="filtros-avancados" aria-label="Ordenação e filtro de tamanho">
+
+    <!-- Ordenação -->
+    <div class="filtro-ordenacao-wrap">
+        <label for="filtroOrdenacao" class="filtro-avancado-label">Ordenar por</label>
+        <select id="filtroOrdenacao" class="filtro-ordenacao">
+            <option value="relevancia">Relevância</option>
+            <option value="preco-asc">Menor preço</option>
+            <option value="preco-desc">Maior preço</option>
+        </select>
+    </div>
+
+    <!-- Tamanhos -->
+    <div class="filtro-tamanho-wrap">
+        <span class="filtro-avancado-label">Tamanho</span>
+        <div class="filtro-tamanho-grupo">
+            <label class="filtro-tamanho-pill">
+                <input type="checkbox" class="filtro-tamanho-check" value="P">
+                <span>P</span>
+            </label>
+            <label class="filtro-tamanho-pill">
+                <input type="checkbox" class="filtro-tamanho-check" value="M">
+                <span>M</span>
+            </label>
+            <label class="filtro-tamanho-pill">
+                <input type="checkbox" class="filtro-tamanho-check" value="G">
+                <span>G</span>
+            </label>
+            <label class="filtro-tamanho-pill">
+                <input type="checkbox" class="filtro-tamanho-check" value="GG">
+                <span>GG</span>
+            </label>
+        </div>
+    </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     CSS — cole dentro do <style> existente ou no style.css
+═══════════════════════════════════════════════════════════════ -->
+<style>
+    .filtros-avancados {
+        display: flex;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        align-items: flex-end;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .filtro-avancado-label {
+        display: block;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #888;
+        margin-bottom: 0.4rem;
+    }
+
+    .filtro-ordenacao-wrap { min-width: 180px; }
+
+    .filtro-ordenacao {
+        width: 100%;
+        background: #181818;
+        border: 1px solid #2a2a2a;
+        border-radius: 8px;
+        padding: 0.55rem 0.85rem;
+        color: #f0f0f0;
+        font-size: 0.9rem;
+        outline: none;
+        cursor: pointer;
+    }
+    .filtro-ordenacao:focus { border-color: #c9a227; }
+    .filtro-ordenacao option { background: #181818; }
+
+    .filtro-tamanho-grupo {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .filtro-tamanho-pill {
+        position: relative;
+        cursor: pointer;
+    }
+
+    .filtro-tamanho-pill input {
+        position: absolute;
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .filtro-tamanho-pill span {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 42px;
+        height: 38px;
+        padding: 0 0.6rem;
+        border-radius: 8px;
+        border: 1px solid #2a2a2a;
+        background: #181818;
+        color: #ccc;
+        font-size: 0.85rem;
+        font-weight: 700;
+        transition: all .15s;
+    }
+
+    .filtro-tamanho-pill input:checked + span {
+        background: rgba(201,162,39,0.16);
+        border-color: #c9a227;
+        color: #e8be3a;
+    }
+
+    .filtro-tamanho-pill:hover span {
+        border-color: #c9a227;
+    }
+
+    @media (max-width: 600px) {
+        .filtros-avancados { flex-direction: column; align-items: stretch; gap: 1rem; }
+    }
+</style>
+    
     <!-- CATÁLOGO -->
     <section class="section-title-block">
         <h2 class="section-title">EXPLORAR MODELOS</h2>
