@@ -22,7 +22,7 @@
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content="https://site-camisas.vercel.app/logo.webp">
-    
+
     <meta property="og:locale" content="pt_BR">
 
     <title>90+3 — Camisas Com Qualidade Até o Fim | Itapetininga</title>
@@ -31,7 +31,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <!--  PERFORMANCE: Favicon em WebP (mais leve) — troque logo.webp por logo.webp sem alteração, já está ok -->
+    <!--  PERFORMANCE: Favicon em WebP -->
     <link rel="icon" type="image/webp" href="logo.webp">
 
     <!--  PERFORMANCE: Fontes com display=swap para não bloquear render -->
@@ -39,237 +39,91 @@
 
     <link rel="stylesheet" href="style.css">
 
-    <script>
-        // ═══════════════════════════════════════════════════════════════
-//  90+3 — Catálogo dinâmico (substitui o <script> de catálogo
-//  que está dentro do index.html, logo antes do </body>)
-// ═══════════════════════════════════════════════════════════════
+    <!-- CSS dos filtros avançados (Ordenação + Tamanho) -->
+    <style>
+        .filtros-avancados {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            align-items: flex-end;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
 
-const API_URL = 'https://api-90mais3.vercel.app';
+        .filtro-avancado-label {
+            display: block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #888;
+            margin-bottom: 0.4rem;
+        }
 
-// ── Estado ────────────────────────────────────────────────────
-let todasCamisas    = [];
-let categoriaAtiva  = 'todos';
-let termoBusca      = '';
-let ordenacaoAtiva  = 'relevancia';   // 'relevancia' | 'preco-asc' | 'preco-desc'
-let tamanhosAtivos  = [];             // ex: ['P', 'G'] — vazio = todos
+        .filtro-ordenacao-wrap { min-width: 180px; }
 
-// ── Inicialização ─────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', async () => {
-    await carregarCamisas();
-    iniciarBuscaDinamica();
-    iniciarFiltroOrdenacao();
-    iniciarFiltroTamanho();
-});
+        .filtro-ordenacao {
+            width: 100%;
+            background: #181818;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            padding: 0.55rem 0.85rem;
+            color: #f0f0f0;
+            font-size: 0.9rem;
+            outline: none;
+            cursor: pointer;
+        }
+        .filtro-ordenacao:focus { border-color: #c9a227; }
+        .filtro-ordenacao option { background: #181818; }
 
-// ── Busca as camisas na API ───────────────────────────────────
-async function carregarCamisas() {
-    try {
-        const res = await fetch(`${API_URL}/api/camisas`);
-        if (!res.ok) throw new Error('Falha na API');
-        todasCamisas = await res.json();
-        renderizarCatalogo();
-    } catch (e) {
-        console.error('Erro ao carregar catálogo:', e);
-        document.getElementById('catalogo-grid').innerHTML =
-            '<p style="text-align:center;color:#888;padding:3rem;grid-column:1/-1">Erro ao carregar catálogo. Tente recarregar a página.</p>';
-    }
-}
+        .filtro-tamanho-grupo {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
 
-// ── Renderiza os cards no grid ────────────────────────────────
-function renderizarCatalogo() {
-    const grid     = document.getElementById('catalogo-grid');
-    const msgVazia = document.getElementById('msgNenhuma');
+        .filtro-tamanho-pill {
+            position: relative;
+            cursor: pointer;
+        }
 
-    let filtradas = todasCamisas;
+        .filtro-tamanho-pill input {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
 
-    // Filtro de liga
-    if (categoriaAtiva !== 'todos') {
-        filtradas = filtradas.filter(c => c.liga === categoriaAtiva || (c.tags || []).includes(categoriaAtiva));
-    }
+        .filtro-tamanho-pill span {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 42px;
+            height: 38px;
+            padding: 0 0.6rem;
+            border-radius: 8px;
+            border: 1px solid #2a2a2a;
+            background: #181818;
+            color: #ccc;
+            font-size: 0.85rem;
+            font-weight: 700;
+            transition: all .15s;
+        }
 
-    // Filtro de busca textual
-    if (termoBusca) {
-        const t = termoBusca.toLowerCase();
-        filtradas = filtradas.filter(c =>
-            c.nome.toLowerCase().includes(t) ||
-            c.temporada.toLowerCase().includes(t) ||
-            c.modelo.toLowerCase().includes(t)
-        );
-    }
+        .filtro-tamanho-pill input:checked + span {
+            background: rgba(201,162,39,0.16);
+            border-color: #c9a227;
+            color: #e8be3a;
+        }
 
-    // Filtro de tamanho — só mostra camisas com estoque > 0 em algum dos tamanhos escolhidos
-    if (tamanhosAtivos.length > 0) {
-        filtradas = filtradas.filter(c => {
-            const est = c.estoque || {};
-            return tamanhosAtivos.some(t => Number(est[t] ?? 0) > 0);
-        });
-    }
+        .filtro-tamanho-pill:hover span {
+            border-color: #c9a227;
+        }
 
-    // Ordenação
-    filtradas = ordenarCamisas(filtradas);
-
-    if (filtradas.length === 0) {
-        grid.innerHTML = '';
-        msgVazia.style.display = 'block';
-        return;
-    }
-
-    msgVazia.style.display = 'none';
-    grid.innerHTML = filtradas.map(gerarCardHTML).join('');
-
-    // Flip frente/costas ao clicar na imagem
-    grid.querySelectorAll('.imagem-container').forEach(el => {
-        el.addEventListener('click', () => el.classList.toggle('virado'));
-        el.addEventListener('keydown', e => {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                el.classList.toggle('virado');
-            }
-        });
-    });
-
-    // Botões de favorito gerados dinamicamente
-    grid.querySelectorAll('.btn-fav').forEach(btn => {
-        btn.addEventListener('click', () => alternarFavorito(btn));
-    });
-}
-
-// ── Aplica a ordenação escolhida ──────────────────────────────
-// IMPORTANTE: a ordenação por relevância usa o campo "prioridade"
-// vindo do banco (maior prioridade aparece primeiro). Quando o admin
-// muda a prioridade no painel, a ordem do site muda automaticamente.
-function ordenarCamisas(lista) {
-    const copia = [...lista];
-
-    if (ordenacaoAtiva === 'preco-asc') {
-        copia.sort((a, b) => Number(a.preco) - Number(b.preco));
-    } else if (ordenacaoAtiva === 'preco-desc') {
-        copia.sort((a, b) => Number(b.preco) - Number(a.preco));
-    } else {
-        // relevância — usa prioridade (maior primeiro), depois id como desempate
-        copia.sort((a, b) => {
-            const diff = (Number(b.prioridade) || 0) - (Number(a.prioridade) || 0);
-            return diff !== 0 ? diff : a.id - b.id;
-        });
-    }
-
-    return copia;
-}
-
-// ── Gera o HTML de um card a partir dos dados da API ──────────
-function gerarCardHTML(c) {
-    const est      = c.estoque || {};
-    const tamanhos = ['P', 'M', 'G', 'GG'];
-    const preco    = Number(c.preco).toFixed(2).split('.');
-
-    const slug = c.nome.normalize('NFD')
-                   .replace(/[\u0300-\u036f]/g, '')
-                   .replace(/\s+/g, '-')
-                   .toUpperCase();
-
-    const tamanhosHTML = tamanhos.map(t => {
-        const qtd = Number(est[t] ?? 0);
-        const cls = qtd > 0 ? 'disponivel' : 'esgotado';
-        const lbl = qtd > 0 ? `Tamanho ${t} disponível` : `Tamanho ${t} esgotado`;
-        return `<span class="tamanho-badge ${cls}" aria-label="${lbl}">${t}</span>`;
-    }).join('');
-
-    // ── Identificador ÚNICO da camisa (corrige bug do carrinho) ──
-    // Antes o carrinho usava só "nome + temporada", então duas camisas
-    // do Brasil (ex: Modelo 1 e Modelo 2) colidiam e uma sumia da sacola.
-    // Agora o MODELO faz parte do identificador e do texto exibido.
-    const identificador = `${c.nome}|${c.temporada}|${c.modelo}`;
-    const nomeCompleto   = `${c.nome} ${c.temporada} - ${c.modelo}`;
-
-    const msgWpp = encodeURIComponent(
-        `Olá, tenho interesse na camisa do ${c.nome} ${c.temporada} - ${c.modelo}`
-    );
-
-    return `
-<article class="card ${slug} ${c.liga}" data-id="${c.id}">
-    <button class="btn-fav" data-id="${identificador}" data-nome="${nomeCompleto}"
-            title="Favoritar ${nomeCompleto}" aria-label="Adicionar ${nomeCompleto} à sacola" aria-pressed="false">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-        </svg>
-    </button>
-    <div class="imagem-container" role="button" tabindex="0" aria-label="Ver costas da camisa ${c.nome}">
-        <picture>
-            <source srcset="${c.foto_frente}" type="image/webp">
-            <img src="${c.foto_frente}" alt="Camisa ${c.nome} ${c.temporada} - frente"
-                 class="foto-frente" loading="lazy" width="400" height="270">
-        </picture>
-        <picture>
-            <source srcset="${c.foto_costas}" type="image/webp">
-            <img src="${c.foto_costas}" alt="Camisa ${c.nome} ${c.temporada} - costas"
-                 class="foto-costas" loading="lazy" width="400" height="270">
-        </picture>
-    </div>
-    <div class="card-info">
-        <div class="card-header-row">
-            <h3>${c.nome}</h3>
-            <span class="preco" aria-label="Preço: R$${preco[0]},${preco[1]}">R$${preco[0]}<small>,${preco[1]}</small></span>
-        </div>
-        <p class="temporada">${c.temporada} · ${c.modelo}</p>
-        <div class="tamanhos" aria-label="Tamanhos disponíveis">${tamanhosHTML}</div>
-        <a class="comprar"
-           href="https://wa.me/5515991617508?text=${msgWpp}"
-           target="_blank" rel="noopener noreferrer"
-           aria-label="Comprar camisa ${nomeCompleto} no WhatsApp">
-            Comprar no WhatsApp
-        </a>
-    </div>
-</article>`;
-}
-
-// ── Filtros por liga ───────────────────────────────────────────
-function filtrarCategoria(liga, btn) {
-    categoriaAtiva = liga;
-    document.querySelectorAll('.filtro-pill').forEach(b => b.classList.remove('active'));
-    if (btn) btn.classList.add('active');
-    renderizarCatalogo();
-}
-
-// ── Busca por texto ────────────────────────────────────────────
-function pesquisarCamisa() {
-    termoBusca = document.getElementById('campoPesquisa').value.trim();
-    renderizarCatalogo();
-}
-
-function iniciarBuscaDinamica() {
-    const input = document.getElementById('campoPesquisa');
-    if (!input) return;
-    input.addEventListener('input', () => {
-        termoBusca = input.value.trim();
-        renderizarCatalogo();
-    });
-}
-
-// ── Filtro de ordenação (relevância / preço) ───────────────────
-function iniciarFiltroOrdenacao() {
-    const select = document.getElementById('filtroOrdenacao');
-    if (!select) return;
-    select.addEventListener('change', () => {
-        ordenacaoAtiva = select.value;
-        renderizarCatalogo();
-    });
-}
-
-// ── Filtro de tamanhos (checkboxes P, M, G, GG) ────────────────
-function iniciarFiltroTamanho() {
-    const checkboxes = document.querySelectorAll('.filtro-tamanho-check');
-    if (!checkboxes.length) return;
-    checkboxes.forEach(cb => {
-        cb.addEventListener('change', () => {
-            tamanhosAtivos = Array.from(checkboxes)
-                .filter(c => c.checked)
-                .map(c => c.value);
-            renderizarCatalogo();
-        });
-    });
-}
-    </script>
+        @media (max-width: 600px) {
+            .filtros-avancados { flex-direction: column; align-items: stretch; gap: 1rem; }
+        }
+    </style>
 </head>
 <body>
 
@@ -368,140 +222,42 @@ function iniciarFiltroTamanho() {
             <button class="filtro-pill" onclick="filtrarCategoria('selecoes', this)"> Seleções</button>
             <button class="filtro-pill" onclick="filtrarCategoria('retro', this)"> Retrô</button>
         </div>
+
+        <!-- Filtros avançados: Ordenação + Tamanho -->
+        <div class="filtros-avancados" aria-label="Ordenação e filtro de tamanho">
+            <div class="filtro-ordenacao-wrap">
+                <label for="filtroOrdenacao" class="filtro-avancado-label">Ordenar por</label>
+                <select id="filtroOrdenacao" class="filtro-ordenacao">
+                    <option value="relevancia">Relevância</option>
+                    <option value="preco-asc">Menor preço</option>
+                    <option value="preco-desc">Maior preço</option>
+                </select>
+            </div>
+
+            <div class="filtro-tamanho-wrap">
+                <span class="filtro-avancado-label">Tamanho</span>
+                <div class="filtro-tamanho-grupo">
+                    <label class="filtro-tamanho-pill">
+                        <input type="checkbox" class="filtro-tamanho-check" value="P">
+                        <span>P</span>
+                    </label>
+                    <label class="filtro-tamanho-pill">
+                        <input type="checkbox" class="filtro-tamanho-check" value="M">
+                        <span>M</span>
+                    </label>
+                    <label class="filtro-tamanho-pill">
+                        <input type="checkbox" class="filtro-tamanho-check" value="G">
+                        <span>G</span>
+                    </label>
+                    <label class="filtro-tamanho-pill">
+                        <input type="checkbox" class="filtro-tamanho-check" value="GG">
+                        <span>GG</span>
+                    </label>
+                </div>
+            </div>
+        </div>
     </section>
 
-    <!-- ═══════════════════════════════════════════════════════════════
-     NOVO BLOCO DE FILTROS — Ordenação + Tamanho
-     Cole este bloco DENTRO da <section class="busca-section">,
-     logo depois da <div id="abaFiltros" class="filtros-container">...</div>
-     (ou seja, depois dos botões de liga: Todas / Brasileirão / Europeus / etc.)
-═══════════════════════════════════════════════════════════════ -->
-
-<div class="filtros-avancados" aria-label="Ordenação e filtro de tamanho">
-
-    <!-- Ordenação -->
-    <div class="filtro-ordenacao-wrap">
-        <label for="filtroOrdenacao" class="filtro-avancado-label">Ordenar por</label>
-        <select id="filtroOrdenacao" class="filtro-ordenacao">
-            <option value="relevancia">Relevância</option>
-            <option value="preco-asc">Menor preço</option>
-            <option value="preco-desc">Maior preço</option>
-        </select>
-    </div>
-
-    <!-- Tamanhos -->
-    <div class="filtro-tamanho-wrap">
-        <span class="filtro-avancado-label">Tamanho</span>
-        <div class="filtro-tamanho-grupo">
-            <label class="filtro-tamanho-pill">
-                <input type="checkbox" class="filtro-tamanho-check" value="P">
-                <span>P</span>
-            </label>
-            <label class="filtro-tamanho-pill">
-                <input type="checkbox" class="filtro-tamanho-check" value="M">
-                <span>M</span>
-            </label>
-            <label class="filtro-tamanho-pill">
-                <input type="checkbox" class="filtro-tamanho-check" value="G">
-                <span>G</span>
-            </label>
-            <label class="filtro-tamanho-pill">
-                <input type="checkbox" class="filtro-tamanho-check" value="GG">
-                <span>GG</span>
-            </label>
-        </div>
-    </div>
-
-</div>
-
-<!-- ═══════════════════════════════════════════════════════════════
-     CSS — cole dentro do <style> existente ou no style.css
-═══════════════════════════════════════════════════════════════ -->
-<style>
-    .filtros-avancados {
-        display: flex;
-        gap: 1.5rem;
-        flex-wrap: wrap;
-        align-items: flex-end;
-        margin-top: 1rem;
-        padding-top: 1rem;
-        border-top: 1px solid rgba(255,255,255,0.08);
-    }
-
-    .filtro-avancado-label {
-        display: block;
-        font-size: 0.75rem;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        color: #888;
-        margin-bottom: 0.4rem;
-    }
-
-    .filtro-ordenacao-wrap { min-width: 180px; }
-
-    .filtro-ordenacao {
-        width: 100%;
-        background: #181818;
-        border: 1px solid #2a2a2a;
-        border-radius: 8px;
-        padding: 0.55rem 0.85rem;
-        color: #f0f0f0;
-        font-size: 0.9rem;
-        outline: none;
-        cursor: pointer;
-    }
-    .filtro-ordenacao:focus { border-color: #c9a227; }
-    .filtro-ordenacao option { background: #181818; }
-
-    .filtro-tamanho-grupo {
-        display: flex;
-        gap: 0.5rem;
-        flex-wrap: wrap;
-    }
-
-    .filtro-tamanho-pill {
-        position: relative;
-        cursor: pointer;
-    }
-
-    .filtro-tamanho-pill input {
-        position: absolute;
-        opacity: 0;
-        width: 0;
-        height: 0;
-    }
-
-    .filtro-tamanho-pill span {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        min-width: 42px;
-        height: 38px;
-        padding: 0 0.6rem;
-        border-radius: 8px;
-        border: 1px solid #2a2a2a;
-        background: #181818;
-        color: #ccc;
-        font-size: 0.85rem;
-        font-weight: 700;
-        transition: all .15s;
-    }
-
-    .filtro-tamanho-pill input:checked + span {
-        background: rgba(201,162,39,0.16);
-        border-color: #c9a227;
-        color: #e8be3a;
-    }
-
-    .filtro-tamanho-pill:hover span {
-        border-color: #c9a227;
-    }
-
-    @media (max-width: 600px) {
-        .filtros-avancados { flex-direction: column; align-items: stretch; gap: 1rem; }
-    }
-</style>
-    
     <!-- CATÁLOGO -->
     <section class="section-title-block">
         <h2 class="section-title">EXPLORAR MODELOS</h2>
@@ -674,7 +430,7 @@ function iniciarFiltroTamanho() {
         </div>
     </div>
 
-    <!-- ✅ PERFORMANCE: Script no final do body, sem render-blocking -->
+    <!-- Script único do site (catálogo + sacola + extras) -->
     <script src="script.js"></script>
 </body>
 </html>
