@@ -262,6 +262,9 @@ const LIGAS_LABEL = { brasileirao: 'Brasileirão', europeus: 'Europeus', selecoe
 
 const FAV_SVG = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`;
 
+// ── Gera o card de cada camisa no catálogo.
+//    O botão e a imagem agora levam para a página exclusiva da camisa
+//    (produto.html?id=X) em vez de abrir o WhatsApp direto. ────────────────
 function gerarCardHTML(c) {
     const est = c.estoque || {};
     const nomeDisplay = c.nome;
@@ -274,11 +277,9 @@ function gerarCardHTML(c) {
 
     // Identificador ÚNICO (corrige o bug de camisas com nome parecido).
     // Inclui o modelo, então duas camisas do Brasil com modelos diferentes
-    // nunca colidem no carrinho.
+    // nunca colidem no carrinho/favoritos.
     const idUnico = `${c.nome}|${c.temporada}|${c.modelo}`;
     const nomeCompleto = `${nomeDisplay} ${c.temporada} - ${c.modelo}`;
-
-    const nomeWA = encodeURIComponent(`Olá, tenho interesse na camisa do ${nomeDisplay} ${c.temporada} - ${c.modelo}`);
 
     const tamanhos = ['P','M','G','GG'].map(t => {
         const qtd = est[t] ?? 0;
@@ -294,16 +295,14 @@ function gerarCardHTML(c) {
             title="Favoritar ${nomeCompleto}" aria-label="Adicionar ${nomeCompleto} à sacola" aria-pressed="false">
             ${FAV_SVG}
         </button>
-        <div class="imagem-container" role="button" tabindex="0" aria-label="Ver costas da camisa ${nomeDisplay}">
+        <a href="produto.html?id=${c.id}" class="imagem-container" aria-label="Ver detalhes da camisa ${nomeDisplay}" style="text-decoration:none">
             <picture>
-                
                 <img src="${c.foto_frente}" alt="Camisa ${nomeDisplay} ${c.temporada} - frente" class="foto-frente" loading="lazy" width="400" height="270">
             </picture>
             <picture>
-                
                 <img src="${c.foto_costas}" alt="Camisa ${nomeDisplay} ${c.temporada} - costas" class="foto-costas" loading="lazy" width="400" height="270">
             </picture>
-        </div>
+        </a>
         <div class="card-info">
             <div class="card-header-row">
                 <h3>${nomeDisplay}</h3>
@@ -311,9 +310,8 @@ function gerarCardHTML(c) {
             </div>
             <p class="temporada">${c.temporada} · ${c.modelo}</p>
             <div class="tamanhos" aria-label="Tamanhos disponíveis">${tamanhos}</div>
-            <a class="comprar" href="https://wa.me/5515991617508?text=${nomeWA}"
-                target="_blank" rel="noopener noreferrer" aria-label="Comprar camisa ${nomeCompleto} no WhatsApp">
-                Comprar no WhatsApp
+            <a class="comprar" href="produto.html?id=${c.id}" aria-label="Ver detalhes da camisa ${nomeCompleto}">
+                Ver Detalhes
             </a>
         </div>
     </article>`;
@@ -383,22 +381,9 @@ function inicializarCards() {
         }
     });
 
-    document.querySelectorAll(".imagem-container").forEach(container => {
-        const pictures = container.querySelectorAll("picture");
-        if (pictures.length >= 2) {
-            pictures[1].style.display = "none";
-            const flip = () => {
-                const mostrando = pictures[0].style.display !== "none";
-                pictures[0].style.display = mostrando ? "none" : "block";
-                pictures[1].style.display = mostrando ? "block" : "none";
-                container.setAttribute("aria-label", mostrando ? "Ver frente da camisa" : "Ver costas da camisa");
-            };
-            container.addEventListener("click", flip);
-            container.addEventListener("keydown", e => {
-                if (e.key === "Enter" || e.key === " ") { e.preventDefault(); flip(); }
-            });
-        }
-    });
+    // Nota: o flip de imagem (frente/costas) foi removido dos cards do
+    // catálogo, já que a imagem agora é um link para a página de produto.
+    // O flip continua existindo dentro de produto.html, via miniaturas.
 
     const observer = new IntersectionObserver(entries => {
         entries.forEach(entry => {
