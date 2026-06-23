@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="icon" type="image/webp" href="logo.webp">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,400;0,600;0,700;1,400&family=Barlow+Condensed:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+
+    <title id="pageTitle">Carregando camisa... | 90+3</title>
+    <meta id="pageDescription" name="description" content="Camisas tailandesas premium da 90+3.">
+
+    <style>
+        /* ── Página de produto — usa as mesmas variáveis do style.css ── */
+        .produto-wrap {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 32px 20px 60px;
+        }
+
+        .produto-voltar {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-muted, #888);
+            font-size: 0.85rem;
+            text-decoration: none;
+            margin-bottom: 22px;
+            transition: color .15s;
+        }
+        .produto-voltar:hover { color: var(--gold, #c9a227); }
+
+        .produto-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: flex-start;
+        }
+
+        /* Galeria de imagens */
+        .produto-galeria { position: sticky; top: 100px; }
+
+        .produto-imagem-principal {
+            position: relative;
+            border-radius: 14px;
+            overflow: hidden;
+            background: #141414;
+            border: 1px solid rgba(255,255,255,0.08);
+            aspect-ratio: 4 / 3;
+        }
+        .produto-imagem-principal img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .produto-imagem-principal img.escondida { display: none; }
+
+        .produto-thumbs {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+        }
+        .produto-thumb {
+            width: 80px;
+            height: 60px;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid transparent;
+            opacity: 0.6;
+            transition: all .15s;
+            background: #141414;
+        }
+        .produto-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .produto-thumb.ativa { opacity: 1; border-color: var(--gold, #c9a227); }
+        .produto-thumb:hover { opacity: 1; }
+
+        /* Info do produto */
+        .produto-info h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.6rem;
+            letter-spacing: 0.02em;
+            line-height: 1.05;
+            margin-bottom: 4px;
+        }
+        .produto-temporada {
+            color: var(--text-muted, #888);
+            font-size: 0.95rem;
+            margin-bottom: 18px;
+        }
+        .produto-preco {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.2rem;
+            color: var(--gold, #c9a227);
+            margin-bottom: 20px;
+        }
+        .produto-preco small { font-size: 1.2rem; }
+
+        .produto-tamanhos-label {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted, #888);
+            margin-bottom: 8px;
+        }
+        .produto-tamanhos { display: flex; gap: 8px; margin-bottom: 26px; }
+
+        .produto-descricao {
+            color: #ddd;
+            line-height: 1.7;
+            font-size: 0.97rem;
+            margin-bottom: 28px;
+            white-space: pre-line;
+        }
+        .produto-descricao.vazia { display: none; }
+
+        .produto-comprar {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 16px 24px;
+            border-radius: 50px;
+            background: #25D366;
+            color: #fff;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 700;
+            font-size: 1.05rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: filter .15s, transform .1s;
+        }
+        .produto-comprar:hover { filter: brightness(1.08); }
+        .produto-comprar:active { transform: scale(.98); }
+
+        .produto-badges-extra {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+        .produto-badge-extra {
+            font-size: 0.72rem;
+            padding: 5px 12px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.12);
+            color: var(--text-muted, #888);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Relacionadas */
+        .relacionadas-section { margin-top: 64px; }
+        .relacionadas-titulo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+            letter-spacing: 0.02em;
+        }
+        .relacionadas-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .produto-erro, .produto-loading {
+            text-align: center;
+            padding: 100px 20px;
+            color: var(--text-muted, #888);
+            font-family: 'Barlow Condensed', sans-serif;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        @media (max-width: 800px) {
+            .produto-grid { grid-template-columns: 1fr; gap: 24px; }
+            .produto-galeria { position: static; }
+            .produto-info h1 { font-size: 2rem; }
+            .relacionadas-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TOPO FIXO: TICKER + HEADER (igual ao restante do site) -->
+    <div class="topo-fixo">
+        <div class="ticker-wrap" aria-label="Informações de promoções" aria-live="off">
+            <div class="ticker-track">
+                <span>📍 ITAPETININGA E REGIÃO</span>
+                <span class="sep">✦</span>
+                <span>💰 5% OFF À VISTA</span>
+                <span class="sep">✦</span>
+                <span>💳 ATÉ 3X SEM JUROS</span>
+                <span class="sep">✦</span>
+                <span>⚽ CAMISAS TAILANDESAS PREMIUM</span>
+                <span class="sep">✦</span>
+                <span>🚚 ENTREGA EM ATÉ 5 DIAS ÚTEIS</span>
+                <span class="sep">✦</span>
+            </div>
+        </div>
+        <header>
+            <div class="header-inner">
+                <div class="logo-block">
+                    <a href="index.html" style="text-decoration:none;color:inherit">
+                        <div class="logo-text"><span class="logo-accent">90</span><span class="logo-plus">+3</span></div>
+                    </a>
+                    <p class="logo-tagline">Qualidade até o Fim</p>
+                </div>
+                <nav aria-label="Navegação principal">
+                    <a href="https://instagram.com/90_3.camisastailandesas" target="_blank" rel="noopener noreferrer" class="nav-btn insta" aria-label="Instagram da 90+3">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                        Instagram
+                    </a>
+                    <a href="https://wa.me/5515991617508" target="_blank" rel="noopener noreferrer" class="nav-btn whats" aria-label="WhatsApp da 90+3">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+                        WhatsApp
+                    </a>
+                </nav>
+            </div>
+        </header>
+    </div>
+
+    <!-- CONTEÚDO DA PÁGINA DE PRODUTO -->
+    <main class="produto-wrap" id="produto-main">
+        <div class="produto-loading" id="produto-loading">Carregando camisa...</div>
+    </main>
+
+    <!-- FOOTER (igual ao restante do site) -->
+    <footer class="footer" aria-label="Rodapé">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <p class="footer-logo"><span class="logo-accent">90</span><span class="logo-plus">+3</span></p>
+                <p>Camisas tailandesas premium para quem vive o futebol de verdade.</p>
+                <div class="footer-social">
+                    <a href="https://instagram.com/90_3.camisastailandesas" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Instagram da 90+3">Instagram</a>
+                    <a href="https://wa.me/5515991617508" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="WhatsApp da 90+3">WhatsApp</a>
+                </div>
+            </div>
+            <div class="footer-cols">
+                <div class="footer-col">
+                    <h4>Contato</h4>
+                    <p>📱 (15) 99161-7508</p>
+                    <p>📍 Itapetininga — SP</p>
+                    <p>⏰ Seg a Sex · 09h–17h</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Pagamento</h4>
+                    <p>💰 5% OFF à vista</p>
+                    <p>💳 3x sem juros no cartão</p>
+                    <p>🚚 Entrega local em até 5 dias</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copy">
+            <p>© 2026 90+3 Qualidade até o Fim — Todos os direitos reservados</p>
+        </div>
+    </footer>
+
+    <!-- FLOATING WHATSAPP -->
+    <a href="https://wa.me/5515991617508?text=Olá%2C%20vim%20pelo%20site%20e%20gostaria%20de%20mais%20informações%20sobre%20as%20camisas" class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Chamar no WhatsApp">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="white" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+    </a>
+
+    <script src="produto.js"></script>
+</body>
+</html>
