@@ -137,133 +137,17 @@ function ordenarCardsNoDOM(cards) {
     return copia;
 }
 
-// ── Sacola / Favoritos ──────────────────────────────────────────────────
-// IMPORTANTE: a chave de cada item agora é "nome|temporada|modelo" em vez
-// de só "nome temporada". Isso corrige o bug em que duas camisas com nome
-// parecido (ex: 4 camisas diferentes do Brasil) se sobrescreviam na sacola.
-// O texto exibido ao cliente continua completo e legível, incluindo o modelo.
-
-let favoritos = [];
-try {
-    const salvos = JSON.parse(localStorage.getItem("fav_903")) || [];
-    // Compatibilidade: favoritos antigos eram só strings (texto exibido).
-    // Convertemos para o novo formato { id, nome } usando o próprio texto como id.
-    favoritos = salvos.map(item =>
-        typeof item === "string" ? { id: item, nome: item } : item
-    );
-} catch (e) { favoritos = []; }
-
-function salvarFavoritos() {
-    try { localStorage.setItem("fav_903", JSON.stringify(favoritos)); } catch (e) {}
-}
-
-function alternarFavorito(botao) {
-    const id   = botao.getAttribute("data-id") || botao.getAttribute("data-nome");
-    const nome = botao.getAttribute("data-nome");
-
-    const indice = favoritos.findIndex(item => item.id === id);
-
-    if (indice >= 0) {
-        favoritos.splice(indice, 1);
-        botao.classList.remove("ativo");
-        botao.setAttribute("aria-pressed", "false");
-    } else {
-        favoritos.push({ id, nome });
-        botao.classList.add("ativo");
-        botao.setAttribute("aria-pressed", "true");
-    }
-
-    salvarFavoritos();
-    atualizarContador();
-    animarBotaoFav(botao);
-}
-
-function animarBotaoFav(botao) {
-    botao.style.transform = "scale(1.35)";
-    setTimeout(() => { botao.style.transform = ""; }, 200);
-}
-
-function atualizarContador() {
-    const contador = document.getElementById("contador-fav");
-    if (contador) {
-        contador.innerText = favoritos.length;
-        contador.closest('#vitrine-flutuante')?.setAttribute(
-            'aria-label',
-            `Abrir sacola de favoritos — ${favoritos.length} ite${favoritos.length === 1 ? 'm' : 'ns'}`
-        );
-    }
-}
-
-function abrirModalFavoritos() {
-    const lista = document.getElementById("lista-favoritos");
-    const modal = document.getElementById("modal-favoritos");
-    if (!lista || !modal) return;
-    if (favoritos.length === 0) {
-        lista.innerHTML = `<p style="text-align:center; color: var(--text-muted); padding: 20px 0;">Sua sacola está vazia.<br>Marque suas favoritas com ♥</p>`;
-    } else {
-        lista.innerHTML = favoritos.map(item => `
-            <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.08)">
-                <p style="margin:0">${item.nome}</p>
-                <button onclick="removerFavoritoPorId('${item.id.replace(/'/g, "\\'")}')"
-                        aria-label="Remover ${item.nome} da sacola"
-                        style="background:none;border:none;color:var(--red, #e63946);cursor:pointer;font-size:1.2rem;line-height:1;flex-shrink:0">&times;</button>
-            </div>
-        `).join("");
-    }
-    modal.classList.add("open");
-    modal.style.display = "flex";
-    setTimeout(() => { modal.querySelector('.modal-close')?.focus(); }, 50);
-}
-
-function removerFavoritoPorId(id) {
-    favoritos = favoritos.filter(item => item.id !== id);
-    salvarFavoritos();
-    atualizarContador();
-
-    // Sincroniza o botão de coração correspondente, se estiver na tela
-    document.querySelectorAll(`.btn-fav`).forEach(btn => {
-        const btnId = btn.getAttribute("data-id") || btn.getAttribute("data-nome");
-        if (btnId === id) {
-            btn.classList.remove("ativo");
-            btn.setAttribute("aria-pressed", "false");
-        }
-    });
-
-    abrirModalFavoritos();
-}
-
-function fecharModalFavoritos() {
-    const modal = document.getElementById("modal-favoritos");
-    if (modal) { modal.classList.remove("open"); modal.style.display = "none"; }
-    document.getElementById('vitrine-flutuante')?.focus();
-}
-
-function enviarFavoritosWhats() {
-    if (favoritos.length === 0) { alert("Adicione camisas na sua sacola primeiro!"); return; }
-    const lista = favoritos.map(f => "  • " + f.nome).join("\n");
-    const msg = `Olá! Tenho interesse nessas camisas da 90+3:\n\n${lista}\n\nGostaria de consultar disponibilidade e fechar pedido!`;
-    window.open(`https://wa.me/5515991617508?text=${encodeURIComponent(msg)}`, "_blank");
-}
-
-document.addEventListener("click", function(e) {
-    const modal = document.getElementById("modal-favoritos");
-    if (modal && e.target === modal) fecharModalFavoritos();
-});
-document.addEventListener("keydown", function(e) {
-    if (e.key === "Escape") {
-        const modal = document.getElementById("modal-favoritos");
-        if (modal && modal.classList.contains("open")) fecharModalFavoritos();
-    }
-});
-
 // ── CATÁLOGO DINÂMICO ──────────────────────────────────────────────────────
+// Nota: as funções de sacola/favoritos (alternarFavorito, abrirModalFavoritos,
+// etc.) NÃO estão mais neste arquivo — elas moraram para carrinho.js, que
+// é compartilhado entre esta página (index.html) e a produto.html.
 
 const LIGAS_LABEL = { brasileirao: 'Brasileirão', europeus: 'Europeus', selecoes: 'Seleções', retro: 'Retrô' };
 
 const FAV_SVG = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`;
 
 // ── Gera o card de cada camisa no catálogo.
-//    O botão e a imagem agora levam para a página exclusiva da camisa
+//    O botão e a imagem levam para a página exclusiva da camisa
 //    (produto.html?id=X) em vez de abrir o WhatsApp direto. ────────────────
 function gerarCardHTML(c) {
     const est = c.estoque || {};
@@ -275,9 +159,6 @@ function gerarCardHTML(c) {
     const precoInt = preco[0];
     const precoCent = preco[1];
 
-    // Identificador ÚNICO (corrige o bug de camisas com nome parecido).
-    // Inclui o modelo, então duas camisas do Brasil com modelos diferentes
-    // nunca colidem no carrinho/favoritos.
     const idUnico = `${c.nome}|${c.temporada}|${c.modelo}`;
     const nomeCompleto = `${nomeDisplay} ${c.temporada} - ${c.modelo}`;
 
@@ -348,15 +229,81 @@ async function carregarCatalogo() {
     }
 }
 
+// ── Carrega a(s) promoção(ões) ativa(s) do banco e monta a seção ──────────
+// liga='promocao' nunca aparece no catálogo normal, só aqui.
+async function carregarPromocoes() {
+    const container = document.getElementById('promo-container');
+    if (!container) return;
+
+    try {
+        const res = await fetch(`${API_URL}/api/camisas?liga=promocao`);
+        if (!res.ok) throw new Error('Falha ao buscar promoções');
+        const promocoes = await res.json();
+
+        const secao = document.getElementById('secao-promocoes');
+        if (!promocoes.length) {
+            if (secao) secao.style.display = 'none';
+            return;
+        }
+
+        container.innerHTML = promocoes.map(gerarCardPromocaoHTML).join('');
+    } catch (err) {
+        console.error('Erro ao carregar promoções:', err);
+        const secao = document.getElementById('secao-promocoes');
+        if (secao) secao.style.display = 'none';
+    }
+}
+
+function gerarCardPromocaoHTML(c) {
+    const est = c.estoque || {};
+    const preco = Number(c.preco).toFixed(2).split('.');
+    const temPrecoOriginal = c.preco_original && Number(c.preco_original) > Number(c.preco);
+    const precoOriginalHTML = temPrecoOriginal
+        ? `<span class="preco-de">De R$${Number(c.preco_original).toFixed(2).replace('.', ',')}</span>`
+        : '';
+    const selo = c.selo_promocional || 'OFERTA ESPECIAL';
+
+    const idUnico = `${c.nome}|${c.temporada}|${c.modelo}`;
+    const nomeCompleto = `${c.nome} ${c.temporada} - ${c.modelo}`;
+
+    const tamanhosHTML = ['P','M','G','GG'].map(t => {
+        const qtd = est[t] ?? 0;
+        const cls = qtd > 0 ? 'disponivel' : 'esgotado';
+        return `<span class="tamanho-badge ${cls}">${t}</span>`;
+    }).join('');
+
+    return `
+    <article class="card card-promo promocao">
+        <button class="btn-fav" data-id="${idUnico}" data-nome="${nomeCompleto}" onclick="alternarFavorito(this)"
+            title="Favoritar ${nomeCompleto}" aria-label="Adicionar ${nomeCompleto} à sacola" aria-pressed="false">
+            ${FAV_SVG}
+        </button>
+        <a href="produto.html?id=${c.id}" class="imagem-unica" style="text-decoration:none">
+            <picture>
+                <img src="${c.foto_frente}" alt="${c.nome}" loading="lazy" width="400" height="420">
+            </picture>
+        </a>
+        <div class="card-info">
+            <div class="promo-badge-tag">${selo}</div>
+            <div class="card-header-row">
+                <h3>${c.nome}</h3>
+            </div>
+            <p class="temporada">${c.temporada} · ${c.modelo}</p>
+            <div class="tamanhos" aria-label="Tamanhos disponíveis">${tamanhosHTML}</div>
+            <div class="preco-promo-block">
+                ${precoOriginalHTML}
+                <span class="preco preco-por">R$${preco[0]}<small>,${preco[1]}</small></span>
+            </div>
+            <a class="comprar btn-promo" href="produto.html?id=${c.id}" aria-label="Ver detalhes de ${nomeCompleto}">
+                Eu quero essa promoção!
+            </a>
+        </div>
+    </article>`;
+}
+
 function inicializarCards() {
     atualizarContador();
-    document.querySelectorAll(".btn-fav").forEach(botao => {
-        const id = botao.getAttribute("data-id") || botao.getAttribute("data-nome");
-        if (favoritos.some(item => item.id === id)) {
-            botao.classList.add("ativo");
-            botao.setAttribute("aria-pressed", "true");
-        }
-    });
+    sincronizarBotoesFavorito();
 
     document.querySelectorAll("img").forEach(img => {
         if (!img.getAttribute("loading")) img.setAttribute("loading", "lazy");
@@ -381,10 +328,6 @@ function inicializarCards() {
         }
     });
 
-    // Nota: o flip de imagem (frente/costas) foi removido dos cards do
-    // catálogo, já que a imagem agora é um link para a página de produto.
-    // O flip continua existindo dentro de produto.html, via miniaturas.
-
     const observer = new IntersectionObserver(entries => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -408,6 +351,7 @@ function inicializarCards() {
 
 document.addEventListener("DOMContentLoaded", function () {
     carregarCatalogo();
+    carregarPromocoes();
 
     const campo = document.getElementById("campoPesquisa");
     if (campo) {
