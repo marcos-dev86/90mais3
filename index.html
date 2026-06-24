@@ -14,14 +14,14 @@
     <meta property="og:title" content="90+3 — Camisas Com Qualidade Até o Fim">
     <meta property="og:description" content="Camisas tailandesas premium a partir de R$29. Itapetininga e região. 5% OFF à vista!">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://site-camisas.vercel.app">
+    <meta property="og:url" content="https://90mais3.vercel.app">
 
-    <meta property="og:image" content="https://site-camisas.vercel.app/logo.webp">
+    <meta property="og:image" content="https://90mais3.vercel.app/logo.webp">
     <meta property="og:image:width" content="512">
     <meta property="og:image:height" content="512">
 
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="https://site-camisas.vercel.app/logo.webp">
+    <meta name="twitter:image" content="https://90mais3.vercel.app/logo.webp">
 
     <meta property="og:locale" content="pt_BR">
 
@@ -269,45 +269,15 @@
 
     <p class="nenhuma-camisa" id="msgNenhuma" role="status" aria-live="polite">Nenhuma camisa encontrada para essa busca.</p>
 
-    <!-- PROMOÇÕES -->
-    <section class="secao-promocoes" aria-label="Promoções">
+    <!-- PROMOÇÕES (carregadas dinamicamente do banco via script.js → carregarPromocoes()) -->
+    <section class="secao-promocoes" id="secao-promocoes" aria-label="Promoções">
         <div class="promo-header">
             <span class="promo-fire" aria-hidden="true">🔥</span>
             <h2>PROMOÇÃO IMPERDÍVEL</h2>
             <span class="promo-fire" aria-hidden="true">🔥</span>
         </div>
-        <div class="promo-container">
-            <article class="card card-promo promocao">
-                <button class="btn-fav" data-nome="KIT PROMOCIONAL BRASIL COPA DO MUNDO 2026" onclick="alternarFavorito(this)" title="Favoritar KIT BRASIL 2026" aria-label="Adicionar KIT BRASIL 2026 à sacola" aria-pressed="false">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-                </button>
-                <div class="imagem-unica">
-                    <picture>
-                        <source srcset="Camisas/BRASIL 2026/Kit Brasil 2026.webp" type="image/webp">
-                        <img src="Camisas/BRASIL 2026/Kit Brasil 2026.webp" alt="Kit Brasil 2026 - 2 camisas da seleção brasileira" loading="lazy" width="400" height="420">
-                    </picture>
-                </div>
-                <div class="card-info">
-                    <div class="promo-badge-tag">OFERTA ESPECIAL</div>
-                    <div class="card-header-row">
-                        <h3>KIT BRASIL 2026</h3>
-                    </div>
-                    <p class="temporada">Temporada 2026/27 · 2 camisas</p>
-                    <div class="tamanhos" aria-label="Tamanhos disponíveis">
-                        <span class="tamanho-badge esgotado">P</span>
-                        <span class="tamanho-badge disponivel">M</span>
-                        <span class="tamanho-badge disponivel">G</span>
-                        <span class="tamanho-badge esgotado">GG</span>
-                    </div>
-                    <div class="preco-promo-block">
-                        <span class="preco-de">De R$129,90</span>
-                        <span class="preco preco-por" aria-label="Por R$99,90">R$99<small>,90</small></span>
-                    </div>
-                    <a class="comprar btn-promo" href="https://wa.me/5515991617508?text=Olá%2C%20quero%20aproveitar%20a%20promoção%20do%20kit%20camisa%20da%20seleção%20Brasileira!" target="_blank" rel="noopener noreferrer" aria-label="Comprar Kit Brasil 2026 no WhatsApp">
-                        Eu quero esse Kit!
-                    </a>
-                </div>
-            </article>
+        <div class="promo-container" id="promo-container">
+            <!-- Cards de promoção inseridos dinamicamente -->
         </div>
     </section>
 
@@ -430,7 +400,8 @@
         </div>
     </div>
 
-    <!-- Script único do site (catálogo + sacola + extras) -->
+    <!-- Scripts: carrinho.js (sacola compartilhada com produto.html) + script.js (catálogo + extras) -->
+    <script src="carrinho.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
