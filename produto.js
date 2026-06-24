@@ -1,5 +1,8 @@
 const API_URL = 'https://api-90mais3.vercel.app';
 
+let camisaAtual = null;
+let tamanhoSelecionado = null;
+
 // ── Lê o ID da camisa a partir da URL (?id=15) ────────────────
 function obterIdDaURL() {
     const params = new URLSearchParams(window.location.search);
@@ -25,6 +28,7 @@ async function carregarProduto() {
         if (!res.ok) throw new Error('Falha ao buscar camisa');
 
         const camisa = await res.json();
+        camisaAtual = camisa;
         renderizarProduto(camisa);
     } catch (err) {
         console.error(err);
@@ -38,17 +42,39 @@ function renderizarProduto(c) {
     const est = c.estoque || {};
     const preco = Number(c.preco).toFixed(2).split('.');
     const nomeCompleto = `${c.nome} ${c.temporada} - ${c.modelo}`;
+    const idUnico = `${c.nome}|${c.temporada}|${c.modelo}`;
 
     // Atualiza título e meta description da aba/SEO
     document.getElementById('pageTitle').textContent = `${nomeCompleto} | 90+3`;
     document.getElementById('pageDescription').setAttribute('content',
         `Camisa ${c.nome} ${c.temporada}, ${c.modelo}. Camisa tailandesa premium por R$${preco[0]},${preco[1]} na 90+3.`);
 
+    // Bloco de preço — mostra "de/por" se houver preco_original (promoção)
+    let precoHTML;
+    if (c.preco_original && Number(c.preco_original) > Number(c.preco)) {
+        const precoOriginal = Number(c.preco_original).toFixed(2).replace('.', ',');
+        precoHTML = `
+            <div class="produto-preco-bloco">
+                <span class="produto-preco-de">De R$${precoOriginal}</span>
+                <span class="produto-preco">R$${preco[0]}<small>,${preco[1]}</small></span>
+            </div>`;
+    } else {
+        precoHTML = `
+            <div class="produto-preco-bloco">
+                <span class="produto-preco">R$${preco[0]}<small>,${preco[1]}</small></span>
+            </div>`;
+    }
+
+    const seloHTML = c.selo_promocional
+        ? `<span class="produto-selo">${escaparHTML(c.selo_promocional)}</span>`
+        : '';
+
     const tamanhosHTML = ['P', 'M', 'G', 'GG'].map(t => {
         const qtd = Number(est[t] ?? 0);
         const cls = qtd > 0 ? 'disponivel' : 'esgotado';
-        const label = qtd > 0 ? `Tamanho ${t} disponível` : `Tamanho ${t} esgotado`;
-        return `<span class="tamanho-badge ${cls}" aria-label="${label}">${t}</span>`;
+        const label = qtd > 0 ? `Selecionar tamanho ${t}` : `Tamanho ${t} esgotado`;
+        return `<span class="tamanho-badge ${cls}" data-tamanho="${t}" data-disponivel="${qtd > 0}"
+                      role="button" tabindex="0" aria-label="${label}" onclick="selecionarTamanho('${t}', ${qtd > 0})">${t}</span>`;
     }).join('');
 
     const msgWpp = encodeURIComponent(`Olá, tenho interesse na camisa do ${c.nome} ${c.temporada} - ${c.modelo}`);
@@ -58,6 +84,7 @@ function renderizarProduto(c) {
         ? `<p class="produto-descricao">${escaparHTML(c.descricao)}</p>`
         : '';
 
+    const jaNoCarrinho = itemEstaNoCarrinho(idUnico);
     const relacionadasHTML = montarRelacionadas(c.relacionadas || []);
 
     main.innerHTML = `
@@ -80,14 +107,23 @@ function renderizarProduto(c) {
             </div>
 
             <div class="produto-info">
+                ${seloHTML}
                 <h1>${c.nome}</h1>
                 <p class="produto-temporada">${c.temporada} · ${c.modelo}</p>
-                <div class="produto-preco">R$${preco[0]}<small>,${preco[1]}</small></div>
+                ${precoHTML}
 
-                <div class="produto-tamanhos-label">Tamanhos disponíveis</div>
+                <div class="produto-tamanhos-label">Selecione o tamanho</div>
                 <div class="produto-tamanhos" aria-label="Tamanhos disponíveis">${tamanhosHTML}</div>
+                <p class="produto-tamanho-aviso" id="aviso-tamanho"></p>
 
                 ${descricaoHTML}
+
+                <div class="produto-acoes">
+                    <button class="produto-add-carrinho ${jaNoCarrinho ? 'no-carrinho' : ''}" id="btn-add-carrinho"
+                            onclick="adicionarAoCarrinho()">
+                        ${jaNoCarrinho ? 'Remover da sacola' : 'Adicionar à sacola'}
+                    </button>
+                </div>
 
                 <a class="produto-comprar"
                    href="https://wa.me/5515991617508?text=${msgWpp}"
@@ -106,6 +142,8 @@ function renderizarProduto(c) {
 
         ${relacionadasHTML}
     `;
+
+    atualizarContador();
 }
 
 // ── Alterna entre foto de frente e costas ──────────────────────
@@ -125,6 +163,43 @@ function mostrarFoto(qual) {
         imgCostas.classList.remove('escondida');
         thumbFrente.classList.remove('ativa');
         thumbCostas.classList.add('ativa');
+    }
+}
+
+// ── Seleciona um tamanho (visual) ───────────────────────────────
+function selecionarTamanho(tamanho, disponivel) {
+    const aviso = document.getElementById('aviso-tamanho');
+
+    if (!disponivel) {
+        aviso.textContent = `Tamanho ${tamanho} está esgotado no momento.`;
+        return;
+    }
+
+    tamanhoSelecionado = tamanho;
+    aviso.textContent = '';
+
+    document.querySelectorAll('.produto-tamanhos .tamanho-badge').forEach(el => {
+        el.classList.toggle('selecionado', el.dataset.tamanho === tamanho);
+    });
+}
+
+// ── Adiciona ou remove a camisa atual da sacola ─────────────────
+function adicionarAoCarrinho() {
+    if (!camisaAtual) return;
+
+    const idUnico = `${camisaAtual.nome}|${camisaAtual.temporada}|${camisaAtual.modelo}`;
+    const tamanhoTexto = tamanhoSelecionado ? ` (Tam. ${tamanhoSelecionado})` : '';
+    const nomeCompleto = `${camisaAtual.nome} ${camisaAtual.temporada} - ${camisaAtual.modelo}${tamanhoTexto}`;
+
+    const acabouDeAdicionar = alternarItemCarrinho(idUnico, nomeCompleto);
+
+    const btn = document.getElementById('btn-add-carrinho');
+    if (acabouDeAdicionar) {
+        btn.textContent = 'Remover da sacola';
+        btn.classList.add('no-carrinho');
+    } else {
+        btn.textContent = 'Adicionar à sacola';
+        btn.classList.remove('no-carrinho');
     }
 }
 
