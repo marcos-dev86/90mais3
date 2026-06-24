@@ -41,7 +41,8 @@
             align-items: flex-start;
         }
 
-        /* Galeria de imagens */
+        /* Galeria de imagens — sempre corta para preencher o quadro,
+           sem espaços vazios em fotos com proporção diferente */
         .produto-galeria { position: sticky; top: 100px; }
 
         .produto-imagem-principal {
@@ -56,6 +57,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            object-position: center;
             display: block;
         }
         .produto-imagem-principal img.escondida { display: none; }
@@ -76,7 +78,7 @@
             transition: all .15s;
             background: #141414;
         }
-        .produto-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .produto-thumb img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
         .produto-thumb.ativa { opacity: 1; border-color: var(--gold, #c9a227); }
         .produto-thumb:hover { opacity: 1; }
 
@@ -93,11 +95,33 @@
             font-size: 0.95rem;
             margin-bottom: 18px;
         }
+
+        .produto-selo {
+            display: inline-block;
+            background: var(--gold, #c9a227);
+            color: #111;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 700;
+            font-size: 0.72rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 5px 14px;
+            border-radius: 20px;
+            margin-bottom: 14px;
+        }
+
+        .produto-preco-bloco { margin-bottom: 20px; }
+        .produto-preco-de {
+            display: block;
+            color: var(--text-muted, #888);
+            font-size: 0.95rem;
+            text-decoration: line-through;
+            margin-bottom: 2px;
+        }
         .produto-preco {
             font-family: 'Bebas Neue', sans-serif;
             font-size: 2.2rem;
             color: var(--gold, #c9a227);
-            margin-bottom: 20px;
         }
         .produto-preco small { font-size: 1.2rem; }
 
@@ -109,7 +133,26 @@
             color: var(--text-muted, #888);
             margin-bottom: 8px;
         }
-        .produto-tamanhos { display: flex; gap: 8px; margin-bottom: 26px; }
+        .produto-tamanhos { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+
+        .produto-tamanhos .tamanho-badge {
+            cursor: pointer;
+            user-select: none;
+        }
+        .produto-tamanhos .tamanho-badge.selecionado {
+            outline: 2px solid var(--gold, #c9a227);
+            outline-offset: 2px;
+        }
+        .produto-tamanhos .tamanho-badge.esgotado {
+            cursor: not-allowed;
+        }
+
+        .produto-tamanho-aviso {
+            font-size: 0.8rem;
+            color: #e63946;
+            margin-bottom: 18px;
+            min-height: 1.1em;
+        }
 
         .produto-descricao {
             color: #ddd;
@@ -119,6 +162,46 @@
             white-space: pre-line;
         }
         .produto-descricao.vazia { display: none; }
+
+        /* Botões de ação */
+        .produto-acoes {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .produto-add-carrinho {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex: 1;
+            padding: 16px 20px;
+            border-radius: 50px;
+            background: transparent;
+            border: 1.5px solid var(--gold, #c9a227);
+            color: var(--gold, #c9a227);
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background .15s, color .15s, transform .1s;
+        }
+        .produto-add-carrinho:hover { background: var(--gold, #c9a227); color: #111; }
+        .produto-add-carrinho:active { transform: scale(.98); }
+        .produto-add-carrinho.no-carrinho {
+            background: var(--gold, #c9a227);
+            color: #111;
+        }
+        .produto-add-carrinho:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            border-color: var(--text-muted, #888);
+            color: var(--text-muted, #888);
+            background: transparent;
+        }
 
         .produto-comprar {
             display: inline-flex;
@@ -170,6 +253,10 @@
             grid-template-columns: repeat(4, 1fr);
             gap: 16px;
         }
+        .relacionadas-grid .imagem-container img {
+            object-fit: cover;
+            object-position: center;
+        }
 
         .produto-erro, .produto-loading {
             text-align: center;
@@ -185,12 +272,13 @@
             .produto-galeria { position: static; }
             .produto-info h1 { font-size: 2rem; }
             .relacionadas-grid { grid-template-columns: repeat(2, 1fr); }
+            .produto-acoes { flex-direction: column; }
         }
     </style>
 </head>
 <body>
 
-    <!-- TOPO FIXO: TICKER + HEADER (igual ao restante do site) -->
+    <!-- TOPO FIXO: TICKER + HEADER -->
     <div class="topo-fixo">
         <div class="ticker-wrap" aria-label="Informações de promoções" aria-live="off">
             <div class="ticker-track">
@@ -227,14 +315,13 @@
             </div>
         </header>
     </div>
-    <br><br>
 
     <!-- CONTEÚDO DA PÁGINA DE PRODUTO -->
     <main class="produto-wrap" id="produto-main">
         <div class="produto-loading" id="produto-loading">Carregando camisa...</div>
     </main>
 
-    <!-- FOOTER (igual ao restante do site) -->
+    <!-- FOOTER -->
     <footer class="footer" aria-label="Rodapé">
         <div class="footer-inner">
             <div class="footer-brand">
@@ -270,6 +357,28 @@
         <svg width="28" height="28" viewBox="0 0 24 24" fill="white" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
     </a>
 
+    <!-- SACOLA FLUTUANTE (mesma da home, compartilha o mesmo localStorage) -->
+    <div id="vitrine-flutuante" onclick="abrirModalFavoritos()" role="button" tabindex="0" aria-label="Abrir sacola de favoritos" title="Minha sacola">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <small id="contador-fav" aria-label="Itens na sacola">0</small>
+    </div>
+
+    <!-- MODAL FAVORITOS / CARRINHO -->
+    <div id="modal-favoritos" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-titulo">
+        <div class="modal-content">
+            <button class="modal-close" onclick="fecharModalFavoritos()" aria-label="Fechar sacola">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+            <div class="modal-logo" aria-hidden="true"><span class="logo-accent">90</span><span class="logo-plus">+3</span></div>
+            <h3 id="modal-titulo">Minha Sacola</h3>
+            <div id="lista-favoritos" aria-live="polite"></div>
+            <button class="comprar" onclick="enviarFavoritosWhats()">
+                Enviar lista para o WhatsApp
+            </button>
+        </div>
+    </div>
+
+    <script src="carrinho.js"></script>
     <script src="produto.js"></script>
 </body>
 </html>
