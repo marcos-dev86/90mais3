@@ -78,7 +78,7 @@ function abrirModalFavoritos() {
     const modal = document.getElementById('modal-favoritos');
     if (!modal) return;
     renderizarListaSacola();
-    modal.classList.add('aberto');
+    modal.classList.add('open');
     document.body.style.overflow = 'hidden';
     modal.setAttribute('aria-hidden', 'false');
 }
@@ -87,7 +87,7 @@ function abrirModalFavoritos() {
 function fecharModalFavoritos() {
     const modal = document.getElementById('modal-favoritos');
     if (!modal) return;
-    modal.classList.remove('aberto');
+    modal.classList.remove('open');
     document.body.style.overflow = '';
     modal.setAttribute('aria-hidden', 'true');
 }
@@ -96,7 +96,7 @@ function fecharModalFavoritos() {
 document.addEventListener('click', function(e) {
     const modal = document.getElementById('modal-favoritos');
     if (!modal) return;
-    if (modal.classList.contains('aberto') && e.target === modal) {
+    if (modal.classList.contains('open') && e.target === modal) {
         fecharModalFavoritos();
     }
 });
