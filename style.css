@@ -1115,7 +1115,7 @@ details summary:focus-visible {
     border-bottom: 1px solid #e0e0e0;
     flex-shrink: 0;
 }
-.sd-logo-wrap { display: flex; align-items: center; gap: 10px; padding: 6px; background: #1a1919; }
+.sd-logo-wrap { display: flex; align-items: center; gap: 10px; padding: 6px 9px; border-radius: 4px; background: #1a1919; }
 .sd-logo { font-family: 'Bebas Neue', sans-serif; font-size: 22px; line-height: 1; }
 .sd-logo-accent { color: #c9a227; }
 .sd-logo-plus   { color: #1a1a1a; }
