@@ -1,4 +1,6 @@
 // ══════════════════════════════════════════════════════════════════
+// |         ID DA SACOLA --> id="sacola-titulo"                    |
+// ══════════════════════════════════════════════════════════════════
 //  carrinho.js — Sacola lateral (drawer) cinza/branco elegante
 //  - Foto da camisa visível
 //  - Tamanho escolhido na página do produto (obrigatório)
@@ -112,8 +114,8 @@ function garantirDrawerDOM() {
     <div class="sd-header">
         <div class="sd-logo-wrap">
             <span class="sd-logo"><span class="ls-plus">90</span><span class="sd-logo-accent">+3</span></span>
-            <span class="sd-titulo ls-plus">Minha Sacola</span>
-             // ID DA SACOLA --> id="sacola-titulo"
+            <span class="ls-plus">Minha Sacola</span>
+             
         </div>
         <button class="sd-close" onclick="fecharModalFavoritos()" aria-label="Fechar sacola">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
