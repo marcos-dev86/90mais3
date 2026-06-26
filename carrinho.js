@@ -112,7 +112,8 @@ function garantirDrawerDOM() {
     <div class="sd-header">
         <div class="sd-logo-wrap">
             <span class="sd-logo"><span class="ls-plus">90</span><span class="sd-logo-accent">+3</span></span>
-            <span class="sd-titulo ls-plus" id="sacola-titulo">Minha Sacola</span>
+            <span class="sd-titulo ls-plus">Minha Sacola</span>
+             // ID DA SACOLA --> id="sacola-titulo"
         </div>
         <button class="sd-close" onclick="fecharModalFavoritos()" aria-label="Fechar sacola">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
