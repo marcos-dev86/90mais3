@@ -111,7 +111,7 @@ function garantirDrawerDOM() {
 <div id="sacola-drawer" role="dialog" aria-modal="true" aria-labelledby="sacola-titulo">
     <div class="sd-header">
         <div class="sd-logo-wrap">
-            <span class="sd-logo"><span class="sd-logo-accent">90</span><span class="sd-logo-plus">+3</span></span>
+            <span class="sd-logo"><span class="sd-logo-plus">90</span><span class="sd-logo-accent">+3</span></span>
             <span class="sd-titulo" id="sacola-titulo">Minha Sacola</span>
         </div>
         <button class="sd-close" onclick="fecharModalFavoritos()" aria-label="Fechar sacola">
