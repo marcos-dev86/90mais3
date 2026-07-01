@@ -1,6 +1,6 @@
 <div align="center">
 
-# ⚽ 90+3 — Camisas Com Qualidade Até o Fim
+# ⚽ 90+3
 
 Camisas tailandesas premium para quem vive o futebol de verdade.
 Brasileirão · Europeus · Seleções · Retrô
