@@ -9,6 +9,11 @@
 // ══════════════════════════════════════════════════════════════════
 
 const CHAVE_SACOLA = '90mais3_sacola';
+const CHAVE_CUPOM  = '90mais3_cupom';
+// Definida aqui de novo (mesmo padrão já usado em script.js/produto.js) porque
+// carrinho.js é carregado ANTES desses arquivos nas duas páginas — não dá pra
+// depender da constante deles ainda não existir nesse ponto.
+const API_URL = 'https://api-90mais3.vercel.app';
 
 // ─── Persistência ─────────────────────────────────────────────────
 function lerSacola() {
@@ -17,6 +22,27 @@ function lerSacola() {
 }
 function salvarSacola(itens) {
     localStorage.setItem(CHAVE_SACOLA, JSON.stringify(itens));
+}
+
+// ─── Persistência do cupom aplicado ─────────────────────────────
+function lerCupom() {
+    try { return JSON.parse(localStorage.getItem(CHAVE_CUPOM)) || null; }
+    catch { return null; }
+}
+function salvarCupom(cupom) {
+    localStorage.setItem(CHAVE_CUPOM, JSON.stringify(cupom));
+}
+function limparCupom() {
+    localStorage.removeItem(CHAVE_CUPOM);
+}
+
+// ─── Calcula o valor do desconto (nunca deixa o total ficar negativo) ──
+function calcularDesconto(subtotal, cupom) {
+    if (!cupom || subtotal <= 0) return 0;
+    const bruto = cupom.tipo === 'percentual'
+        ? subtotal * (Number(cupom.valor) / 100)
+        : Number(cupom.valor);
+    return Math.min(Math.max(bruto, 0), subtotal);
 }
 
 // ─── Consulta ────────────────────────────────────────────────────
@@ -127,10 +153,15 @@ function garantirDrawerDOM() {
     <div class="sd-itens" id="lista-favoritos" aria-live="polite"></div>
 
     <div class="sd-rodape">
+        <div class="sd-cupom" id="sd-cupom"></div>
         <div class="sd-linha-valores">
             <div class="sd-linha">
                 <span class="sd-rotulo">Subtotal</span>
                 <span class="sd-valor" id="sacola-subtotal">—</span>
+            </div>
+            <div class="sd-linha" id="sd-linha-desconto" style="display:none">
+                <span class="sd-rotulo">Desconto</span>
+                <span class="sd-valor sd-valor-desconto" id="sacola-desconto">—</span>
             </div>
             <div class="sd-divisor"></div>
             <div class="sd-linha sd-linha-total">
@@ -185,14 +216,107 @@ document.addEventListener('click', function (e) {
     }
 });
 
+// ─── Cupom: alterna a visibilidade do campo de código ─────────────
+function alternarCampoCupom() {
+    const bloco = document.getElementById('sd-cupom');
+    const campo = document.getElementById('sd-cupom-campo');
+    if (!bloco || !campo) return;
+    const abrindo = campo.hidden;
+    campo.hidden = !abrindo;
+    bloco.classList.toggle('aberto', abrindo);
+    if (abrindo) document.getElementById('sd-cupom-input')?.focus();
+}
+
+// ─── Cupom: lê o campo de texto e valida ──────────────────────────
+function aplicarCupom() {
+    const input = document.getElementById('sd-cupom-input');
+    if (input) aplicarCupomPorCodigo(input.value);
+}
+
+// ─── Cupom: valida um código contra a API e aplica se estiver ativo ──
+// (usada tanto pelo campo do carrinho quanto pelo Ticket Dourado em script.js)
+async function aplicarCupomPorCodigo(codigoDigitado) {
+    const codigo = (codigoDigitado || '').trim().toUpperCase();
+    const msgEl = document.getElementById('sd-cupom-msg');
+    if (!codigo) return;
+
+    if (msgEl) { msgEl.textContent = 'Verificando...'; msgEl.className = 'sd-cupom-msg'; }
+
+    try {
+        const res = await fetch(`${API_URL}/api/cupons?codigo=${encodeURIComponent(codigo)}`);
+
+        if (res.status === 404) {
+            if (msgEl) { msgEl.textContent = 'Cupom inválido.'; msgEl.className = 'sd-cupom-msg erro'; }
+            return;
+        }
+        if (!res.ok) {
+            if (msgEl) { msgEl.textContent = 'Não foi possível validar o cupom agora. Tente de novo.'; msgEl.className = 'sd-cupom-msg erro'; }
+            return;
+        }
+
+        const cupom = await res.json();
+
+        if (!cupom.ativo) {
+            if (msgEl) { msgEl.textContent = 'Este cupom expirou ou não está mais disponível.'; msgEl.className = 'sd-cupom-msg erro'; }
+            return;
+        }
+
+        salvarCupom({ codigo: cupom.codigo, tipo: cupom.tipo, valor: Number(cupom.valor) });
+        renderizarListaSacola();
+    } catch (e) {
+        if (msgEl) { msgEl.textContent = 'Não foi possível validar o cupom agora. Tente de novo.'; msgEl.className = 'sd-cupom-msg erro'; }
+    }
+}
+
+// ─── Cupom: remove o cupom aplicado ────────────────────────────────
+function removerCupom() {
+    limparCupom();
+    renderizarListaSacola();
+}
+
+// ─── Cupom: desenha o bloco (campo vazio, ou selo de "aplicado") ──
+function renderizarCupomUI() {
+    const bloco = document.getElementById('sd-cupom');
+    if (!bloco) return;
+    const cupom = lerCupom();
+
+    if (cupom) {
+        const rotulo = cupom.tipo === 'percentual'
+            ? `${cupom.valor}% OFF`
+            : `R$${Number(cupom.valor).toFixed(2).replace('.', ',')} OFF`;
+        bloco.innerHTML = `
+            <div class="sd-cupom-ativo">
+                <span>🎟️ <strong>${cupom.codigo}</strong> aplicado — ${rotulo}</span>
+                <button type="button" onclick="removerCupom()">remover</button>
+            </div>`;
+        return;
+    }
+
+    bloco.innerHTML = `
+        <button type="button" class="sd-cupom-toggle" onclick="alternarCampoCupom()">
+            <span>🎟️ Tem um cupom?</span>
+            <span class="sd-cupom-seta">▾</span>
+        </button>
+        <div class="sd-cupom-campo" id="sd-cupom-campo" hidden>
+            <input type="text" id="sd-cupom-input" placeholder="Código do cupom" autocomplete="off"
+                   onkeypress="if(event.key==='Enter'){event.preventDefault();aplicarCupom();}">
+            <button type="button" class="sd-cupom-aplicar" onclick="aplicarCupom()">Aplicar</button>
+        </div>
+        <p class="sd-cupom-msg" id="sd-cupom-msg"></p>`;
+}
+
 // ─── Renderiza a lista de itens dentro do drawer
 function renderizarListaSacola() {
-    const lista  = document.getElementById('lista-favoritos');
-    const subEl  = document.getElementById('sacola-subtotal');
-    const totEl  = document.getElementById('sacola-total');
+    const lista     = document.getElementById('lista-favoritos');
+    const subEl     = document.getElementById('sacola-subtotal');
+    const descLinha = document.getElementById('sd-linha-desconto');
+    const descEl    = document.getElementById('sacola-desconto');
+    const totEl     = document.getElementById('sacola-total');
     if (!lista) return;
 
     const itens = lerSacola();
+
+    renderizarCupomUI();
 
     if (!itens.length) {
         lista.innerHTML = `
@@ -207,6 +331,7 @@ function renderizarListaSacola() {
             </div>`;
         if (subEl) subEl.textContent = '—';
         if (totEl) totEl.textContent = '—';
+        if (descLinha) descLinha.style.display = 'none';
         return;
     }
 
@@ -234,10 +359,23 @@ function renderizarListaSacola() {
         </div>`;
     }).join('');
 
-    const total = itens.reduce((s, i) => s + (Number(i.preco) || 0), 0);
-    const fmt   = v => v > 0 ? `R$${v.toFixed(2).replace('.', ',')}` : '—';
-    if (subEl) subEl.textContent = fmt(total);
+    const subtotal = itens.reduce((s, i) => s + (Number(i.preco) || 0), 0);
+    const cupom    = lerCupom();
+    const desconto = calcularDesconto(subtotal, cupom);
+    const total    = subtotal - desconto;
+    const fmt      = v => v > 0 ? `R$${v.toFixed(2).replace('.', ',')}` : '—';
+
+    if (subEl) subEl.textContent = fmt(subtotal);
     if (totEl) totEl.textContent = fmt(total);
+
+    if (descLinha && descEl) {
+        if (desconto > 0) {
+            descLinha.style.display = 'flex';
+            descEl.textContent = `- R$${desconto.toFixed(2).replace('.', ',')}`;
+        } else {
+            descLinha.style.display = 'none';
+        }
+    }
 }
 
 // ─── Remove por índice (chamado pelos botões × dentro do drawer)
@@ -267,7 +405,13 @@ function enviarFavoritosWhats() {
     const lista = itens.map((it, i) =>
         `${i + 1}. ${it.nome} — Tam. ${it.tamanho}`
     ).join('\n');
-    const msg = `Olá! Gostaria de encomendar as seguintes camisas da 90+3:\n\n${lista}\n\nPoderia confirmar disponibilidade e valor total?`;
+
+    const cupom = lerCupom();
+    const linhaCupom = cupom
+        ? `\n\nCupom aplicado: ${cupom.codigo} (${cupom.tipo === 'percentual' ? cupom.valor + '% OFF' : 'R$' + Number(cupom.valor).toFixed(2).replace('.', ',') + ' OFF'})`
+        : '';
+
+    const msg = `Olá! Gostaria de encomendar as seguintes camisas da 90+3:\n\n${lista}${linhaCupom}\n\nPoderia confirmar disponibilidade e valor total?`;
     window.open(`https://wa.me/5515991617508?text=${encodeURIComponent(msg)}`, '_blank');
 }
 
