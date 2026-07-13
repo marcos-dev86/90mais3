@@ -407,6 +407,24 @@
         </div>
     </div>
 
+    <!-- MODAL DO TICKET DOURADO — caixa centralizada mostrando o cupom -->
+    <div id="modal-ticket" class="modal modal-centro" role="dialog" aria-modal="true" aria-labelledby="ticket-titulo">
+        <div id="ticket-card" role="document">
+            <button class="ticket-fechar" onclick="fecharModalTicket()" aria-label="Fechar">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+            <div class="ticket-emoji" aria-hidden="true">🎟️</div>
+            <h3 id="ticket-titulo" class="ticket-titulo">Você achou o<br><span class="ticket-dourado-texto">Ticket Dourado!</span></h3>
+            <p class="ticket-sub">Use o cupom abaixo e ganhe desconto na sua compra:</p>
+            <div class="ticket-codigo-box" onclick="copiarCupomTicket()" role="button" tabindex="0" aria-label="Copiar código do cupom">
+                <span id="ticket-codigo-texto">DOURADO15</span>
+                <span class="ticket-copiar">Copiar</span>
+            </div>
+            <p class="ticket-copiado" id="ticket-copiado" hidden>Código copiado!</p>
+            <button class="ticket-btn-usar" onclick="usarCupomTicket()">Aplicar na minha sacola</button>
+        </div>
+    </div>
+
     <!-- Scripts: carrinho.js (sacola compartilhada com produto.html) + script.js (catálogo + extras) -->
     <script src="carrinho.js"></script>
     <script src="script.js"></script>
