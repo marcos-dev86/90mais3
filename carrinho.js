@@ -10,10 +10,13 @@
 
 const CHAVE_SACOLA = '90mais3_sacola';
 const CHAVE_CUPOM  = '90mais3_cupom';
-// Definida aqui de novo (mesmo padrão já usado em script.js/produto.js) porque
-// carrinho.js é carregado ANTES desses arquivos nas duas páginas — não dá pra
-// depender da constante deles ainda não existir nesse ponto.
-const API_URL = 'https://api-90mais3.vercel.app';
+// API_URL NÃO é declarada aqui de propósito: já existe (const API_URL = ...) em
+// script.js e em produto.js. Como todos os <script> de uma página HTML clássica
+// compartilham o mesmo escopo de topo, declarar de novo aqui causaria
+// "Identifier 'API_URL' has already been declared" e quebraria a página inteira.
+// As funções abaixo só usam API_URL dentro de handlers de clique, chamados bem
+// depois de todos os scripts já terem carregado — nesse momento a constante já
+// existe no escopo compartilhado, então funciona sem precisar redeclarar.
 
 // ─── Persistência ─────────────────────────────────────────────────
 function lerSacola() {
