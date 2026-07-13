@@ -1551,7 +1551,7 @@ details summary:focus-visible {
 .ticket-dourado-texto { color: var(--gold); }
 
 .ticket-sub {
-    font-size: .88rem;
+    font-size: .102rem;
     color: #777;
     line-height: 1.5;
     margin-bottom: 20px;
