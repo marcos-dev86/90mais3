@@ -1512,7 +1512,7 @@ details summary:focus-visible {
 /* ══════════════════════════════════════════════════════════════
    TICKET DOURADO — modal centralizado com o código do cupom
    ══════════════════════════════════════════════════════════════ */
-.modal-centro { justify-content: center; align-items: center; padding: 20px; }
+#modal-ticket.modal-centro { justify-content: center !important; align-items: center !important; padding: 20px; }
 
 #ticket-card {
     position: relative;
@@ -1527,7 +1527,7 @@ details summary:focus-visible {
     opacity: 0;
     transition: transform .3s cubic-bezier(.25,1,.5,1), opacity .25s;
 }
-.modal-centro.open #ticket-card { transform: scale(1); opacity: 1; }
+#modal-ticket.modal-centro.open #ticket-card { transform: scale(1); opacity: 1; }
 
 .ticket-fechar {
     position: absolute; top: 14px; right: 14px;
