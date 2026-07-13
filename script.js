@@ -351,9 +351,52 @@ function exibirProvaSocial() {
     }
 }
 
+// Código do cupom do Ticket Dourado. A validade de verdade (ativo/inativo)
+// é sempre checada na hora de aplicar, direto no banco — então se esse
+// cupom for desativado no admin, o easter egg continua aparecendo, mas
+// avisa corretamente que expirou (mesma checagem do campo normal de cupom).
+const CODIGO_TICKET_DOURADO = "DOURADO15";
+
 function resgatarTicket() {
     const ticket = document.getElementById("ticket-secreto");
     if (ticket) ticket.style.display = "none";
-    alert("🎟️ VOCÊ ACHOU O TICKET DOURADO!\n\nTire um print desta tela e mande no WhatsApp da 90+3 para ganhar 15% OFF no valor TOTAL das suas camisas!");
-    window.open(`https://wa.me/5515991617508?text=${encodeURIComponent("Achei o Ticket Dourado no site! Quero meus 15% OFF nas camisas da vitrine 🎟️")}`, "_blank");
+    abrirModalTicket();
 }
+
+function abrirModalTicket() {
+    const modal = document.getElementById("modal-ticket");
+    if (!modal) return;
+    modal.classList.add("open");
+    document.body.style.overflow = "hidden";
+}
+
+function fecharModalTicket() {
+    const modal = document.getElementById("modal-ticket");
+    if (modal) modal.classList.remove("open");
+    document.body.style.overflow = "";
+}
+
+function copiarCupomTicket() {
+    navigator.clipboard?.writeText(CODIGO_TICKET_DOURADO).then(() => {
+        const msg = document.getElementById("ticket-copiado");
+        if (msg) {
+            msg.hidden = false;
+            setTimeout(() => { msg.hidden = true; }, 2000);
+        }
+    });
+}
+
+// Fecha o cupom de fora do card e aplica direto na sacola
+function usarCupomTicket() {
+    fecharModalTicket();
+    if (typeof abrirModalFavoritos === "function") abrirModalFavoritos();
+    if (typeof aplicarCupomPorCodigo === "function") aplicarCupomPorCodigo(CODIGO_TICKET_DOURADO);
+}
+
+// Fecha o modal do ticket ao clicar fora do card (mesmo padrão da sacola)
+document.addEventListener("click", function (e) {
+    const modal = document.getElementById("modal-ticket");
+    if (modal && modal.classList.contains("open") && e.target === modal) {
+        fecharModalTicket();
+    }
+});
