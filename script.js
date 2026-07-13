@@ -355,7 +355,7 @@ function exibirProvaSocial() {
 // é sempre checada na hora de aplicar, direto no banco — então se esse
 // cupom for desativado no admin, o easter egg continua aparecendo, mas
 // avisa corretamente que expirou (mesma checagem do campo normal de cupom).
-const CODIGO_TICKET_DOURADO = "DOURADO15";
+const CODIGO_TICKET_DOURADO = "CUPOM15";
 
 function resgatarTicket() {
     const ticket = document.getElementById("ticket-secreto");
@@ -365,7 +365,10 @@ function resgatarTicket() {
 
 function abrirModalTicket() {
     const modal = document.getElementById("modal-ticket");
-    if (!modal) return;
+    if (!modal) {
+        console.warn('[ticket-dourado] elemento #modal-ticket não encontrado no HTML — confira se o index.html publicado tem esse bloco.');
+        return;
+    }
     modal.classList.add("open");
     document.body.style.overflow = "hidden";
 }
