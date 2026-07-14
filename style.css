@@ -21,6 +21,25 @@
     --radius-sm:   8px;
     --shadow-card: 0 8px 32px rgba(0,0,0,0.45);
     --shadow-gold: 0 4px 24px rgba(201,162,39,0.25);
+
+    /* Padrão de grade quadriculada sutil — reaproveitado em várias seções
+       do topo do site (header, hero, busca, catálogo). Definido uma única
+       vez aqui pra manter o espaçamento/opacidade sempre idênticos. */
+    --fundo-grade:
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 60px,
+            rgba(255,255,255,0.015) 60px,
+            rgba(255,255,255,0.015) 61px
+        ),
+        repeating-linear-gradient(
+            90deg,
+            transparent,
+            transparent 60px,
+            rgba(255,255,255,0.015) 60px,
+            rgba(255,255,255,0.015) 61px
+        );
 }
 
 /* ── RESET & BASE ── */
@@ -31,6 +50,7 @@ html { scroll-behavior: smooth; }
 body {
     font-family: 'Barlow', sans-serif;
     background-color: var(--black);
+    background-image: var(--fundo-grade);
     color: var(--text);
     overflow-x: hidden;
     line-height: 1.6;
@@ -158,20 +178,7 @@ nav { display: flex; gap: 10px; flex-wrap: wrap; }
     background-image:
         radial-gradient(circle at 20% 50%, rgba(201,162,39,0.08) 0%, transparent 60%),
         radial-gradient(circle at 80% 20%, rgba(201,162,39,0.06) 0%, transparent 50%),
-        repeating-linear-gradient(
-            0deg,
-            transparent,
-            transparent 60px,
-            rgba(255,255,255,0.015) 60px,
-            rgba(255,255,255,0.015) 61px
-        ),
-        repeating-linear-gradient(
-            90deg,
-            transparent,
-            transparent 60px,
-            rgba(255,255,255,0.015) 60px,
-            rgba(255,255,255,0.015) 61px
-        );
+        var(--fundo-grade);
     pointer-events: none;
 }
 .hero-content {
@@ -291,6 +298,7 @@ nav { display: flex; gap: 10px; flex-wrap: wrap; }
 /* ── BUSCA & FILTROS ── */
 .busca-section {
     background: var(--dark);
+    background-image: var(--fundo-grade);
     border-top: 1px solid var(--border);
     border-bottom: 1px solid var(--border);
     padding: 28px 24px;
