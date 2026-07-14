@@ -7,7 +7,7 @@ Brasileirão · Europeus · Seleções · Retrô
 
 <br>
 
-[🌐 Visitar o Site](https://90mais3.vercel.app) &nbsp;|&nbsp; [📸 Instagram](https://instagram.com/90_3.camisastailandesas) &nbsp;|&nbsp; [💬 WhatsApp](https://wa.me/5515991617508)
+[🌐 Visitar o Site](https://90mais3.vercel.app) &nbsp;|&nbsp; [📸 Instagram](https://instagram.com/90mais3.itape) &nbsp;|&nbsp; [💬 WhatsApp](https://wa.me/5515991617508)
 
 </div>
 
@@ -48,7 +48,7 @@ O nome vem do futebol — aquele acréscimo no final do jogo onde tudo pode acon
 | | |
 |---|---|
 | 💬 WhatsApp | [(15) 99161-7508](https://wa.me/5515991617508) |
-| 📸 Instagram | [@90_3.camisastailandesas](https://instagram.com/90_3.camisastailandesas) |
+| 📸 Instagram | [@90mais3.itape](https://instagram.com/90mais3.itape) |
 | 📍 Região | Itapetininga — SP |
 | ⏰ Horário | Seg a Sex · 09h às 17h |
 
