@@ -42,6 +42,8 @@ function limparCupom() {
 // ─── Calcula o valor do desconto (nunca deixa o total ficar negativo) ──
 function calcularDesconto(subtotal, cupom) {
     if (!cupom || subtotal <= 0) return 0;
+    const minimo = Number(cupom.valorMinimo) || 0;
+    if (subtotal < minimo) return 0;
     const bruto = cupom.tipo === 'percentual'
         ? subtotal * (Number(cupom.valor) / 100)
         : Number(cupom.valor);
@@ -264,7 +266,19 @@ async function aplicarCupomPorCodigo(codigoDigitado) {
             return;
         }
 
-        salvarCupom({ codigo: cupom.codigo, tipo: cupom.tipo, valor: Number(cupom.valor) });
+        const minimo   = Number(cupom.valor_minimo) || 0;
+        const subtotal = lerSacola().reduce((s, i) => s + (Number(i.preco) || 0), 0);
+
+        if (minimo > 0 && subtotal < minimo) {
+            const faltam = (minimo - subtotal).toFixed(2).replace('.', ',');
+            if (msgEl) {
+                msgEl.textContent = `Esse cupom exige compra mínima de R$${minimo.toFixed(2).replace('.', ',')}. Faltam R$${faltam} na sua sacola.`;
+                msgEl.className = 'sd-cupom-msg erro';
+            }
+            return;
+        }
+
+        salvarCupom({ codigo: cupom.codigo, tipo: cupom.tipo, valor: Number(cupom.valor), valorMinimo: minimo });
         renderizarListaSacola();
     } catch (e) {
         if (msgEl) { msgEl.textContent = 'Não foi possível validar o cupom agora. Tente de novo.'; msgEl.className = 'sd-cupom-msg erro'; }
@@ -287,11 +301,20 @@ function renderizarCupomUI() {
         const rotulo = cupom.tipo === 'percentual'
             ? `${cupom.valor}% OFF`
             : `R$${Number(cupom.valor).toFixed(2).replace('.', ',')} OFF`;
+        const minimo   = Number(cupom.valorMinimo) || 0;
+        const subtotal = lerSacola().reduce((s, i) => s + (Number(i.preco) || 0), 0);
+        const faltam   = minimo - subtotal;
+
+        const avisoMinimo = faltam > 0
+            ? `<p class="sd-cupom-msg">Faltam R$${faltam.toFixed(2).replace('.', ',')} na sacola para o desconto valer.</p>`
+            : '';
+
         bloco.innerHTML = `
             <div class="sd-cupom-ativo">
                 <span>🎟️ <strong>${cupom.codigo}</strong> aplicado — ${rotulo}</span>
                 <button type="button" onclick="removerCupom()">remover</button>
-            </div>`;
+            </div>
+            ${avisoMinimo}`;
         return;
     }
 
@@ -410,7 +433,9 @@ function enviarFavoritosWhats() {
     ).join('\n');
 
     const cupom = lerCupom();
-    const linhaCupom = cupom
+    const subtotal = itens.reduce((s, i) => s + (Number(i.preco) || 0), 0);
+    const cupomValendo = cupom && calcularDesconto(subtotal, cupom) > 0;
+    const linhaCupom = cupomValendo
         ? `\n\nCupom aplicado: ${cupom.codigo} (${cupom.tipo === 'percentual' ? cupom.valor + '% OFF' : 'R$' + Number(cupom.valor).toFixed(2).replace('.', ',') + ' OFF'})`
         : '';
 
