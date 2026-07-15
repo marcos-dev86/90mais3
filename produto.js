@@ -42,6 +42,9 @@ function renderizarProduto(c) {
     document.getElementById('pageDescription')
         .setAttribute('content', `Camisa ${c.nome} ${c.temporada}, ${c.modelo}. R$${preco[0]},${preco[1]} na 90+3.`);
 
+    atualizarOpenGraph(c, nomeCompleto, `R$${preco[0]},${preco[1]}`);
+    atualizarSchemaOrg(c, nomeCompleto);
+
     // Fotos disponíveis para o carrossel
     fotosDisponiveis = [];
     if (c.foto_frente) fotosDisponiveis.push({ src: c.foto_frente, label: 'Frente' });
@@ -139,6 +142,14 @@ function renderizarProduto(c) {
                     </svg>
                     Comprar no WhatsApp
                 </a>
+
+                <button class="produto-compartilhar" id="btn-compartilhar" onclick="compartilharProduto()" aria-label="Compartilhar essa camisa">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+                        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                    </svg>
+                    <span id="btn-compartilhar-texto">Compartilhar</span>
+                </button>
 
                 <div class="produto-badges-extra">
                     <span class="produto-badge-extra">5% OFF à vista</span>
@@ -277,6 +288,94 @@ function escaparHTML(t) {
     const d = document.createElement('div');
     d.textContent = t;
     return d.innerHTML;
+}
+
+// ─── Open Graph — atualiza os valores pra quem SIM executa JS (o próprio
+// Google, por exemplo). WhatsApp/Instagram/Facebook geralmente não executam
+// JS ao montar a prévia do link, então eles continuam vendo os valores
+// estáticos que já estão no <head> do produto.html. ────────────────────
+function atualizarOpenGraph(c, nomeCompleto, precoFormatado) {
+    const titulo   = `${nomeCompleto} | 90+3`;
+    const desc     = `Camisa ${nomeCompleto}, ${precoFormatado} na 90+3 — camisas tailandesas com qualidade até o fim.`;
+    const imagem   = c.foto_frente || 'https://90mais3.vercel.app/logo.webp';
+    const url      = window.location.href;
+
+    const set = (id, valor) => { const el = document.getElementById(id); if (el) el.setAttribute('content', valor); };
+    set('ogTitle', titulo);
+    set('ogDescription', desc);
+    set('ogImage', imagem);
+    set('ogUrl', url);
+    set('twitterTitle', titulo);
+    set('twitterDescription', desc);
+    set('twitterImage', imagem);
+}
+
+// ─── Schema.org (dados estruturados) — informa preço, disponibilidade e
+// imagem num formato que o Google entende, pra tentar exibir resultado
+// rico (preço/estoque) direto na busca. O Google executa JS ao indexar,
+// então isso funciona mesmo sendo montado aqui. ────────────────────────
+function atualizarSchemaOrg(c, nomeCompleto) {
+    let script = document.getElementById('schema-produto');
+    if (!script) {
+        script = document.createElement('script');
+        script.type = 'application/ld+json';
+        script.id = 'schema-produto';
+        document.head.appendChild(script);
+    }
+
+    const disponivel = Object.values(c.estoque || {}).some(q => Number(q) > 0);
+
+    const dados = {
+        '@context': 'https://schema.org/',
+        '@type': 'Product',
+        name: nomeCompleto,
+        image: [c.foto_frente, c.foto_costas].filter(Boolean),
+        description: `Camisa ${nomeCompleto}, tailandesa premium.`,
+        brand: { '@type': 'Brand', name: '90+3 Camisas Tailandesas' },
+        offers: {
+            '@type': 'Offer',
+            url: window.location.href,
+            priceCurrency: 'BRL',
+            price: Number(c.preco).toFixed(2),
+            availability: disponivel ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+            itemCondition: 'https://schema.org/NewCondition'
+        }
+    };
+
+    script.textContent = JSON.stringify(dados);
+}
+
+// ─── Compartilhar — usa o menu nativo do celular quando existe; no
+// desktop (ou navegador sem suporte) copia o link pra área de transferência. ──
+function compartilharProduto() {
+    const c = window.camisaAtual;
+    if (!c) return;
+
+    const nomeCompleto = `${c.nome} ${c.temporada} - ${c.modelo}`;
+    const url   = window.location.href;
+    const texto = `Olha essa ${nomeCompleto} que achei na 90+3! 🔥`;
+
+    if (navigator.share) {
+        navigator.share({ title: `${nomeCompleto} | 90+3`, text: texto, url }).catch(() => {});
+        return;
+    }
+
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(url)
+            .then(mostrarFeedbackCompartilhar)
+            .catch(() => window.open(`https://wa.me/?text=${encodeURIComponent(texto + ' ' + url)}`, '_blank'));
+        return;
+    }
+
+    window.open(`https://wa.me/?text=${encodeURIComponent(texto + ' ' + url)}`, '_blank');
+}
+
+function mostrarFeedbackCompartilhar() {
+    const texto = document.getElementById('btn-compartilhar-texto');
+    if (!texto) return;
+    const original = texto.textContent;
+    texto.textContent = '✓ Link copiado!';
+    setTimeout(() => { texto.textContent = original; }, 2000);
 }
 
 document.addEventListener('DOMContentLoaded', carregarProduto);
