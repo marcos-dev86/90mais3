@@ -14,6 +14,21 @@
     <title id="pageTitle">Carregando camisa... | 90+3</title>
     <meta id="pageDescription" name="description" content="Camisas tailandesas premium da 90+3.">
 
+    <!-- Open Graph / redes sociais — versão padrão. É atualizada por produto.js quando o
+         produto carrega, mas WhatsApp/Instagram/Facebook geralmente não executam JS ao
+         gerar a prévia de link, então o valor abaixo é o que a maioria vai ver. -->
+    <meta property="og:type" content="product">
+    <meta property="og:site_name" content="90+3 Camisas Tailandesas">
+    <meta id="ogTitle" property="og:title" content="Camisas Tailandesas Premium | 90+3">
+    <meta id="ogDescription" property="og:description" content="Camisas de time tailandesas com qualidade até o fim. Confira o modelo e garanta a sua.">
+    <meta id="ogImage" property="og:image" content="https://90mais3.vercel.app/logo.webp">
+    <meta id="ogUrl" property="og:url" content="https://90mais3.vercel.app/produto.html">
+    <meta property="og:locale" content="pt_BR">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta id="twitterTitle" name="twitter:title" content="Camisas Tailandesas Premium | 90+3">
+    <meta id="twitterDescription" name="twitter:description" content="Camisas de time tailandesas com qualidade até o fim.">
+    <meta id="twitterImage" name="twitter:image" content="https://90mais3.vercel.app/logo.webp">
+
     <style>
         /* ── Página de produto — usa as mesmas variáveis do style.css ── */
         .produto-wrap {
@@ -223,6 +238,28 @@
         }
         .produto-comprar:hover { filter: brightness(1.08); }
         .produto-comprar:active { transform: scale(.98); }
+
+        .produto-compartilhar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 12px 20px;
+            margin-top: 10px;
+            border-radius: 50px;
+            background: transparent;
+            border: 1px solid var(--border, #2a2a2a);
+            color: var(--text-muted, #888);
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: border-color .15s, color .15s;
+        }
+        .produto-compartilhar:hover { border-color: var(--gold, #c9a227); color: var(--gold, #c9a227); }
 
         .produto-badges-extra {
             display: flex;
