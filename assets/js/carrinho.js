@@ -255,7 +255,7 @@ async function aplicarCupomPorCodigo(codigoDigitado) {
             return;
         }
         if (!res.ok) {
-            if (msgEl) { msgEl.textContent = 'Não foi possível validar o cupom agora. Tente Novamente.'; msgEl.className = 'sd-cupom-msg erro'; }
+            if (msgEl) { msgEl.textContent = 'Não foi possível validar o cupom agora. Tente de novo.'; msgEl.className = 'sd-cupom-msg erro'; }
             return;
         }
 
@@ -272,7 +272,7 @@ async function aplicarCupomPorCodigo(codigoDigitado) {
         if (minimo > 0 && subtotal < minimo) {
             const faltam = (minimo - subtotal).toFixed(2).replace('.', ',');
             if (msgEl) {
-                msgEl.textContent = `Esse cupom tem um pedido mínimo de R$${minimo.toFixed(2).replace('.', ',')}. Faltam R$${faltam} para o desconto em sua sacola.`;
+                msgEl.textContent = `Esse cupom exige compra mínima de R$${minimo.toFixed(2).replace('.', ',')}. Faltam R$${faltam} na sua sacola.`;
                 msgEl.className = 'sd-cupom-msg erro';
             }
             return;
@@ -428,18 +428,30 @@ function removerIdx(idx) {
 function enviarFavoritosWhats() {
     const itens = lerSacola();
     if (!itens.length) { alert('Sua sacola está vazia!'); return; }
+
+    const fmt = v => `R$${Number(v).toFixed(2).replace('.', ',')}`;
+
+    // O tamanho já vem embutido em it.nome (ex: "... (Tam. G)"), então não
+    // repetimos aqui — só mostramos o nome + o valor unitário de cada item.
     const lista = itens.map((it, i) =>
-        `${i + 1}. ${it.nome} — Tam. ${it.tamanho}`
+        `${i + 1}. ${it.nome} — ${fmt(it.preco)}`
     ).join('\n');
 
-    const cupom = lerCupom();
     const subtotal = itens.reduce((s, i) => s + (Number(i.preco) || 0), 0);
-    const cupomValendo = cupom && calcularDesconto(subtotal, cupom) > 0;
+    const cupom    = lerCupom();
+    const desconto = calcularDesconto(subtotal, cupom);
+    const cupomValendo = cupom && desconto > 0;
+    const total    = subtotal - desconto;
+
     const linhaCupom = cupomValendo
-        ? `\n\nCupom aplicado: ${cupom.codigo} (${cupom.tipo === 'percentual' ? cupom.valor + '% OFF' : 'R$' + Number(cupom.valor).toFixed(2).replace('.', ',') + ' OFF'})`
+        ? `\n\nCupom aplicado: ${cupom.codigo} (${cupom.tipo === 'percentual' ? cupom.valor + '% OFF' : fmt(cupom.valor) + ' OFF'})`
         : '';
 
-    const msg = `Olá! Gostaria de encomendar as seguintes camisas da 90+3:\n\n${lista}${linhaCupom}\n\nPoderia confirmar disponibilidade e valor total?`;
+    const linhaValores = cupomValendo
+        ? `\n\nSubtotal: ${fmt(subtotal)}\nDesconto: -${fmt(desconto)}\nTotal: ${fmt(total)}`
+        : `\n\nTotal: ${fmt(subtotal)}`;
+
+    const msg = `Olá! Gostaria de encomendar as seguintes camisas da 90+3:\n\n${lista}${linhaCupom}${linhaValores}\n\nPoderia confirmar disponibilidade?`;
     window.open(`https://wa.me/5515991617508?text=${encodeURIComponent(msg)}`, '_blank');
 }
 
