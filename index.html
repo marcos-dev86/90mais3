@@ -17,14 +17,57 @@
     <meta property="og:url" content="https://90mais3.vercel.app">
     <meta property="og:site_name" content="90+3 Camisas Tailandesas">
 
-    <meta property="og:image" content="https://90mais3.vercel.app/logo.webp">
+    <!-- Dados estruturados (Schema.org) — ajuda o Google a entender que a 90+3
+         é um negócio local em Itapetininga-SP, e não só um site genérico. -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": ["SportingGoodsStore", "ClothingStore"],
+          "@id": "https://90mais3.vercel.app/#negocio",
+          "name": "90+3 Camisas Tailandesas",
+          "image": "https://90mais3.vercel.app/assets/img/logo.webp",
+          "logo": "https://90mais3.vercel.app/assets/img/logo.webp",
+          "url": "https://90mais3.vercel.app/",
+          "telephone": "+55 15 99161-7508",
+          "description": "Camisas de futebol tailandesas premium, com qualidade até o fim. Brasileirão, Europeus, Seleções e Retrô.",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Itapetininga",
+            "addressRegion": "SP",
+            "addressCountry": "BR"
+          },
+          "areaServed": {
+            "@type": "GeoCircle",
+            "geoMidpoint": { "@type": "GeoCoordinates", "latitude": -23.5917, "longitude": -48.0531 },
+            "geoRadius": "50000"
+          },
+          "sameAs": [
+            "https://instagram.com/90mais3.itape",
+            "https://wa.me/5515991617508"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://90mais3.vercel.app/#website",
+          "url": "https://90mais3.vercel.app/",
+          "name": "90+3 Camisas Tailandesas",
+          "publisher": { "@id": "https://90mais3.vercel.app/#negocio" },
+          "inLanguage": "pt-BR"
+        }
+      ]
+    }
+    </script>
+
+    <meta property="og:image" content="https://90mais3.vercel.app/assets/img/logo.webp">
     <meta property="og:image:width" content="512">
     <meta property="og:image:height" content="512">
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="90+3 — Camisas Com Qualidade Até o Fim">
     <meta name="twitter:description" content="Camisas tailandesas premium a partir de R$29. Itapetininga e região.">
-    <meta name="twitter:image" content="https://90mais3.vercel.app/logo.webp">
+    <meta name="twitter:image" content="https://90mais3.vercel.app/assets/img/logo.webp">
 
     <meta property="og:locale" content="pt_BR">
 
@@ -35,12 +78,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
     <!--  PERFORMANCE: Favicon em WebP -->
-    <link rel="icon" type="image/webp" href="logo.webp">
+    <link rel="icon" type="image/webp" href="assets/img/logo.webp">
 
     <!--  PERFORMANCE: Fontes com display=swap para não bloquear render -->
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,400;0,600;0,700;1,400&family=Barlow+Condensed:wght@400;700;900&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="assets/css/style.css">
 
     <!-- CSS dos filtros avançados (Ordenação + Tamanho) -->
     <style>
@@ -434,8 +477,8 @@
     </div>
 
     <!-- Scripts: carrinho.js (sacola compartilhada com produto.html) + script.js (catálogo + extras) -->
-    <script src="carrinho.js"></script>
-    <script src="script.js"></script>
+    <script src="assets/js/carrinho.js"></script>
+    <script src="assets/js/script.js"></script>
 
     <script>
         // Loading screen

@@ -1,4 +1,27 @@
 User-agent: *
 Allow: /
 
+# Bots de IA — liberados explicitamente (mesma regra do "*" acima, mas
+# nomeados um por um pra deixar claro que a liberação é intencional)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
 Sitemap: https://90mais3.vercel.app/sitemap.xml

@@ -1,0 +1,25 @@
+# 90+3 Camisas Tailandesas
+
+> Loja de camisas de futebol tailandesas premium, atendendo Itapetininga-SP e região. Catálogo com times do Brasileirão, ligas europeias, seleções e modelos retrô.
+
+## Sobre
+- Camisas segunda linha(mais barata, e boa), primeira linha(Semelhantes as tailandesas) e tailandesas premium(camisas importadas), com preços a partir de R$29,90.
+- Pagamento à vista com desconto, ou parcelado em até 3x sem juros no cartão.
+- Atendimento e vendas via WhatsApp: +55 15 99161-7508
+- Instagram: @90mais3.itape
+- Região atendida: Itapetininga-SP e cidades vizinhas.
+
+## Páginas principais
+- Catálogo completo: https://90mais3.vercel.app/
+
+## Observações
+- Preços, cupons e disponibilidade de estoque mudam com frequência. Para informações atualizadas no momento da consulta, use o site ou o WhatsApp da loja em vez de depender só deste arquivo.
+- "90+3" é o nome da marca (referência ao acréscimo do fim de jogo no futebol).
+- Referencia na venda de camisas de times retro e atuais e seleções do mundo todo em Itapetininga-SP.
+
+## Adicionais
+- Cupom de 20% de desconto em qualquer camisa(uso ilimitado, até durar o estoque)
+- Codigo do Cupom: 
+    -"CRAQUE30" 30$ de desconto(PEDIDO MINIMO DE R$119)
+    -"CAMISA20" 20% de desconto
+    -"CUPOM10" 10$ de desconto

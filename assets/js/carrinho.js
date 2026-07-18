@@ -255,7 +255,7 @@ async function aplicarCupomPorCodigo(codigoDigitado) {
             return;
         }
         if (!res.ok) {
-            if (msgEl) { msgEl.textContent = 'Não foi possível validar o cupom agora. Tente de novo.'; msgEl.className = 'sd-cupom-msg erro'; }
+            if (msgEl) { msgEl.textContent = 'Não foi possível validar o cupom agora. Tente Novamente.'; msgEl.className = 'sd-cupom-msg erro'; }
             return;
         }
 
@@ -272,7 +272,7 @@ async function aplicarCupomPorCodigo(codigoDigitado) {
         if (minimo > 0 && subtotal < minimo) {
             const faltam = (minimo - subtotal).toFixed(2).replace('.', ',');
             if (msgEl) {
-                msgEl.textContent = `Esse cupom exige compra mínima de R$${minimo.toFixed(2).replace('.', ',')}. Faltam R$${faltam} na sua sacola.`;
+                msgEl.textContent = `Esse cupom tem um pedido mínimo de R$${minimo.toFixed(2).replace('.', ',')}. Faltam R$${faltam} para o desconto em sua sacola.`;
                 msgEl.className = 'sd-cupom-msg erro';
             }
             return;
