@@ -68,8 +68,9 @@ function renderizarProduto(c) {
     const seloHTML = c.selo_promocional
         ? `<span class="produto-selo">${escaparHTML(c.selo_promocional)}</span>` : '';
 
-    // Badges de tamanho
-    const tamanhosHTML = ['P', 'M', 'G', 'GG'].map(t => {
+    // Badges de tamanho — infantil usa numeração 4 a 14, adulto usa P/M/G/GG
+    const tamanhosDisponiveis = c.infantil ? ['4', '6', '8', '10', '12', '14'] : ['P', 'M', 'G', 'GG'];
+    const tamanhosHTML = tamanhosDisponiveis.map(t => {
         const qtd  = Number(est[t] ?? 0);
         const disp = qtd > 0;
         const cls  = disp ? 'disponivel' : 'esgotado';
@@ -152,6 +153,7 @@ function renderizarProduto(c) {
                 </button>
 
                 <div class="produto-badges-extra">
+                    ${c.infantil ? '<span class="produto-badge-extra produto-badge-infantil">Linha Infantil</span>' : ''}
                     <span class="produto-badge-extra">5% OFF à vista</span>
                     <span class="produto-badge-extra">3x sem juros</span>
                     <span class="produto-badge-extra">Entrega em até 5 dias</span>

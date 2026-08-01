@@ -133,15 +133,21 @@ function gerarCardHTML(c) {
     const idUnico      = `${c.nome}|${c.temporada}|${c.modelo}`;
     const nomeCompleto = `${nomeDisplay} ${c.temporada} - ${c.modelo}`;
 
-    const tamanhos = ['P', 'M', 'G', 'GG'].map(t => {
+    // Infantil usa numeração 4 a 14, adulto usa P/M/G/GG
+    const tamanhosDisponiveis = c.infantil ? ['4', '6', '8', '10', '12', '14'] : ['P', 'M', 'G', 'GG'];
+    const tamanhos = tamanhosDisponiveis.map(t => {
         const qtd = est[t] ?? 0;
         const cls = qtd > 0 ? 'disponivel' : 'esgotado';
         return `<span class="tamanho-badge ${cls}" aria-label="Tamanho ${t} ${qtd > 0 ? 'disponível' : 'esgotado'}">${t}</span>`;
     }).join('');
 
+    const infantilClass = c.infantil ? 'infantil' : '';
+    const infantilTagHTML = c.infantil ? '<div class="etiqueta-infantil">INFANTIL</div>' : '';
+
     return `
-    <article class="card ${timeClass} ${ligaClass} ${tagsClass}"
+    <article class="card ${timeClass} ${ligaClass} ${tagsClass} ${infantilClass}"
              data-id="${c.id}" data-preco="${c.preco}" data-prioridade="${c.prioridade || 0}">
+        ${infantilTagHTML}
         <button class="btn-fav"
                 data-id="${idUnico}"
                 data-nome="${nomeCompleto}"
@@ -224,7 +230,8 @@ function gerarCardPromocaoHTML(c) {
     const selo = c.selo_promocional || 'OFERTA ESPECIAL';
     const idUnico      = `${c.nome}|${c.temporada}|${c.modelo}`;
     const nomeCompleto = `${c.nome} ${c.temporada} - ${c.modelo}`;
-    const tamanhosHTML = ['P','M','G','GG'].map(t => {
+    const tamanhosDisponiveisPromo = c.infantil ? ['4', '6', '8', '10', '12', '14'] : ['P', 'M', 'G', 'GG'];
+    const tamanhosHTML = tamanhosDisponiveisPromo.map(t => {
         const qtd = est[t] ?? 0;
         return `<span class="tamanho-badge ${qtd > 0 ? 'disponivel' : 'esgotado'}">${t}</span>`;
     }).join('');
