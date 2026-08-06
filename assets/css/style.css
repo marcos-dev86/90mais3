@@ -661,7 +661,7 @@ details summary:focus-visible {
 .etiqueta-infantil {
     position: absolute;
     top: 12px;
-    right: 12px;
+    left: 12px;
     padding: 5px 12px;
     font-family: 'Barlow Condensed', sans-serif;
     font-size: 11px;
@@ -708,7 +708,7 @@ details summary:focus-visible {
     color: var(--gold);
 }
 .promo-fire { font-size: 32px; }
-.promo-container { display: flex; justify-content: center; }
+.promo-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 24px; }
 .card-promo {
     max-width: 400px;
     width: 100%;
