@@ -7,30 +7,33 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="icon" type="image/webp" href="assets/img/logo.webp">
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,400;0,600;0,700;1,400&family=Barlow+Condensed:wght@400;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="preconnect" href="https://api-90mais3.vercel.app">
+    <link rel="icon" type="image/webp" href="src/img/logo.webp">
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,400;0,600;0,700;1,400&family=Barlow+Condensed:wght@400;700;900&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,400;0,600;0,700;1,400&family=Barlow+Condensed:wght@400;700;900&display=swap" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,400;0,600;0,700;1,400&family=Barlow+Condensed:wght@400;700;900&display=swap"></noscript>
+    <link rel="stylesheet" href="src/css/style.min.css">
 
     <title id="pageTitle">Carregando camisa... | 90+3</title>
     <meta id="pageDescription" name="description" content="Camisas tailandesas premium da 90+3.">
 
-    <!-- Open Graph / redes sociais — versão padrão. É atualizada por produto.js quando o
+    <!-- Open Graph / redes sociais: versão padrão. É atualizada por produto.js quando o
          produto carrega, mas WhatsApp/Instagram/Facebook geralmente não executam JS ao
          gerar a prévia de link, então o valor abaixo é o que a maioria vai ver. -->
     <meta property="og:type" content="product">
     <meta property="og:site_name" content="90+3 Camisas Tailandesas">
     <meta id="ogTitle" property="og:title" content="Camisas Tailandesas Premium | 90+3">
     <meta id="ogDescription" property="og:description" content="Camisas de time tailandesas com qualidade até o fim. Confira o modelo e garanta a sua.">
-    <meta id="ogImage" property="og:image" content="https://90mais3.vercel.app/assets/img/logo.webp">
+    <meta id="ogImage" property="og:image" content="https://90mais3.vercel.app/src/img/logo.webp">
     <meta id="ogUrl" property="og:url" content="https://90mais3.vercel.app/produto.html">
     <meta property="og:locale" content="pt_BR">
     <meta name="twitter:card" content="summary_large_image">
     <meta id="twitterTitle" name="twitter:title" content="Camisas Tailandesas Premium | 90+3">
     <meta id="twitterDescription" name="twitter:description" content="Camisas de time tailandesas com qualidade até o fim.">
-    <meta id="twitterImage" name="twitter:image" content="https://90mais3.vercel.app/assets/img/logo.webp">
+    <meta id="twitterImage" name="twitter:image" content="https://90mais3.vercel.app/src/img/logo.webp">
 
     <style>
-        /* ── Página de produto — usa as mesmas variáveis do style.css ── */
+        /* ── Página de produto: usa as mesmas variáveis do style.min.css ── */
         .produto-wrap {
             max-width: 1100px;
             margin: 0 auto;
@@ -56,7 +59,7 @@
             align-items: flex-start;
         }
 
-        /* Galeria de imagens — sempre corta para preencher o quadro,
+        /* Galeria de imagens: sempre corta para preencher o quadro,
            sem espaços vazios em fotos com proporção diferente */
         .produto-galeria { position: sticky; top: 100px; }
 
@@ -377,13 +380,13 @@
             </div>
             <div class="footer-cols">
                 <div class="footer-col">
-                    <h4>Contato</h4>
+                    <h3>Contato</h3>
                     <p>📱 (15) 99161-7508</p>
-                    <p>📍 Itapetininga — SP</p>
+                    <p>📍 Itapetininga, SP</p>
                     <p>⏰ Seg a Sex · 09h–17h</p>
                 </div>
                 <div class="footer-col">
-                    <h4>Pagamento</h4>
+                    <h3>Pagamento</h3>
                     <p>💰 5% OFF à vista</p>
                     <p>💳 3x sem juros no cartão</p>
                     <p>🚚 Entrega local em até 5 dias</p>
@@ -391,7 +394,7 @@
             </div>
         </div>
         <div class="footer-copy">
-            <p>© 2026 90+3 Qualidade até o Fim — Todos os direitos reservados</p>
+            <p>© 2026 90+3 Qualidade até o Fim. Todos os direitos reservados</p>
         </div>
     </footer>
 
@@ -421,7 +424,7 @@
         </div>
     </div>
 
-    <script src="assets/js/carrinho.js"></script>
-    <script src="assets/js/produto.js"></script>
+    <script src="src/js/carrinho.js"></script>
+    <script src="src/js/produto.js"></script>
 </body>
 </html>

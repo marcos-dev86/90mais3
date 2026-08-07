@@ -11,13 +11,13 @@
     <meta name="robots" content="index, follow">
 
     <!-- Open Graph (redes sociais) -->
-    <meta property="og:title" content="90+3 — Camisas Com Qualidade Até o Fim">
+    <meta property="og:title" content="90+3: Camisas Com Qualidade Até o Fim">
     <meta property="og:description" content="Camisas tailandesas premium a partir de R$29. Itapetininga e região. 5% OFF à vista!">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://90mais3.vercel.app">
     <meta property="og:site_name" content="90+3 Camisas Tailandesas">
 
-    <!-- Dados estruturados (Schema.org) — ajuda o Google a entender que a 90+3
+    <!-- Dados estruturados (Schema.org): ajuda o Google a entender que a 90+3
          é um negócio local em Itapetininga-SP, e não só um site genérico. -->
     <script type="application/ld+json">
     {
@@ -27,8 +27,8 @@
           "@type": ["SportingGoodsStore", "ClothingStore"],
           "@id": "https://90mais3.vercel.app/#negocio",
           "name": "90+3 Camisas Tailandesas",
-          "image": "https://90mais3.vercel.app/assets/img/logo.webp",
-          "logo": "https://90mais3.vercel.app/assets/img/logo.webp",
+          "image": "https://90mais3.vercel.app/src/img/logo.webp",
+          "logo": "https://90mais3.vercel.app/src/img/logo.webp",
           "url": "https://90mais3.vercel.app/",
           "telephone": "+55 15 99161-7508",
           "description": "Camisas de futebol tailandesas premium, com qualidade até o fim. Brasileirão, Europeus, Seleções e Retrô.",
@@ -60,30 +60,39 @@
     }
     </script>
 
-    <meta property="og:image" content="https://90mais3.vercel.app/assets/img/logo.webp">
+    <meta property="og:image" content="https://90mais3.vercel.app/src/img/logo.webp">
     <meta property="og:image:width" content="512">
     <meta property="og:image:height" content="512">
 
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="90+3 — Camisas Com Qualidade Até o Fim">
+    <meta name="twitter:title" content="90+3: Camisas Com Qualidade Até o Fim">
     <meta name="twitter:description" content="Camisas tailandesas premium a partir de R$29. Itapetininga e região.">
-    <meta name="twitter:image" content="https://90mais3.vercel.app/assets/img/logo.webp">
+    <meta name="twitter:image" content="https://90mais3.vercel.app/src/img/logo.webp">
 
     <meta property="og:locale" content="pt_BR">
 
-    <title>90+3 — Camisas Com Qualidade Até o Fim | Itapetininga</title>
+    <title>90+3: Camisas Com Qualidade Até o Fim | Itapetininga</title>
 
     <!--  PERFORMANCE: Preconnect para fontes (reduz latência) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
+    <!--  PERFORMANCE: Preconnect para a API, que é chamada assim que a página carrega -->
+    <link rel="preconnect" href="https://api-90mais3.vercel.app">
+
     <!--  PERFORMANCE: Favicon em WebP -->
-    <link rel="icon" type="image/webp" href="assets/img/logo.webp">
+    <link rel="icon" type="image/webp" href="src/img/logo.webp">
 
-    <!--  PERFORMANCE: Fontes com display=swap para não bloquear render -->
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,400;0,600;0,700;1,400&family=Barlow+Condensed:wght@400;700;900&display=swap" rel="stylesheet">
+    <!--  PERFORMANCE: Fontes carregadas sem bloquear a renderização inicial.
+         O preload busca o CSS da fonte em paralelo com o resto da página;
+         o link real só vira "stylesheet" quando termina de chegar (onload),
+         então a fonte não some mais nada do caminho crítico de renderização.
+         O <noscript> garante que a fonte carrega normalmente se JS estiver desligado. -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,400;0,600;0,700;1,400&family=Barlow+Condensed:wght@400;700;900&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,400;0,600;0,700;1,400&family=Barlow+Condensed:wght@400;700;900&display=swap" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,400;0,600;0,700;1,400&family=Barlow+Condensed:wght@400;700;900&display=swap"></noscript>
 
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="src/css/style.min.css">
 
     <!-- CSS dos filtros avançados (Ordenação + Tamanho) -->
     <style>
@@ -235,6 +244,9 @@
     </header>
     </div><!-- /topo-fixo -->
 
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main>
+
     <!-- HERO -->
     <section class="hero" aria-label="Seção principal">
         <div class="hero-bg-pattern" aria-hidden="true"></div>
@@ -347,7 +359,7 @@
             <div class="faq-list">
                 <details class="faq-item">
                     <summary>As camisas são originais?</summary>
-                    <p>Não são originais, mas trabalhamos exclusivamente com camisas tailandesas premium de alta qualidade — idênticas às originais em acabamento, tecido e detalhes.</p>
+                    <p>Não são originais, mas trabalhamos exclusivamente com camisas tailandesas premium de alta qualidade, idênticas às originais em acabamento, tecido e detalhes.</p>
                 </details>
                 <details class="faq-item">
                     <summary>Quais tamanhos estão disponíveis?</summary>
@@ -374,27 +386,29 @@
         <div class="feedbacks-inner">
             <h2 class="section-title">O que dizem<br><span style="color: var(--gold)">nossos clientes</span></h2>
             <div id="ticket-secreto" onclick="resgatarTicket()" role="button" tabindex="0" aria-label="Ticket dourado secreto">
-                <span>🎟️ TICKET DOURADO — CLIQUE</span>
+                <span>🎟️ TICKET DOURADO · CLIQUE</span>
             </div>
             <div class="comentarios">
                 <div class="comentario">
                     <div class="stars" aria-label="4 de 5 estrelas">⭐⭐⭐⭐</div>
                     <p>"Camisa chegou em 1 semana, mas a qualidade é incrível pelo preço!"</p>
-                    <span class="autor">— Lucas</span>
+                    <span class="autor">· Lucas</span>
                 </div>
                 <div class="comentario">
                     <div class="stars" aria-label="5 de 5 estrelas">⭐⭐⭐⭐⭐</div>
                     <p>"Material muito bom, recomendo demais! Já pedi a terceira camisa."</p>
-                    <span class="autor">— Rafael</span>
+                    <span class="autor">· Rafael</span>
                 </div>
                 <div class="comentario">
                     <div class="stars" aria-label="5 de 5 estrelas">⭐⭐⭐⭐⭐</div>
                     <p>"Atendimento excelente no WhatsApp, logo comprarei mais para meu sobrinho!"</p>
-                    <span class="autor">— Mariana</span>
+                    <span class="autor">· Mariana</span>
                 </div>
             </div>
         </div>
     </section>
+
+    </main>
 
     <!-- FOOTER -->
     <footer class="footer" aria-label="Rodapé">
@@ -409,13 +423,13 @@
             </div>
             <div class="footer-cols">
                 <div class="footer-col">
-                    <h4>Contato</h4>
+                    <h3>Contato</h3>
                     <p>📱 (15) 99161-7508</p>
-                    <p>📍 Itapetininga — SP</p>
+                    <p>📍 Itapetininga, SP</p>
                     <p>⏰ Seg a Sex · 09h–17h</p>
                 </div>
                 <div class="footer-col">
-                    <h4>Pagamento</h4>
+                    <h3>Pagamento</h3>
                     <p>💰 5% OFF à vista</p>
                     <p>💳 3x sem juros no cartão</p>
                     <p>🚚 Entrega local em até 5 dias</p>
@@ -423,7 +437,7 @@
             </div>
         </div>
         <div class="footer-copy">
-            <p>© 2026 90+3 Qualidade até o Fim — Todos os direitos reservados</p>
+            <p>© 2026 90+3 Qualidade até o Fim. Todos os direitos reservados</p>
         </div>
     </footer>
 
@@ -459,7 +473,7 @@
         </div>
     </div>
 
-    <!-- MODAL DO TICKET DOURADO — caixa centralizada mostrando o cupom -->
+    <!-- MODAL DO TICKET DOURADO: caixa centralizada mostrando o cupom -->
     <div id="modal-ticket" class="modal modal-centro" role="dialog" aria-modal="true" aria-labelledby="ticket-titulo">
         <div id="ticket-card" role="document">
             <button class="ticket-fechar" onclick="fecharModalTicket()" aria-label="Fechar">
@@ -478,8 +492,8 @@
     </div>
 
     <!-- Scripts: carrinho.js (sacola compartilhada com produto.html) + script.js (catálogo + extras) -->
-    <script src="assets/js/carrinho.js"></script>
-    <script src="assets/js/script.js"></script>
+    <script src="src/js/carrinho.js"></script>
+    <script src="src/js/script.js"></script>
 
     <script>
         // Loading screen
