@@ -3,14 +3,8 @@
 <div align="center">
 
 **Catálogo digital desenvolvido para uma operação comercial real, com foco em experiência do usuário, conversão e presença digital.**
-</div>
 
-<div align="left">
 [![Website](https://img.shields.io/badge/Website-90%2B3-111827?style=for-the-badge\&logo=vercel)](https://90mais3.vercel.app)
-</div>
-</div>
-
-<div align="right">
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge\&logo=github)](https://github.com/marcos-dev86/90mais3)
 
 </div>
