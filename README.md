@@ -1,96 +1,129 @@
-# 90+3 — Catálogo de Camisas de Futebol
+# 90+3 - E-commerce de Camisas de Futebol
 
-> Projeto web desenvolvido para uma operação real de comércio local, com foco em catálogo de produtos, conversão e atendimento direto pelo WhatsApp.
+<div align="center">
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-90%2B3-111827?style=for-the-badge)](https://90mais3.vercel.app)
-[![GitHub](https://img.shields.io/badge/GitHub-Reposit%C3%B3rio-181717?style=for-the-badge\&logo=github)](https://github.com/marcos-dev86/90mais3)
+**Catálogo digital desenvolvido para uma operação comercial real, com foco em experiência do usuário, conversão e presença digital.**
+</div>
 
-## Sobre o projeto
+<div align="left">
+[![Website](https://img.shields.io/badge/Website-90%2B3-111827?style=for-the-badge\&logo=vercel)](https://90mais3.vercel.app)
+</div>
+</div>
 
-O **90+3** é um catálogo digital de camisas de futebol premium desenvolvido para a marca **90+3 Camisas**, com atendimento comercial realizado pelo WhatsApp.
+<div align="right">
+[![GitHub](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge\&logo=github)](https://github.com/marcos-dev86/90mais3)
 
-O projeto foi pensado como uma aplicação web real, priorizando **experiência do usuário, responsividade, performance, SEO e conversão**, permitindo que o cliente encontre produtos, consulte informações e entre em contato com a loja de forma rápida.
+</div>
 
-O nome **90+3** faz referência aos minutos de acréscimo do futebol — conceito utilizado também na identidade visual e no posicionamento da marca.
+---
 
-## Objetivos técnicos
+## Visão geral
 
-* Criar uma experiência de catálogo responsiva para desktop e mobile.
-* Organizar produtos por categorias e páginas de produto.
-* Facilitar a conversão do visitante em contato comercial.
-* Integrar o fluxo de compra ao WhatsApp.
-* Melhorar a indexação orgânica por meio de SEO técnico.
-* Estruturar dados do negócio para mecanismos de busca.
-* Publicar e manter o projeto em ambiente de produção.
+O **90+3** é uma plataforma web de catálogo para uma loja de camisas de futebol premium, desenvolvida para atender clientes de **Itapetininga e região**.
 
-## Funcionalidades
+O projeto foi desenvolvido com uma abordagem orientada a produto. Além da apresentação do catálogo, a aplicação conduz o usuário até o contato comercial pelo WhatsApp, combinando **interface responsiva, desenvolvimento frontend, SEO técnico, dados estruturados e deploy em produção**.
 
-* Catálogo de camisas de futebol.
-* Categorias de **Brasileirão, Europeus, Seleções e Retrô**.
-* Páginas individuais de produtos.
-* Integração direta com WhatsApp para atendimento.
-* Links para Instagram e canais comerciais.
-* Layout responsivo para diferentes tamanhos de tela.
-* SEO on-page com title, description, keywords e Open Graph.
-* Dados estruturados **Schema.org / JSON-LD** para identificação do negócio local.
-* `robots.txt` e `sitemap.xml` para suporte à indexação.
-* Configuração de deploy com Vercel.
+O conceito visual e o naming são inspirados nos minutos de acréscimo do futebol — o momento em que cada lance pode decidir o resultado.
 
-## Tecnologias
+## Destaques técnicos
 
-* **HTML5** — estrutura semântica das páginas.
-* **CSS3** — layout, responsividade e identidade visual.
-* **JavaScript** — interações e comportamento da aplicação.
-* **JSON-LD / Schema.org** — dados estruturados para SEO.
-* **Vercel** — hospedagem e deploy.
-* **Git / GitHub** — versionamento e publicação do código.
+* Interface responsiva para desktop, tablet e mobile.
+* Catálogo organizado por categorias e produtos.
+* Páginas dedicadas para apresentação dos produtos.
+* Integração com WhatsApp como canal de conversão.
+* SEO técnico aplicado diretamente ao frontend.
+* Open Graph e Twitter Cards para compartilhamento social.
+* Dados estruturados com **Schema.org / JSON-LD**.
+* `robots.txt` e `sitemap.xml` para mecanismos de busca.
+* Otimizações de carregamento com `preconnect`.
+* Configuração de publicação utilizando Vercel.
+* Versionamento através do Git/GitHub.
 
-## SEO e performance
+## Stack
 
-O projeto possui uma camada de SEO técnico integrada ao frontend, incluindo:
+| Tecnologia               | Aplicação                                    |
+| ------------------------ | -------------------------------------------- |
+| **HTML5**                | Estrutura semântica das páginas              |
+| **CSS3**                 | Layout, responsividade e apresentação visual |
+| **JavaScript**           | Interatividade e lógica do frontend          |
+| **JSON-LD / Schema.org** | Dados estruturados e SEO                     |
+| **Git / GitHub**         | Versionamento do código                      |
+| **Vercel**               | Deploy e hospedagem                          |
 
-* Meta tags para mecanismos de busca.
-* Open Graph para compartilhamento em redes sociais.
+## SEO e presença digital
+
+O projeto foi estruturado para funcionar não apenas como uma interface visual, mas como uma aplicação preparada para **indexação, compartilhamento e aquisição orgânica**.
+
+Implementações realizadas:
+
+* Meta title e meta description.
+* Open Graph.
 * Twitter Cards.
-* Dados estruturados para negócio local e website.
-* `robots.txt`.
-* `sitemap.xml`.
-* URLs e títulos orientados à busca local.
-* Preconnect para recursos externos utilizados pela página.
+* Dados estruturados `SportingGoodsStore`, `ClothingStore` e `WebSite`.
+* Informações estruturadas de localização e área de atendimento.
+* Sitemap XML.
+* Robots TXT.
+* Metadados específicos para compartilhamento.
+* Preconnect para recursos externos.
 
-Essas implementações foram utilizadas para transformar um catálogo estático em uma presença digital preparada para **busca orgânica, compartilhamento e conversão**.
+## Fluxo da aplicação
+
+```text
+Descoberta
+    ↓
+Navegação pelo catálogo
+    ↓
+Visualização do produto
+    ↓
+Interesse
+    ↓
+Contato via WhatsApp
+    ↓
+Atendimento comercial
+```
+
+O frontend foi pensado como parte do processo comercial, reduzindo a distância entre a descoberta do produto e o contato com a loja.
 
 ## Estrutura do projeto
 
 ```text
 90mais3/
-├── Camisas/          # Catálogo e recursos relacionados aos produtos
-├── src/              # Imagens e recursos do frontend
-├── index.html        # Página principal
-├── produto.html      # Página de produto
-├── robots.txt        # Regras para crawlers
-├── sitemap.xml       # URLs para indexação
-├── llms.txt          # Contexto estruturado do projeto
-├── vercel.json       # Configuração de deploy
+├── Camisas/            # Recursos relacionados ao catálogo
+├── src/                # Assets e recursos do frontend
+├── index.html          # Página principal
+├── produto.html        # Página de produto
+├── robots.txt          # Diretivas para crawlers
+├── sitemap.xml         # URLs para indexação
+├── llms.txt            # Contexto estruturado do projeto
+├── vercel.json         # Configuração de deploy
 └── README.md
 ```
 
+## Objetivos do projeto
+
+O desenvolvimento teve como principais objetivos:
+
+* Criar uma presença digital profissional para a marca.
+* Disponibilizar um catálogo acessível em dispositivos móveis.
+* Estruturar corretamente as páginas para mecanismos de busca.
+* Facilitar o contato entre cliente e negócio.
+* Aplicar boas práticas de frontend em um cenário real.
+* Publicar e manter a aplicação em produção.
+
 ## Resultado
 
-O projeto está disponível em produção e atende uma operação comercial local em **Itapetininga — SP e região**.
+O **90+3** está publicado em produção e representa um projeto desenvolvido para um cenário comercial real.
 
-### Links
+O projeto demonstra aplicação prática de conhecimentos em:
 
-* **Site:** https://90mais3.vercel.app
+**Frontend · UI/UX · Responsividade · SEO · Performance Web · Integrações · Conversão · Git · Deploy**
+
+## Links
+
+* **Website:** https://90mais3.vercel.app
 * **Repositório:** https://github.com/marcos-dev86/90mais3
 * **Instagram:** https://instagram.com/90mais3.itape
 * **WhatsApp:** https://wa.me/5515991617508
-
-## Contexto profissional
-
-Este projeto demonstra a aplicação prática de desenvolvimento frontend em um cenário real, combinando **interface responsiva, organização de catálogo, integração com canais de venda, SEO técnico, dados estruturados e deploy em produção**.
-
-A proposta é apresentar não apenas uma interface visual, mas uma solução web orientada a **negócio, aquisição de usuários e conversão**.
 
 ---
 
