@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, follow">
+<title>404 — Página Fora de Jogo | 90+3 Camisas Tailandesas</title>
+<meta name="description" content="A página que você procura não existe ou foi movida. Volte para o início da 90+3 e confira nossas camisas tailandesas premium.">
+
+<link rel="icon" type="image/webp" href="src/img/logo.webp">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,400;0,600;0,700;1,400&family=Barlow+Condensed:wght@400;700;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,400;0,600;0,700;1,400&family=Barlow+Condensed:wght@400;700;900&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,400;0,600;0,700;1,400&family=Barlow+Condensed:wght@400;700;900&display=swap"></noscript>
+
+<style>
+    :root {
+        --gold: #c9a227;
+        --gold-light: #e8be3a;
+        --black: #0a0a0a;
+        --dark: #111111;
+        --border: #2a2a2a;
+        --text: #f0f0f0;
+        --text-muted: #888888;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+        margin: 0; padding: 0; height: 100%;
+        background: var(--black);
+        color: var(--text);
+        font-family: 'Barlow', sans-serif;
+    }
+    body {
+        display: flex; align-items: center; justify-content: center;
+        min-height: 100vh;
+        padding: 24px;
+        position: relative;
+        overflow: hidden;
+        background-image:
+            repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(255,255,255,0.015) 60px, rgba(255,255,255,0.015) 61px),
+            repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(255,255,255,0.015) 60px, rgba(255,255,255,0.015) 61px);
+    }
+    body::before {
+        content: "";
+        position: absolute;
+        top: 50%; left: 50%;
+        width: 700px; height: 700px;
+        transform: translate(-50%, -50%);
+        background: radial-gradient(circle, rgba(201,162,39,0.14), transparent 70%);
+        pointer-events: none;
+    }
+    .wrap {
+        position: relative;
+        text-align: center;
+        max-width: 560px;
+        width: 100%;
+    }
+    .logo {
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 32px;
+        letter-spacing: .02em;
+        margin-bottom: 36px;
+    }
+    .logo .plus { color: #fff; }
+    .logo .accent { color: var(--gold); }
+
+    .ball {
+        font-size: 46px;
+        margin-bottom: 8px;
+        display: inline-block;
+        animation: bounce 1.6s ease-in-out infinite;
+        filter: drop-shadow(0 8px 10px rgba(0,0,0,0.5));
+    }
+    @keyframes bounce {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        50% { transform: translateY(-22px) rotate(180deg); }
+    }
+
+    .codigo {
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: clamp(90px, 22vw, 160px);
+        line-height: 1;
+        letter-spacing: .02em;
+        background: linear-gradient(180deg, #fff, var(--gold-light) 70%, var(--gold));
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin: 0;
+    }
+
+    .titulo {
+        font-family: 'Barlow Condensed', sans-serif;
+        font-size: 26px;
+        font-weight: 900;
+        letter-spacing: .16em;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin: 4px 0 14px;
+    }
+
+    .desc {
+        font-size: 16px;
+        line-height: 1.6;
+        color: var(--text-muted);
+        max-width: 420px;
+        margin: 0 auto 36px;
+    }
+    .desc strong { color: var(--text); font-weight: 600; }
+
+    .acoes {
+        display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
+        margin-bottom: 28px;
+    }
+    .btn-primary {
+        display: inline-block;
+        background: var(--gold);
+        color: var(--black);
+        padding: 15px 36px;
+        border-radius: 50px;
+        font-family: 'Barlow Condensed', sans-serif;
+        font-size: 16px;
+        font-weight: 700;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+        text-decoration: none;
+        transition: background .2s, transform .2s, box-shadow .2s;
+        box-shadow: 0 4px 20px rgba(201,162,39,0.4);
+    }
+    .btn-primary:hover { background: var(--gold-light); transform: translateY(-3px); box-shadow: 0 8px 30px rgba(201,162,39,0.5); }
+    .btn-ghost {
+        display: inline-block;
+        background: transparent;
+        color: var(--text);
+        padding: 14px 36px;
+        border-radius: 50px;
+        border: 1px solid var(--border);
+        font-family: 'Barlow Condensed', sans-serif;
+        font-size: 16px;
+        font-weight: 700;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+        text-decoration: none;
+        transition: border-color .2s, transform .2s, color .2s;
+    }
+    .btn-ghost:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-3px); }
+
+    .whats {
+        font-family: 'Barlow Condensed', sans-serif;
+        font-size: 14px;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        text-decoration: none;
+        border-bottom: 1px solid transparent;
+        transition: color .2s, border-color .2s;
+    }
+    .whats:hover { color: var(--gold-light); border-color: var(--gold-light); }
+
+    @media (max-width: 480px) {
+        .codigo { font-size: clamp(70px, 26vw, 120px); }
+        .titulo { font-size: 20px; letter-spacing: .1em; }
+        .btn-primary, .btn-ghost { width: 100%; text-align: center; padding: 14px 20px; }
+        .acoes { flex-direction: column; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .ball { animation: none; }
+    }
+</style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="logo"><span class="plus">90</span><span class="accent">+3</span></div>
+
+        <span class="ball" aria-hidden="true">⚽</span>
+        <p class="titulo">ERROR</p>
+        <p class="codigo">404</p>
+        <p class="titulo">Impedimento!</p>
+
+        <p class="desc">
+            O árbitro apitou: essa página <strong>não existe</strong>. Mas o catálogo inteiro de camisas segue
+            de pé, bora voltar pra jogada?
+        </p>
+
+        <div class="acoes">
+            <a href="/" class="btn-primary">Voltar para o Início</a>
+            <a href="/#catalogo" class="btn-ghost">Ver Catálogo</a>
+        </div>
+
+        <a href="https://wa.me/5515991617508?text=Olá%2C%20eu%20caí%20numa%20página%20que%20não%20existe%20mais%20no%20site" class="whats" target="_blank" rel="noopener noreferrer">Precisa de ajuda? Fale no WhatsApp</a>
+    </div>
+</body>
+</html>
