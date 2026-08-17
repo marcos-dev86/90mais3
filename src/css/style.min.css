@@ -1528,7 +1528,7 @@ details summary:focus-visible {
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
     gap: 22px;
-    transition: opacity .5s ease, visibility .5s ease;
+    transition: opacity .3s ease, visibility .3s ease;
 }
 #loading-screen.saindo { opacity: 0; visibility: hidden; pointer-events: none; }
 .ls-logo {
@@ -1546,7 +1546,7 @@ details summary:focus-visible {
 .ls-bar {
     height: 100%; background: linear-gradient(90deg, #c9a227, #e8be3a);
     border-radius: 2px; width: 0;
-    animation: lsBar 1.9s ease-out forwards;
+    animation: lsBar .9s ease-out forwards;
 }
 @keyframes lsBar { to { width: 100%; } }
 
