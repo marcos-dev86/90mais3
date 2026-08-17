@@ -80,7 +80,8 @@ function aplicarTodosFiltros() {
         if (tamanhosAtivos.length > 0) {
             const disponiveis = Array.from(card.querySelectorAll(".tamanho-badge.disponivel"))
                 .map(b => b.textContent.trim());
-            passaTamanho = tamanhosAtivos.some(t => disponiveis.includes(t));
+            const ehInfantil = card.classList.contains("infantil");
+            passaTamanho = tamanhosAtivos.some(t => t === "INFANTIL" ? ehInfantil : disponiveis.includes(t));
         }
         const visivel = passaCategoria && passaBusca && passaTamanho;
         card.style.display = visivel ? "" : "none";
