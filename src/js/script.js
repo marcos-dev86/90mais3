@@ -21,6 +21,24 @@ let categoriaAtiva = "todos";
 let ordenacaoAtiva = "relevancia";
 let tamanhosAtivos = [];
 
+// ── Estado da paginação ("Ver Mais") ─────────────────────────────
+// Carrega o catálogo aos poucos (por fileiras) em vez de tudo de uma vez,
+// o que evita disparar o carregamento de todas as imagens (lazy) logo de cara.
+const LINHAS_INICIAIS   = 3; // fileiras exibidas ao entrar no site
+const LINHAS_POR_CLIQUE = 2; // fileiras extras carregadas a cada clique em "Ver Mais"
+let linhasCarregadas = LINHAS_INICIAIS;
+
+// Descobre quantas colunas o grid está usando de fato nesse momento
+// (o CSS usa repeat(auto-fill, minmax(...))), então isso muda com a
+// largura da tela). Ler o valor computado é mais confiável do que
+// tentar reproduzir os breakpoints do CSS aqui em JS.
+function calcularColunasCatalogo() {
+    const grid = document.getElementById("catalogo-grid");
+    if (!grid) return 1;
+    const colunas = getComputedStyle(grid).gridTemplateColumns.split(" ").filter(Boolean).length;
+    return colunas > 0 ? colunas : 1;
+}
+
 function filtrarCategoria(categoria, el) {
     categoriaAtiva = categoria;
     document.querySelectorAll(".filtro-pill").forEach(p => {
@@ -65,13 +83,17 @@ function iniciarFiltroTamanho() {
     });
 }
 
-function aplicarTodosFiltros() {
+// resetPagina=true → volta para a primeira "página" (3 fileiras) porque o
+// conjunto de resultados mudou (busca, categoria, tamanho, ordenação).
+// resetPagina=false → mantém quantas fileiras o usuário já tinha carregado
+// (usado pelo botão "Ver Mais" e pelo recálculo no resize da janela).
+function aplicarTodosFiltros(resetPagina = true) {
     const campo = document.getElementById("campoPesquisa");
     const termo = campo ? campo.value.toLowerCase().trim() : "";
     const grid  = document.getElementById("catalogo-grid");
     const cards = Array.from(document.querySelectorAll(".card:not(.promocao)"));
 
-    let visiveis = 0;
+    const passaFiltro = new Set();
     cards.forEach(card => {
         const conteudo = card.innerText.toLowerCase();
         const passaCategoria = categoriaAtiva === "todos" || card.classList.contains(categoriaAtiva);
@@ -83,9 +105,7 @@ function aplicarTodosFiltros() {
             const ehInfantil = card.classList.contains("infantil");
             passaTamanho = tamanhosAtivos.some(t => t === "INFANTIL" ? ehInfantil : disponiveis.includes(t));
         }
-        const visivel = passaCategoria && passaBusca && passaTamanho;
-        card.style.display = visivel ? "" : "none";
-        if (visivel) visiveis++;
+        if (passaCategoria && passaBusca && passaTamanho) passaFiltro.add(card);
     });
 
     if (grid) {
@@ -93,8 +113,15 @@ function aplicarTodosFiltros() {
         ordenados.forEach(card => grid.appendChild(card));
     }
 
+    // Lista final, já na ordem em que aparecem no grid, só com quem passou no filtro
+    const cardsFiltrados = Array.from(document.querySelectorAll(".card:not(.promocao)"))
+        .filter(card => passaFiltro.has(card));
+
+    if (resetPagina) linhasCarregadas = LINHAS_INICIAIS;
+    aplicarPaginacaoCatalogo(cardsFiltrados);
+
     const msg = document.getElementById("msgNenhuma");
-    if (msg) msg.style.display = visiveis === 0 ? "block" : "none";
+    if (msg) msg.style.display = cardsFiltrados.length === 0 ? "block" : "none";
 
     if (termo !== "") {
         document.querySelectorAll(".filtro-pill").forEach(p => {
@@ -102,6 +129,53 @@ function aplicarTodosFiltros() {
             p.removeAttribute("aria-current");
         });
     }
+}
+
+// Mostra só os N primeiros cards que passaram no filtro (N = colunas × fileiras
+// carregadas) e esconde o resto — inclusive quem não bateu no filtro.
+// Como as imagens usam loading="lazy", um card com display:none nem chega a
+// baixar as fotos, então isso realmente evita o carregamento de tudo de uma vez.
+function aplicarPaginacaoCatalogo(cardsFiltrados) {
+    const total   = cardsFiltrados.length;
+    const colunas = calcularColunasCatalogo();
+    const itensExibidos = Math.min(total, colunas * linhasCarregadas);
+
+    const visiveis = new Set(cardsFiltrados.slice(0, itensExibidos));
+    document.querySelectorAll(".card:not(.promocao)").forEach(card => {
+        card.style.display = visiveis.has(card) ? "" : "none";
+    });
+
+    atualizarBotaoVerMais(total, itensExibidos);
+}
+
+function atualizarBotaoVerMais(total, itensExibidos) {
+    const btn = document.getElementById("btnVerMais");
+    const fim = document.getElementById("msgFimCatalogo");
+    if (!btn) return;
+
+    btn.classList.remove("carregando");
+    btn.textContent = "Ver Mais Camisas";
+
+    if (total === 0) {
+        btn.style.display = "none";
+        if (fim) fim.style.display = "none";
+        return;
+    }
+
+    const aindaTemMais = itensExibidos < total;
+    btn.style.display = aindaTemMais ? "" : "none";
+    if (fim) fim.style.display = aindaTemMais ? "none" : "block";
+}
+
+// Chamado pelo botão "Ver Mais Camisas"
+function verMaisCamisas() {
+    const btn = document.getElementById("btnVerMais");
+    if (btn) {
+        btn.classList.add("carregando");
+        btn.textContent = "Carregando...";
+    }
+    linhasCarregadas += LINHAS_POR_CLIQUE;
+    aplicarTodosFiltros(false);
 }
 
 function ordenarCardsNoDOM(cards) {
@@ -314,6 +388,14 @@ function inicializarCards() {
     });
 
     aplicarTodosFiltros();
+
+    // Se a tela mudar de tamanho (ex.: girar o celular, redimensionar a janela),
+    // o número de colunas do grid muda — recalcula quantos cards cabem nas
+    // fileiras já carregadas, sem voltar para a primeira página.
+    if (!window.__resizeCatalogoOuvido) {
+        window.__resizeCatalogoOuvido = true;
+        window.addEventListener("resize", debounce(() => aplicarTodosFiltros(false), 200), { passive: true });
+    }
 }
 
 document.addEventListener("DOMContentLoaded", function () {
