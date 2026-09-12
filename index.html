@@ -353,6 +353,15 @@
 
     <p class="nenhuma-camisa" id="msgNenhuma" role="status" aria-live="polite">Nenhuma camisa encontrada para essa busca.</p>
 
+    <div class="paginacao-wrap" id="paginacaoWrap">
+        <button type="button" class="btn-ver-mais" id="btnVerMais" onclick="verMaisCamisas()">
+            Ver Mais Camisas
+        </button>
+        <p class="msg-fim-catalogo" id="msgFimCatalogo" role="status" aria-live="polite">
+            Você já viu todas as camisas do nosso catálogo! ⚽🏆
+        </p>
+    </div>
+
     <!-- PROMOÇÕES (carregadas dinamicamente do banco via script.js → carregarPromocoes()) -->
     <section class="secao-promocoes" id="secao-promocoes" aria-label="Promoções">
         <div class="promo-header">
