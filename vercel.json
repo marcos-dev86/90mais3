@@ -1,5 +1,9 @@
 {
   "version": 2,
+  "redirects": [
+    { "source": "/produto.html", "destination": "/src/html/produto.html", "permanent": true },
+    { "source": "/politica-de-privacidade.html", "destination": "/src/html/politica-de-privacidade.html", "permanent": true }
+  ],
   "headers": [
     {
       "source": "/(.*)",

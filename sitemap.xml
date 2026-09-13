@@ -6,7 +6,7 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://90mais3.vercel.app/produto.html</loc>
+    <loc>https://90mais3.vercel.app/src/html/produto.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>

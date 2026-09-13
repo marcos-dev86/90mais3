@@ -51,17 +51,50 @@ function calcularDesconto(subtotal, cupom) {
 }
 
 // ─── Consulta ────────────────────────────────────────────────────
-function itemEstaNoCarrinho(idUnico) {
-    return lerSacola().some(i => i.id === idUnico);
+// Um "modelo" de camisa é identificado por nome|temporada|modelo (idUnico).
+// Cada UNIDADE dentro da sacola tem seu próprio id, no formato
+// "idUnico::TAMANHO::sufixo", para permitir mais de uma camisa do mesmo
+// modelo (tamanhos diferentes ou repetidos). obterModeloId() extrai o
+// idUnico de qualquer item — inclusive itens antigos, salvos antes dessa
+// mudança, cujo id era só o idUnico puro (sem "::"), então o split ainda
+// funciona certinho pros dois formatos.
+function obterModeloId(item) {
+    return String(item.id).split('::')[0];
 }
 
-// ─── Adiciona na sacola (chamado apenas do produto.js, após tamanho confirmado)
-function adicionarNaSacola(idUnico, nome, tamanho, preco, foto) {
+function itemEstaNoCarrinho(idUnico) {
+    return lerSacola().some(i => obterModeloId(i) === idUnico);
+}
+
+// Quantas unidades de um tamanho específico desse modelo já estão na sacola
+function contarTamanhoNoCarrinho(idUnico, tamanho) {
+    return lerSacola().filter(i => obterModeloId(i) === idUnico && i.tamanho === tamanho).length;
+}
+
+// Quantas unidades desse modelo já estão na sacola, somando todos os tamanhos
+function contarModeloNoCarrinho(idUnico) {
+    return lerSacola().filter(i => obterModeloId(i) === idUnico).length;
+}
+
+// ─── Consulta o estoque atual direto na API (não confia só no que foi
+// carregado quando a página abriu — o estoque pode ter mudado desde então)
+async function obterEstoqueAtual(produtoId) {
+    const res = await fetch(`${API_URL}/api/camisas/${produtoId}`);
+    if (!res.ok) throw new Error('Falha ao consultar estoque');
+    const dados = await res.json();
+    return dados.estoque || {};
+}
+
+// ─── Adiciona uma unidade na sacola (chamado apenas do produto.js, depois
+// de já ter validado tamanho + estoque contra a API). Cada chamada cria uma
+// unidade nova — mais de uma camisa do mesmo modelo é permitido.
+function adicionarNaSacola(produtoId, idUnico, nome, tamanho, preco, foto) {
     if (!tamanho || !tamanho.trim()) return false;
+    const sufixo = Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
     const itens = lerSacola();
-    if (itens.some(i => i.id === idUnico)) return false; // já existe
     itens.push({
-        id: idUnico,
+        id: `${idUnico}::${tamanho}::${sufixo}`,
+        produtoId: produtoId ?? null,
         nome,
         tamanho,
         preco: Number(preco) || 0,
@@ -72,9 +105,11 @@ function adicionarNaSacola(idUnico, nome, tamanho, preco, foto) {
     return true;
 }
 
-// ─── Remove por idUnico (chamado do produto.js ao "remover da sacola")
+// ─── Remove TODAS as unidades de um modelo (qualquer tamanho) — usado pelo
+// coração do catálogo, que representa o produto como um todo, não uma
+// unidade específica.
 function removerPorId(idUnico) {
-    salvarSacola(lerSacola().filter(i => i.id !== idUnico));
+    salvarSacola(lerSacola().filter(i => obterModeloId(i) !== idUnico));
     atualizarContador();
     sincronizarBotoesFavorito();
 }
@@ -83,7 +118,7 @@ function removerPorId(idUnico) {
 //     NÃO adiciona direto — mostra popup pedindo para ir à página do produto
 function alternarFavorito(btn) {
     const idUnico = btn.dataset.id;
-    const jaEsta  = lerSacola().some(i => i.id === idUnico);
+    const jaEsta  = lerSacola().some(i => obterModeloId(i) === idUnico);
     if (jaEsta) {
         // Se já está, remove
         removerPorId(idUnico);
@@ -129,7 +164,7 @@ function atualizarContador() {
 function sincronizarBotoesFavorito() {
     const sacola = lerSacola();
     document.querySelectorAll('.btn-fav').forEach(btn => {
-        const ativo = sacola.some(i => i.id === btn.dataset.id);
+        const ativo = sacola.some(i => obterModeloId(i) === btn.dataset.id);
         btn.classList.toggle('ativo', ativo);
         btn.setAttribute('aria-pressed', ativo ? 'true' : 'false');
     });
@@ -331,6 +366,39 @@ function renderizarCupomUI() {
         <p class="sd-cupom-msg" id="sd-cupom-msg"></p>`;
 }
 
+// Resolve o caminho da foto salva num item da sacola. Itens novos já chegam
+// com URL absoluta (calculada na página do produto); isso aqui é só uma
+// rede de segurança para itens antigos, salvos antes de produto.html/
+// politica-de-privacidade.html mudarem de pasta, que ainda guardam o
+// caminho relativo à raiz do site (ex.: "Camisas/x.webp").
+function resolverFotoSacola(foto) {
+    if (!foto) return '';
+    if (/^https?:\/\//i.test(foto)) return foto; // já é absoluta
+    const paginaAninhada = window.location.pathname.indexOf('/src/html/') !== -1;
+    return paginaAninhada ? '../' + foto : foto;
+}
+
+// ─── Agrupa unidades iguais (mesmo modelo + tamanho) numa linha só, com
+// quantidade — fica mais legível quando a pessoa pede 2+ do mesmo tamanho.
+// Cada grupo guarda os índices originais no array plano da sacola, pra dar
+// pra remover uma unidade por vez a partir da linha agrupada.
+function agruparItensSacola(itens) {
+    const grupos = [];
+    const porChave = new Map();
+    itens.forEach((item, idx) => {
+        const chave = `${obterModeloId(item)}::${item.tamanho}`;
+        let grupo = porChave.get(chave);
+        if (!grupo) {
+            grupo = { ...item, quantidade: 0, indices: [] };
+            porChave.set(chave, grupo);
+            grupos.push(grupo);
+        }
+        grupo.quantidade++;
+        grupo.indices.push(idx);
+    });
+    return grupos;
+}
+
 // ─── Renderiza a lista de itens dentro do drawer
 function renderizarListaSacola() {
     const lista     = document.getElementById('lista-favoritos');
@@ -361,23 +429,33 @@ function renderizarListaSacola() {
         return;
     }
 
-    lista.innerHTML = itens.map((item, idx) => {
-        const foto = item.foto
-            ? `<img src="${item.foto}" alt="${item.nome}" loading="lazy">`
+    lista.innerHTML = agruparItensSacola(itens).map(grupo => {
+        const foto = grupo.foto
+            ? `<img src="${resolverFotoSacola(grupo.foto)}" alt="${grupo.nome}" loading="lazy">`
             : `<div class="sd-foto-placeholder">90+3</div>`;
 
-        const preco = item.preco > 0
-            ? `R$${Number(item.preco).toFixed(2).replace('.', ',')}` : '';
+        const precoUnit = Number(grupo.preco) || 0;
+        const precoLinha = precoUnit * grupo.quantidade;
+        const precoHTML = precoLinha > 0
+            ? `R$${precoLinha.toFixed(2).replace('.', ',')}${
+                grupo.quantidade > 1
+                    ? ` <span class="sd-item-preco-unit">(${grupo.quantidade}x R$${precoUnit.toFixed(2).replace('.', ',')})</span>`
+                    : ''
+              }`
+            : '';
+
+        // Cada clique no × remove 1 unidade dessa linha (a última adicionada)
+        const idxRemover = grupo.indices[grupo.indices.length - 1];
 
         return `
         <div class="sd-item">
             <div class="sd-item-foto">${foto}</div>
             <div class="sd-item-info">
-                <p class="sd-item-nome">${item.nome}</p>
-                <p class="sd-item-tamanho">Tamanho: <strong>${item.tamanho}</strong></p>
-                ${preco ? `<p class="sd-item-preco">${preco}</p>` : ''}
+                <p class="sd-item-nome">${grupo.nome}${grupo.quantidade > 1 ? ` <span class="sd-item-qtd">×${grupo.quantidade}</span>` : ''}</p>
+                <p class="sd-item-tamanho">Tamanho: <strong>${grupo.tamanho}</strong></p>
+                ${precoHTML ? `<p class="sd-item-preco">${precoHTML}</p>` : ''}
             </div>
-            <button class="sd-remover" onclick="removerIdx(${idx})" aria-label="Remover ${item.nome}">
+            <button class="sd-remover" onclick="removerIdx(${idxRemover})" aria-label="Remover uma unidade de ${grupo.nome}">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                     <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
                 </svg>
@@ -404,7 +482,8 @@ function renderizarListaSacola() {
     }
 }
 
-// ─── Remove por índice (chamado pelos botões × dentro do drawer)
+// ─── Remove por índice (chamado pelos botões × dentro do drawer) — remove
+// 1 unidade por vez, mesmo quando a linha exibida está agrupada com ×N
 function removerIdx(idx) {
     const itens = lerSacola();
     itens.splice(idx, 1);
@@ -413,15 +492,8 @@ function removerIdx(idx) {
     sincronizarBotoesFavorito();
     renderizarListaSacola();
 
-    // Se estiver na página do produto, atualiza o botão de adicionar
-    const btn = document.getElementById('btn-add-carrinho');
-    if (btn && window.camisaAtual) {
-        const id = `${window.camisaAtual.nome}|${window.camisaAtual.temporada}|${window.camisaAtual.modelo}`;
-        if (!lerSacola().some(i => i.id === id)) {
-            btn.textContent = 'Adicionar à sacola';
-            btn.classList.remove('no-carrinho');
-        }
-    }
+    // Se estiver na página do produto, atualiza o aviso de "você já tem X na sacola"
+    if (typeof atualizarResumoCarrinhoProduto === 'function') atualizarResumoCarrinhoProduto();
 }
 
 // ─── Envio pelo WhatsApp
@@ -432,10 +504,13 @@ function enviarFavoritosWhats() {
     const fmt = v => `R$${Number(v).toFixed(2).replace('.', ',')}`;
 
     // O tamanho já vem embutido em it.nome (ex: "... (Tam. G)"), então não
-    // repetimos aqui — só mostramos o nome + o valor unitário de cada item.
-    const lista = itens.map((it, i) =>
-        `${i + 1}. ${it.nome} — ${fmt(it.preco)}`
-    ).join('\n');
+    // repetimos aqui. Unidades repetidas do mesmo modelo + tamanho aparecem
+    // numa linha só, com a quantidade e o valor total daquela linha.
+    const lista = agruparItensSacola(itens).map((grupo, i) => {
+        const totalLinha = (Number(grupo.preco) || 0) * grupo.quantidade;
+        const prefixo = grupo.quantidade > 1 ? `${grupo.quantidade}x ` : '';
+        return `${i + 1}. ${prefixo}${grupo.nome} — ${fmt(totalLinha)}`;
+    }).join('\n');
 
     const subtotal = itens.reduce((s, i) => s + (Number(i.preco) || 0), 0);
     const cupom    = lerCupom();

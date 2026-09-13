@@ -1338,11 +1338,29 @@ details summary:focus-visible {
     margin-bottom: 4px;
 }
 .sd-item-tamanho strong { color: #333; }
+.sd-item-qtd {
+    display: inline-block;
+    background: #f1e4bb;
+    color: #8a6d10;
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .03em;
+    padding: 1px 7px;
+    border-radius: 20px;
+    margin-left: 4px;
+    vertical-align: middle;
+}
 .sd-item-preco {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 1rem;
     color: #c9a227;
     letter-spacing: .02em;
+}
+.sd-item-preco-unit {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: .72rem;
+    color: #999;
+    letter-spacing: 0;
 }
 .sd-remover {
     background: none; border: none;

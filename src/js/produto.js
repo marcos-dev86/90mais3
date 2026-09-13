@@ -1,5 +1,21 @@
 const API_URL = 'https://api-90mais3.vercel.app';
 
+// produto.html agora vive em src/html/ (duas pastas abaixo da raiz do site),
+// mas a API continua devolvendo os caminhos das fotos relativos à RAIZ do
+// site (ex.: "Camisas/BRASIL 1 FRENTE.webp"). SITE_ROOT_URL calcula a URL da
+// raiz subindo dois níveis a partir de onde esta página está — funciona
+// tanto na Vercel (raiz do domínio) quanto no GitHub Pages (raiz do projeto,
+// ex.: .../90mais3/), já que é uma resolução relativa, não um caminho fixo.
+const SITE_ROOT_URL = new URL('../../', window.location.href).href;
+
+// Resolve um caminho vindo da API (relativo à raiz do site) pra uma URL
+// absoluta e correta não importa de onde a página seja servida.
+function resolverCaminhoRaiz(caminho) {
+    if (!caminho) return '';
+    if (/^https?:\/\//i.test(caminho)) return caminho; // já é absoluto
+    return new URL(caminho, SITE_ROOT_URL).href;
+}
+
 window.camisaAtual  = null;
 let tamanhoSelecionado = null;
 let fotoAtualIdx    = 0;
@@ -13,13 +29,13 @@ async function carregarProduto() {
     const id   = obterIdDaURL();
     const main = document.getElementById('produto-main');
     if (!id) {
-        main.innerHTML = '<div class="produto-erro">Camisa não especificada.<br><a href="index.html" style="color:var(--gold)">Voltar ao catálogo</a></div>';
+        main.innerHTML = '<div class="produto-erro">Camisa não especificada.<br><a href="../../index.html" style="color:var(--gold)">Voltar ao catálogo</a></div>';
         return;
     }
     try {
         const res = await fetch(`${API_URL}/api/camisas/${id}`);
         if (res.status === 404) {
-            main.innerHTML = '<div class="produto-erro">Camisa não encontrada.<br><a href="index.html" style="color:var(--gold)">Voltar ao catálogo</a></div>';
+            main.innerHTML = '<div class="produto-erro">Camisa não encontrada.<br><a href="../../index.html" style="color:var(--gold)">Voltar ao catálogo</a></div>';
             return;
         }
         if (!res.ok) throw new Error('Falha');
@@ -45,10 +61,11 @@ function renderizarProduto(c) {
     atualizarOpenGraph(c, nomeCompleto, `R$${preco[0]},${preco[1]}`);
     atualizarSchemaOrg(c, nomeCompleto);
 
-    // Fotos disponíveis para o carrossel
+    // Fotos disponíveis para o carrossel — resolvidas pra URL absoluta, já
+    // que a API devolve caminhos relativos à raiz do site
     fotosDisponiveis = [];
-    if (c.foto_frente) fotosDisponiveis.push({ src: c.foto_frente, label: 'Frente' });
-    if (c.foto_costas) fotosDisponiveis.push({ src: c.foto_costas, label: 'Costas' });
+    if (c.foto_frente) fotosDisponiveis.push({ src: resolverCaminhoRaiz(c.foto_frente), label: 'Frente' });
+    if (c.foto_costas) fotosDisponiveis.push({ src: resolverCaminhoRaiz(c.foto_costas), label: 'Costas' });
     fotoAtualIdx = 0;
 
     // Bloco de preço
@@ -85,8 +102,6 @@ function renderizarProduto(c) {
     const descHTML = c.descricao && c.descricao.trim()
         ? `<p class="produto-descricao">${escaparHTML(c.descricao)}</p>` : '';
 
-    const jaNC = itemEstaNoCarrinho(idUnico);
-
     // Thumbnails
     const thumbsHTML = fotosDisponiveis.map((f, i) => `
         <div class="produto-thumb ${i === 0 ? 'ativa' : ''}" id="thumb-${i}" onclick="irParaFoto(${i})" role="button" tabindex="0" aria-label="${f.label}">
@@ -105,7 +120,7 @@ function renderizarProduto(c) {
     const msgWpp = encodeURIComponent(`Olá, tenho interesse na camisa ${c.nome} ${c.temporada} - ${c.modelo}`);
 
     main.innerHTML = `
-        <a href="index.html#catalogo" class="produto-voltar">&larr; Voltar ao catálogo</a>
+        <a href="../../index.html#catalogo" class="produto-voltar">&larr; Voltar ao catálogo</a>
         <div class="produto-grid">
             <div class="produto-galeria">
                 <div class="produto-imagem-principal" id="img-container">
@@ -125,13 +140,14 @@ function renderizarProduto(c) {
                 <div class="produto-tamanhos-label">Selecione o tamanho <span class="tam-obrigatorio">*</span></div>
                 <div class="produto-tamanhos" id="bloco-tamanhos" aria-label="Tamanhos disponíveis">${tamanhosHTML}</div>
                 <p class="produto-tamanho-aviso" id="aviso-tamanho" role="alert"></p>
+                <p class="produto-resumo-sacola" id="resumo-carrinho-produto" role="status" aria-live="polite"></p>
 
                 ${descHTML}
 
                 <div class="produto-acoes">
-                    <button class="produto-add-carrinho ${jaNC ? 'no-carrinho' : ''}" id="btn-add-carrinho"
+                    <button class="produto-add-carrinho" id="btn-add-carrinho"
                             onclick="adicionarAoCarrinho()">
-                        ${jaNC ? 'Remover da sacola' : 'Adicionar à sacola'}
+                        Adicionar à sacola
                     </button>
                 </div>
 
@@ -165,6 +181,7 @@ function renderizarProduto(c) {
     inicializarZoom();
     atualizarContador();
     sincronizarBotoesFavorito();
+    atualizarResumoCarrinhoProduto();
 }
 
 // ── Navega entre fotos (setas) ─────────────────────────────────
@@ -223,30 +240,22 @@ function selecionarTamanho(tam, disponivel) {
         el.classList.toggle('selecionado', el.dataset.tamanho === tam));
 }
 
-// ── Adiciona à sacola — OBRIGATÓRIO ter tamanho selecionado ───
-function adicionarAoCarrinho() {
+// ── Adiciona à sacola — cada clique adiciona MAIS UMA unidade do tamanho
+// selecionado (é permitido ter mais de uma camisa do mesmo modelo, seja em
+// tamanhos diferentes ou repetidos). Antes de adicionar, confere o estoque
+// direto na API — não confia só no que foi carregado quando a página abriu,
+// porque o estoque pode ter mudado — e também quantas unidades desse
+// tamanho a pessoa já tem na sacola, pra nunca deixar passar do que existe.
+async function adicionarAoCarrinho() {
     const c = window.camisaAtual;
     if (!c) return;
 
     const idUnico = `${c.nome}|${c.temporada}|${c.modelo}`;
     const btn     = document.getElementById('btn-add-carrinho');
-    const aviso   = document.getElementById('aviso-tamanho');
-
-    // Se já está na sacola → remove
-    if (itemEstaNoCarrinho(idUnico)) {
-        removerPorId(idUnico);
-        if (btn) { btn.textContent = 'Adicionar à sacola'; btn.classList.remove('no-carrinho'); }
-        if (aviso) { aviso.textContent = ''; aviso.className = 'produto-tamanho-aviso'; }
-        return;
-    }
 
     // Sem tamanho → bloqueia com mensagem e animação
     if (!tamanhoSelecionado) {
-        if (aviso) {
-            aviso.textContent = 'Selecione um tamanho antes de adicionar à sacola.';
-            aviso.className   = 'produto-tamanho-aviso aviso-erro aviso-shake';
-            setTimeout(() => aviso.classList.remove('aviso-shake'), 500);
-        }
+        mostrarAvisoTamanho('Selecione um tamanho antes de adicionar à sacola.');
         const bloco = document.getElementById('bloco-tamanhos');
         if (bloco) {
             bloco.classList.add('shake');
@@ -255,12 +264,91 @@ function adicionarAoCarrinho() {
         return;
     }
 
-    // Tudo certo — adiciona
-    const nomeFull = `${c.nome} ${c.temporada} - ${c.modelo} (Tam. ${tamanhoSelecionado})`;
-    adicionarNaSacola(idUnico, nomeFull, tamanhoSelecionado, c.preco, c.foto_frente);
-    if (btn) { btn.textContent = 'Remover da sacola'; btn.classList.add('no-carrinho'); }
+    if (btn) { btn.disabled = true; btn.textContent = 'Verificando estoque...'; }
+    const aviso = document.getElementById('aviso-tamanho');
     if (aviso) { aviso.textContent = ''; aviso.className = 'produto-tamanho-aviso'; }
-    setTimeout(() => abrirModalFavoritos(), 150);
+
+    try {
+        const estoqueAtual = await obterEstoqueAtual(c.id);
+        const disponivel   = Number(estoqueAtual[tamanhoSelecionado] ?? 0);
+        const jaNaSacola   = contarTamanhoNoCarrinho(idUnico, tamanhoSelecionado);
+
+        // Estoque zerou (pode ter mudado desde que a página carregou)
+        if (disponivel <= 0) {
+            mostrarAvisoTamanho(`Tamanho ${tamanhoSelecionado} está esgotado no momento.`);
+            marcarTamanhoEsgotado(tamanhoSelecionado);
+            return;
+        }
+
+        // Ainda tem estoque, mas a pessoa já colocou na sacola tudo que existe
+        // desse tamanho — aviso diferente do "esgotado" (personalizado pro cenário)
+        if (jaNaSacola >= disponivel) {
+            mostrarAvisoTamanho(
+                disponivel === 1
+                    ? `Você já colocou na sacola a única unidade do tamanho ${tamanhoSelecionado} que temos em estoque.`
+                    : `Você já colocou na sacola todas as ${disponivel} unidades do tamanho ${tamanhoSelecionado} que temos em estoque.`
+            );
+            return;
+        }
+
+        // Tudo certo — adiciona mais uma unidade
+        const nomeFull = `${c.nome} ${c.temporada} - ${c.modelo} (Tam. ${tamanhoSelecionado})`;
+        const fotoParaSacola = fotosDisponiveis[0]?.src || resolverCaminhoRaiz(c.foto_frente);
+        adicionarNaSacola(c.id, idUnico, nomeFull, tamanhoSelecionado, c.preco, fotoParaSacola);
+        atualizarResumoCarrinhoProduto();
+
+        if (btn) {
+            btn.classList.add('no-carrinho');
+            btn.textContent = 'Adicionado! ✓';
+            setTimeout(() => {
+                btn.classList.remove('no-carrinho');
+                btn.textContent = 'Adicionar à sacola';
+            }, 1200);
+        }
+        setTimeout(() => abrirModalFavoritos(), 150);
+    } catch (e) {
+        mostrarAvisoTamanho('Não foi possível confirmar o estoque agora. Tente novamente em instantes.');
+    } finally {
+        if (btn) btn.disabled = false;
+    }
+}
+
+// Mostra a mensagem de aviso/erro abaixo dos tamanhos, com o efeito de "shake" padrão
+function mostrarAvisoTamanho(msg) {
+    const aviso = document.getElementById('aviso-tamanho');
+    if (!aviso) return;
+    aviso.textContent = msg;
+    aviso.className = 'produto-tamanho-aviso aviso-erro aviso-shake';
+    setTimeout(() => aviso.classList.remove('aviso-shake'), 500);
+}
+
+// A API acabou de confirmar que esse tamanho esgotou — reflete isso na
+// badge (fica igual ao esgotado calculado na carga da página)
+function marcarTamanhoEsgotado(tam) {
+    const badge = document.querySelector(`.produto-tamanhos .tamanho-badge[data-tamanho="${tam}"]`);
+    if (badge) {
+        badge.classList.remove('disponivel', 'selecionado');
+        badge.classList.add('esgotado');
+        badge.dataset.disponivel = 'false';
+        badge.setAttribute('onclick', `selecionarTamanho('${tam}', false)`);
+        badge.setAttribute('aria-label', `Tamanho ${tam} esgotado`);
+    }
+    if (tamanhoSelecionado === tam) tamanhoSelecionado = null;
+}
+
+// Mostra quantas unidades dessa camisa (somando todos os tamanhos) já estão
+// na sacola — atualizado ao carregar a página, adicionar e remover itens.
+function atualizarResumoCarrinhoProduto() {
+    const resumo = document.getElementById('resumo-carrinho-produto');
+    const c = window.camisaAtual;
+    if (!resumo || !c) return;
+    const idUnico = `${c.nome}|${c.temporada}|${c.modelo}`;
+    const total = contarModeloNoCarrinho(idUnico);
+    resumo.textContent = total === 0
+        ? ''
+        : total === 1
+            ? 'Você já tem 1 unidade dessa camisa na sacola.'
+            : `Você já tem ${total} unidades dessa camisa na sacola.`;
 }
 
 function montarRelacionadas(lista) {
@@ -269,7 +357,7 @@ function montarRelacionadas(lista) {
         const preco = Number(c.preco).toFixed(2).split('.');
         return `<a href="produto.html?id=${c.id}" class="card" style="text-decoration:none;color:inherit;display:block">
             <div class="imagem-container" style="pointer-events:none">
-                <picture><img src="${c.foto_frente}" alt="${c.nome}" class="foto-frente" loading="lazy" width="400" height="270"></picture>
+                <picture><img src="${resolverCaminhoRaiz(c.foto_frente)}" alt="${c.nome}" class="foto-frente" loading="lazy" width="400" height="270"></picture>
             </div>
             <div class="card-info">
                 <div class="card-header-row">
@@ -299,7 +387,7 @@ function escaparHTML(t) {
 function atualizarOpenGraph(c, nomeCompleto, precoFormatado) {
     const titulo   = `${nomeCompleto} | 90+3`;
     const desc     = `Camisa ${nomeCompleto}, ${precoFormatado} na 90+3 — camisas tailandesas com qualidade até o fim.`;
-    const imagem   = c.foto_frente || 'https://90mais3.vercel.app/assets/img/logo.webp';
+    const imagem   = c.foto_frente ? resolverCaminhoRaiz(c.foto_frente) : 'https://90mais3.vercel.app/src/img/logo.webp';
     const url      = window.location.href;
 
     const set = (id, valor) => { const el = document.getElementById(id); if (el) el.setAttribute('content', valor); };
@@ -331,7 +419,7 @@ function atualizarSchemaOrg(c, nomeCompleto) {
         '@context': 'https://schema.org/',
         '@type': 'Product',
         name: nomeCompleto,
-        image: [c.foto_frente, c.foto_costas].filter(Boolean),
+        image: [c.foto_frente, c.foto_costas].filter(Boolean).map(resolverCaminhoRaiz),
         description: `Camisa ${nomeCompleto}, tailandesa premium.`,
         brand: { '@type': 'Brand', name: '90+3 Camisas Tailandesas' },
         offers: {

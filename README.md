@@ -87,16 +87,15 @@ O frontend foi pensado como parte do processo comercial, reduzindo a distância 
 ├── Camisas/                      # Imagens dos produtos, organizadas por coleção
 ├── src/
 │   ├── css/                      # Estilos, incluindo versão minificada
+│   ├── html/                     # Páginas internas: produto e política de privacidade
 │   ├── img/                      # Ícones e logotipo
 │   └── js/                       # Lógica do frontend: produto, carrinho e cookies
 ├── index.html                    # Página principal / catálogo
-├── produto.html                  # Página de produto
-├── politica-de-privacidade.html  # Política de privacidade
 ├── site.webmanifest              # Configuração de instalação como app
 ├── robots.txt                    # Diretivas para mecanismos de busca
 ├── sitemap.xml                   # URLs para indexação
 ├── llms.txt                      # Contexto estruturado do projeto
-├── vercel.json                   # Deploy e cabeçalhos de segurança
+├── vercel.json                   # Deploy, redirects e cabeçalhos de segurança
 └── README.md
 ```
 

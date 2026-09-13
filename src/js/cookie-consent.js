@@ -3,9 +3,9 @@
    =========================================================
    Como usar:
    1. Inclua no <head> de CADA página (index.html, produto.html):
-        <link rel="stylesheet" href="/cookie-consent.css">
+        <link rel="stylesheet" href="src/css/cookie-consent.css">
    2. Inclua antes do </body>:
-        <script src="/cookie-consent.js" defer></script>
+        <script src="src/js/cookie-consent.js" defer></script>
    3. (Opcional) Ajuste os textos e o link da política de
       privacidade no objeto CONFIG abaixo.
    4. Para carregar scripts opcionais só quando o usuário
@@ -31,7 +31,14 @@
     storageKey: '90mais3_cookie_consent',
     cookieName: '90mais3_cookies',
     expirationDays: 180,
-    privacyPolicyUrl: '/politica-de-privacidade.html',
+    // Caminho calculado na hora: como agora existem páginas em profundidades
+    // diferentes (index.html na raiz; produto.html e politica-de-privacidade.html
+    // em src/html/), um caminho fixo não serve pros dois casos. Continua sendo
+    // relativo (nunca começa com "/"), então funciona tanto na Vercel (site na
+    // raiz do domínio) quanto no GitHub Pages (site numa subpasta do domínio).
+    privacyPolicyUrl: (window.location.pathname.indexOf('/src/html/') !== -1)
+      ? 'politica-de-privacidade.html'
+      : 'src/html/politica-de-privacidade.html',
     texts: {
       title: 'Usamos cookies 🍪',
       body:

@@ -234,7 +234,7 @@ function gerarCardHTML(c) {
                 aria-pressed="false">
             ${FAV_SVG}
         </button>
-        <a href="produto.html?id=${c.id}" class="imagem-container" aria-label="Ver detalhes de ${nomeDisplay}" style="text-decoration:none">
+        <a href="src/html/produto.html?id=${c.id}" class="imagem-container" aria-label="Ver detalhes de ${nomeDisplay}" style="text-decoration:none">
             <picture>
                 <img src="${c.foto_frente}" alt="Camisa ${nomeDisplay} ${c.temporada} - frente" class="foto-frente" loading="lazy" width="400" height="270">
             </picture>
@@ -249,7 +249,7 @@ function gerarCardHTML(c) {
             </div>
             <p class="temporada">${c.temporada} · ${c.modelo}</p>
             <div class="tamanhos" aria-label="Tamanhos disponíveis">${tamanhos}</div>
-            <a class="comprar" href="produto.html?id=${c.id}" aria-label="Ver detalhes de ${nomeCompleto}">
+            <a class="comprar" href="src/html/produto.html?id=${c.id}" aria-label="Ver detalhes de ${nomeCompleto}">
                 Ver Detalhes
             </a>
         </div>
@@ -324,7 +324,7 @@ function gerarCardPromocaoHTML(c) {
                 aria-pressed="false">
             ${FAV_SVG}
         </button>
-        <a href="produto.html?id=${c.id}" class="imagem-unica" style="text-decoration:none">
+        <a href="src/html/produto.html?id=${c.id}" class="imagem-unica" style="text-decoration:none">
             <picture>
                 <img src="${c.foto_frente}" alt="${c.nome}" loading="lazy" width="400" height="420">
             </picture>
@@ -338,7 +338,7 @@ function gerarCardPromocaoHTML(c) {
                 ${precoOriginalHTML}
                 <span class="preco preco-por">R$${preco[0]}<small>,${preco[1]}</small></span>
             </div>
-            <a class="comprar btn-promo" href="produto.html?id=${c.id}" aria-label="Ver detalhes de ${nomeCompleto}">
+            <a class="comprar btn-promo" href="src/html/produto.html?id=${c.id}" aria-label="Ver detalhes de ${nomeCompleto}">
                 Eu quero essa promoção!
             </a>
         </div>
